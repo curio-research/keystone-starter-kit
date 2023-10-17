@@ -1,11 +1,11 @@
 import React from 'react';
 import WS, {WebSocket} from "ws";
-import {addUpdate, TableUpdate} from "../store/store";
-import {useDispatch} from "react-redux";
+import {addUpdate, store, TableUpdate} from "../store/store";
+import {Provider, useDispatch} from "react-redux";
 import {Accessors} from "../core/schemas";
-import Table from "../components/table";
+import Table from "./table";
 
-function App() {
+function WorldApp() {
   const dispatch = useDispatch();
   const ws = new WebSocket("ws://localhost:8080/subscribeAllTableUpdates");
 
@@ -29,6 +29,7 @@ function App() {
   }
 
   return (
+      <Provider store={store}>
       <React.Fragment>
         {
           Accessors.map((accessor) => {
@@ -36,7 +37,8 @@ function App() {
           })
         }
       </React.Fragment>
+      </Provider>
   );
 }
 
-export default App;
+export default WorldApp;
