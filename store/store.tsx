@@ -42,9 +42,10 @@ const slice = createSlice({
     }
 })
 
+export type TableType<T> = Map<number, T>
+export type WorldType = Map<string, TableType<any>>;
+export type StoreType = ToolkitStore<WorldType>;
 
-export type TableType<T> = Map<string, Map<number, T>>;
-export type StoreType = ToolkitStore<TableType<any>>;
 export const store: StoreType = configureStore({
     reducer: slice.reducer
 })

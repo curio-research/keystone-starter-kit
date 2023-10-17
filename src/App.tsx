@@ -4,6 +4,8 @@ import './App.css';
 import WS, {WebSocket} from "ws";
 import {addUpdate, TableUpdate} from "../store/store";
 import {useDispatch} from "react-redux";
+import {Accessors} from "../store/schemas";
+import {TableDisplay} from "../components/tableDisplay";
 
 function App() {
   const dispatch = useDispatch();
@@ -29,22 +31,13 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <React.Fragment>
+        {
+          Accessors.map((accessor) => {
+            return <TableDisplay accessor={accessor} />
+          })
+        }
+      </React.Fragment>
   );
 }
 

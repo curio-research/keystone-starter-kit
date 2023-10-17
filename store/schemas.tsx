@@ -1,5 +1,9 @@
 import "reflect-metadata"
-import {TableAccessor} from "./accessors";
+import {TableAccessor} from "./tableAccessor";
+
+export interface WithID {
+    Id: number
+}
 
 interface Position {
     x: number;
@@ -69,3 +73,11 @@ interface PlayerSchema {
 }
 
 const PlayerTable = new TableAccessor<PlayerSchema>("PlayerSchema");
+
+
+export const Accessors: TableAccessor<any>[] = [
+    LargeTileTable,
+    SmallTileTable,
+    TroopStackTable,
+    PlayerTable
+]
