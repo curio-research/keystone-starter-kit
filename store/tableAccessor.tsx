@@ -1,51 +1,35 @@
-import {store} from "./store";
+import {store, TableType} from "./store";
 
 
 export class TableAccessor<T extends {Id: number}> {
     private tableName: string
     constructor(tableName: string) {
-        let t: T;
         this.tableName = tableName;
     }
 
     name(): string {
         return this.tableName;
     }
-    get(id: number): T | null {
-        const state = store.getState();
-        const table = state.get(this.tableName);
-
-        if (!table) {
-            return null;
-        }
+    get(table: TableType<T>, id: number): T | undefined {
         return table.get(id)
     }
 
-    set(id: number, val: T) {
-        const state = store.getState();
-        if (!state.get(this.tableName)) {
-            state.set(this.tableName, new Map<number, T>());
-        }
-
-        const table = state.get(this.tableName)!;
-        return table.set(id, val)
+    getAny(table: TableType<T>): T | undefined {
+        table.forEach((value) => {
+            return value
+        })
+        return undefined;
+    }
+    set(table: TableType<T>, id: number, val: T) {
+        table.set(id, val)
     }
 
-    filter(val: T): Array<T> {
-        const state = store.getState();
-        const table = state.get(this.tableName)!;
+    filter(table: TableType<T>, val: T): FilterArgs<T> {
+        return new FilterArgs(table);
+    }
 
-        let filter = new FilterArgs<T>(table);
-        for (const field in val) {
-            if (val[field]) {
-                filter = filter.WithCondition((t: T): boolean => {
-                        return t[field] === val[field]
-                    }
-                )
-            }
-        }
-
-        return filter.Execute()
+    allEntities(table: TableType<T>): Array<number> {
+        return Array.from<number>(table.keys())
     }
 }
 
