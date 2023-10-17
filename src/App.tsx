@@ -1,11 +1,9 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 import WS, {WebSocket} from "ws";
 import {addUpdate, TableUpdate} from "../store/store";
 import {useDispatch} from "react-redux";
 import {Accessors} from "../store/schemas";
-import {TableDisplay} from "../components/tableDisplay";
+import Table from "../components/table";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,7 +32,7 @@ function App() {
       <React.Fragment>
         {
           Accessors.map((accessor) => {
-            return <TableDisplay accessor={accessor} />
+            return <Table accessor={accessor} />
           })
         }
       </React.Fragment>

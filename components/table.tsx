@@ -10,7 +10,7 @@ interface TableProps<T extends WithID> {
     accessor: TableAccessor<T>
 }
 
-export function TableDisplay<T extends {Id: number}> (props: {accessor: TableAccessor<T>}) {
+export default function TableDisplay<T extends {Id: number}> (props: {accessor: TableAccessor<T>}) {
     const accessor = props.accessor;
     const slice = useSelector((state: WorldType) => state.get(accessor.name()))!
 
