@@ -1,8 +1,8 @@
 import React from "react";
-import {TableAccessor} from "../store/tableAccessor";
+import {TableAccessor} from "../core/tableAccessor";
 import {useSelector} from "react-redux";
 import {TableType, WorldType} from "../store/store";
-import {WithID} from "../store/schemas";
+import {WithID} from "../core/schemas";
 
 
 interface TableProps<T extends WithID> {

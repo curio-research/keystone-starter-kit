@@ -2,7 +2,7 @@ import React from 'react';
 import WS, {WebSocket} from "ws";
 import {addUpdate, TableUpdate} from "../store/store";
 import {useDispatch} from "react-redux";
-import {Accessors} from "../store/schemas";
+import {Accessors} from "../core/schemas";
 import Table from "../components/table";
 
 function App() {
