@@ -44,7 +44,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s, _, err := server.StartMainServer(mode, wsPort, mySQLdsn, randSeedNumber)
+	s, _, err := server.StartMainServer(mode, wsPort, randSeedNumber)
 	if err != nil {
 		log.Fatal(err)
 	}

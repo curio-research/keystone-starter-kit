@@ -4,7 +4,7 @@ import (
 	"math/rand"
 
 	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/tables"
+	"github.com/curio-research/keystone/game/data"
 	"github.com/curio-research/keystone/state"
 )
 
@@ -65,8 +65,8 @@ func HashIntsByXor(a, b int) int {
 // Randomness
 // ---------------------------------------
 
-func GetWorldRandomnessEntity(w state.IWorld) (int, tables.LocalRandSeedSchema) {
-	randomnessEntity := tables.LocalRandomSeed.Get(w, constants.RandomnessEntity)
+func GetWorldRandomnessEntity(w state.IWorld) (int, data.LocalRandSeedSchema) {
+	randomnessEntity := data.LocalRandomSeed.Get(w, constants.RandomnessEntity)
 
 	return constants.RandomnessEntity, randomnessEntity
 }
@@ -74,11 +74,11 @@ func GetWorldRandomnessEntity(w state.IWorld) (int, tables.LocalRandSeedSchema) 
 // function used by systems to get deterministic randomness
 // start and end are inclusive
 func GetRandomness(w state.IWorld, start int, end int) int {
-	seed := tables.LocalRandomSeed.Get(w, constants.RandomnessEntity).RandValue
+	seed := data.LocalRandomSeed.Get(w, constants.RandomnessEntity).RandValue
 
 	// generate the next deterministic random seed back into the world
 	nextSeed := nextDeterministicRandom(seed)
-	tables.LocalRandomSeed.Set(w, constants.RandomnessEntity, tables.LocalRandSeedSchema{
+	data.LocalRandomSeed.Set(w, constants.RandomnessEntity, data.LocalRandSeedSchema{
 		RandValue: nextSeed,
 	})
 

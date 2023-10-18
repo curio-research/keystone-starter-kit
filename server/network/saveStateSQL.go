@@ -11,7 +11,7 @@ import (
 	"github.com/curio-research/keystone/game/helper"
 	"github.com/curio-research/keystone/game/startup"
 
-	"github.com/curio-research/keystone/game/tables"
+	"github.com/curio-research/keystone/game/data"
 	"github.com/curio-research/keystone/logging"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
@@ -47,7 +47,7 @@ func (handler *MySQLSaveStateHandler) InitializeDBTables() error {
 
 	// all tables that need to be created
 	allSchemas := []any{}
-	for schema := range tables.TableSchemasToAccessors {
+	for schema := range data.TableSchemasToAccessors {
 		allSchemas = append(allSchemas, schema)
 	}
 
@@ -109,7 +109,7 @@ func (handler *MySQLSaveStateHandler) SaveState(tableUpdates []state.TableUpdate
 // restore state updates from mySQL database
 func (handler *MySQLSaveStateHandler) RestoreState(ctx *server.EngineCtx, gameId string) error {
 	gw := ctx.World
-	for schema, tableAccessor := range tables.TableSchemasToAccessors {
+	for schema, tableAccessor := range data.TableSchemasToAccessors {
 		rows, err := handler.DBConnection.Table(tableAccessor.Name()).Rows()
 		if err != nil {
 			return err
@@ -256,7 +256,7 @@ func categorizeTableUpdatesBySchema(updates []state.TableUpdate) (TableToUpdates
 // given a schema type, use the mapping from tables to cast to an array of that type
 func castToSchemaArray(schemaType string, val []interface{}) interface{} {
 	var accessor *state.TableBaseAccessor[any]
-	for _, schemaAccessor := range tables.TableSchemasToAccessors {
+	for _, schemaAccessor := range data.TableSchemasToAccessors {
 		if strings.Contains(schemaAccessor.Name(), schemaType) {
 			accessor = schemaAccessor
 			break

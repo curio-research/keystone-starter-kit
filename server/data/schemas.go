@@ -1,4 +1,4 @@
-package tables
+package data
 
 import (
 	"github.com/curio-research/keystone/state"

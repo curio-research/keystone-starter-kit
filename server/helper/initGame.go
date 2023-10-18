@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/tables"
+	"github.com/curio-research/keystone/game/data"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
@@ -17,13 +17,13 @@ func InitGame(w *state.GameWorld, randSeedNumber int) {
 	RegisterTablesToWorld(w)
 
 	// add random seed
-	tables.LocalRandomSeed.AddSpecific(w, constants.RandomnessEntity, tables.LocalRandSeedSchema{
+	data.LocalRandomSeed.AddSpecific(w, constants.RandomnessEntity, data.LocalRandSeedSchema{
 		RandValue: randSeedNumber,
 	})
 
 	// add game as an object
-	tables.Game.AddSpecific(w, constants.GameEntity, tables.GameSchema{
-		Weather: tables.Sunny,
+	data.Game.AddSpecific(w, constants.GameEntity, data.GameSchema{
+		Weather: data.Sunny,
 	})
 
 	AddTilesToWorld(w)
@@ -35,7 +35,7 @@ func RegisterTablesToWorld(w *state.GameWorld) {
 	server.RegisterDefaultTables(w)
 
 	var tableInterfacesToAdd []state.ITable
-	for _, accessor := range tables.TableSchemasToAccessors {
+	for _, accessor := range data.TableSchemasToAccessors {
 		tableInterfacesToAdd = append(tableInterfacesToAdd, accessor)
 	}
 
@@ -47,12 +47,12 @@ func AddTilesToWorld(w state.IWorld) {
 	for i := 0; i < constants.WorldHeight; i++ {
 		for j := 0; j < constants.WorldWidth; j++ {
 
-			tables.Tile.AddSpecific(w, largeTileId, tables.TileSchema{
+			data.Tile.AddSpecific(w, largeTileId, data.TileSchema{
 				Position: state.Pos{
 					X: j,
 					Y: i,
 				},
-				Terrain: tables.Grass,
+				Terrain: data.Grass,
 			})
 
 			largeTileId++

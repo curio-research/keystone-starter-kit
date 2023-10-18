@@ -19,7 +19,6 @@ type ProtoBasedErrorHandler struct {
 
 // format message into protobuf
 func (h *ProtoBasedErrorHandler) FormatMessage(transactionUuidIdentifier int, errorMessage string) *server.NetworkMessage {
-
 	msg, _ := server.NewMessage(0, uint32(pb_dict.CMD_pb_game_S2C_ServerMessage), uint32(transactionUuidIdentifier), &pb_game.S2C_ServerMessage{
 		Content: errorMessage,
 	})

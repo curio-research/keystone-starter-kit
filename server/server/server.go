@@ -18,7 +18,7 @@ import (
 	"github.com/tjarratt/babble"
 )
 
-func StartMainServer(mode string, websocketPort int, mySQLdsn string, randSeedNumber int) (*gin.Engine, *server.EngineCtx, error) {
+func StartMainServer(mode string, websocketPort int, randSeedNumber int) (*gin.Engine, *server.EngineCtx, error) {
 	// for debugging using profiler
 	go func() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
@@ -34,7 +34,7 @@ func StartMainServer(mode string, websocketPort int, mySQLdsn string, randSeedNu
 
 	// initialize the in-memory world
 	gameWorld := state.NewWorld()
-	helper.InitGame(gameWorld, 0)
+	helper.InitGame(gameWorld, randSeedNumber)
 
 	gameTick := server.NewGameTick(constants.TickRate)
 	// this is where you setup the tick schedules for your game
@@ -51,8 +51,6 @@ func StartMainServer(mode string, websocketPort int, mySQLdsn string, randSeedNu
 		GameTick:               gameTick,
 		TransactionsToSaveLock: sync.Mutex{},
 		Mode:                   mode,
-		SystemErrorHandler:     &network.ProtoBasedErrorHandler{},
-		SystemBroadcastHandler: &network.ProtoBasedBroadcastHandler{},
 		RandSeed:               randSeedNumber,
 	}
 
@@ -62,27 +60,7 @@ func StartMainServer(mode string, websocketPort int, mySQLdsn string, randSeedNu
 		return nil, nil, err
 	}
 	gameCtx.Stream = streamServer
-	gameTick.Setup(gameCtx, gameTick.Schedule)
-
-	// ////////////////////////
-	//    save state loop
-	// ////////////////////////
-
-	if mode == "prod" {
-		// TODO: re-enable after stability in SQL mode achieves stability with more testing
-		err = network.InitializeSQLHandlers(gameCtx, mySQLdsn)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		fmt.Println("Saving initial game state ... ")
-		// first, save the initial game state before game started
-		initialStateUpdatesToSave := gameCtx.World.GetAndClearTableUpdates()
-		gameCtx.SaveStateHandler.SaveState(initialStateUpdatesToSave)
-
-		// initialize mySQL connection for state sync
-		server.SetupSaveStateLoop(gameCtx, constants.SaveStateToDatabaseRate)
-	}
+	gameTick.Setup(gameCtx, gameTick.Schedule) // TODO should just be a call on gameCtx
 
 	color.HiWhite("Tick rate:         " + strconv.Itoa(gameTick.TickRateMs) + "ms")
 
