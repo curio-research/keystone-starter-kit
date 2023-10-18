@@ -24,11 +24,11 @@ type GameSchema struct {
 	Weather Weather
 }
 
-type Terrain int
+type Terrain bool
 
 const (
-	Grass Terrain = 1
-	Wall  Terrain = 2
+	Ground   Terrain = true
+	Obstacle Terrain = false
 )
 
 type TileSchema struct {
@@ -50,7 +50,6 @@ type ProjectileSchema struct {
 
 type AnimalSchema struct {
 	Id       int       `gorm:"primaryKey"`
-	Type     int       // animal type
 	Position state.Pos `gorm:"embedded"`
 }
 

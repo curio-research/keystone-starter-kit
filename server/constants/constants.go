@@ -27,10 +27,14 @@ var (
 	AttackIdleTimeMs int = 2000
 
 	// in large tiles
-	WorldWidth  int = 7
-	WorldHeight int = 7
+	WorldWidth  int = 10
+	WorldHeight int = 10
 
 	// entity for global randomness seed
 	RandomnessEntity int = 6969
 	GameEntity       int = 200
+
+	// fractions to use when generating map
+	FreeTilesRatio          = 0.8
+	AnimalsToFreeTilesRatio = 0.3
 )

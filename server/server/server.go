@@ -8,8 +8,6 @@ import (
 	"sync"
 
 	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/helper"
-	"github.com/curio-research/keystone/game/network"
 	"github.com/curio-research/keystone/game/startup"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
@@ -37,7 +35,7 @@ func StartMainServer(mode string, websocketPort int, randSeedNumber int) (*gin.E
 	gameCtx := setupWorld(mode, gameId, randSeedNumber)
 
 	// initialize in-game world
-	helper.InitGame(gameCtx.World, randSeedNumber)
+	startup.InitGame(gameCtx.World, randSeedNumber)
 
 	color.HiWhite("Tick rate:         " + strconv.Itoa(gameCtx.GameTick.TickRateMs) + "ms")
 
@@ -45,7 +43,7 @@ func StartMainServer(mode string, websocketPort int, randSeedNumber int) (*gin.E
 	startup.AddSystems(gameCtx)
 
 	// setup server routes
-	network.SetupRoutes(s, gameCtx)
+	startup.SetupRoutes(s)
 
 	return s, gameCtx, nil
 }
