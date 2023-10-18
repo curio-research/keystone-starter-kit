@@ -1,8 +1,7 @@
-import React from "react";
 import { TableAccessor } from "../core/tableAccessor";
 import { useSelector } from "react-redux";
-import { StoreState, TableType, WorldType } from "../store/store";
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, Text } from "@chakra-ui/react";
+import { StoreState, TableType } from "../store/store";
+import { Table, Tbody, Tr, Th, Td, Text } from "@chakra-ui/react";
 
 interface TableProps<T extends WithID> {
   table: TableType<T>;
