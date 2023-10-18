@@ -1,0 +1,5 @@
+# kill all local ports that might be running on the machine
+
+kill $(lsof -t -i:9000)
+kill $(lsof -t -i:9001)
+kill $(lsof -t -i:6060)
