@@ -10,7 +10,7 @@ interface TableProps<T extends WithID> {
     accessor: TableAccessor<T>
 }
 
-export default function TableDisplay<T extends {Id: number}> (props: {accessor: TableAccessor<T>}) {
+export default function TableDisplay<T extends WithID> (props: {accessor: TableAccessor<T>}) {
     const accessor = props.accessor;
     const slice = useSelector((state: WorldType) => state.get(accessor.name()))
     if (slice === undefined) {
@@ -26,7 +26,6 @@ export default function TableDisplay<T extends {Id: number}> (props: {accessor: 
 }
 
 function Table<T extends WithID>(props: TableProps<T>) {
-    console.log("mere")
     const {table, accessor} = props;
 
     const anyVal = accessor.getAny(table)
@@ -34,7 +33,6 @@ function Table<T extends WithID>(props: TableProps<T>) {
         return null
     }
 
-    console.log("mere 2")
     const columnNames = new Array<string>();
     for (const field in anyVal) {
         columnNames.push(field);
@@ -45,24 +43,28 @@ function Table<T extends WithID>(props: TableProps<T>) {
     return <React.Fragment>
         <table>
             {
+                <tbody>
                 <tr>
                     {
-                        columnNames.map((value, index) => {
-                            return <th key={index}>{value}</th>
+                        columnNames.map((value) => {
+                            return <th key={value}>{value}</th>
                         })
                     }
                 </tr>
+                </tbody>
             }
             {
-                allEntities.map((entity, index) => {
+                allEntities.map((entity) => {
                     const obj = accessor.get(table, entity)! as any
-                    return <tr key={index}>
+                    return <tbody key={entity}>
+                    <tr key={entity}>
                         {
                             columnNames.map((columnName, index) => {
                                 return <td key={index}>{obj[columnName]}</td>
                             })
                         }
                     </tr>
+                    </tbody>
                 })
             }
         </table>
