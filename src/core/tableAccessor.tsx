@@ -21,7 +21,6 @@ export class TableAccessor<T extends {Id: number}> {
 
     set(table: TableType<T>, id: number, val: T) {
         table.set(id, val)
-        console.log("here")
     }
 
     remove (table: TableType<T>, id: number) {

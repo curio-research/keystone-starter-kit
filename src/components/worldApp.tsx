@@ -18,7 +18,6 @@ function WorldApp() {
     const jsonObj: any = JSON.parse(event.data)
     const updates = jsonObj as unknown as Array<TableUpdate>;
     for (const update of updates) {
-      console.log(update.value);
       dispatch(addUpdate({
         entity: update.entity,
         op: update.op,

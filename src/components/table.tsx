@@ -38,7 +38,6 @@ function Table<T extends WithID>(props: TableProps<T>) {
         columnNames.push(field);
     }
 
-    console.log(accessor.filter(table).Execute())
     const allEntities = accessor.allEntities(table)
     return <React.Fragment>
         <table>
