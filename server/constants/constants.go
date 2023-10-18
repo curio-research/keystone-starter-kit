@@ -4,20 +4,6 @@ package constants
 // game constants
 // ------------------------
 
-type UnitStats struct {
-	Name            UnitType
-	Layer           Layer
-	Strength        int
-	MovementStamina int
-	Speed           float64 // milliseconds per small tile
-	CanLoad         bool
-	IsLoadable      bool
-	CanMove         bool
-	CanAttack       bool
-	CanGuard        bool
-	DeathPriority   int // the higher the priority is, the earlier the troop type dies in a battle
-}
-
 var (
 	// game tick rate (milliseconds)
 	TickRate int = 100

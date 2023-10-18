@@ -32,16 +32,27 @@ func StartMainServer(mode string, websocketPort int, randSeedNumber int) (*gin.E
 	s := gin.Default()
 	s.Use(server.CORSMiddleware())
 
-	// initialize the in-memory world
-	gameWorld := state.NewWorld()
-	helper.InitGame(gameWorld, randSeedNumber)
-
-	gameTick := server.NewGameTick(constants.TickRate)
-	// this is where you setup the tick schedules for your game
-	startup.AddSystems(gameTick)
-
-	// randomly generate gameID
+	// initialize gameCtx (should be refactored to keystone)
 	gameId := babble.NewBabbler().Babble()
+	gameCtx := setupWorld(mode, gameId, randSeedNumber)
+
+	// initialize in-game world
+	helper.InitGame(gameCtx.World, randSeedNumber)
+
+	color.HiWhite("Tick rate:         " + strconv.Itoa(gameCtx.GameTick.TickRateMs) + "ms")
+
+	// add systems for game
+	startup.AddSystems(gameCtx)
+
+	// setup server routes
+	network.SetupRoutes(s, gameCtx)
+
+	return s, gameCtx, nil
+}
+
+func setupWorld(mode string, gameId string, randSeedNumber int) *server.EngineCtx {
+	gameWorld := state.NewWorld()
+	gameTick := server.NewGameTick(constants.TickRate)
 
 	// this is the master game context being passed around, containing pointers to everything
 	gameCtx := &server.EngineCtx{ // TODO create a constructor for this
@@ -55,17 +66,6 @@ func StartMainServer(mode string, websocketPort int, randSeedNumber int) (*gin.E
 	}
 
 	// initialize a websocket streaming server for both incoming and outgoing requests
-	streamServer, err := server.NewStreamServer(s, gameCtx, network.SocketRequestRouter, websocketPort)
-	if err != nil {
-		return nil, nil, err
-	}
-	gameCtx.Stream = streamServer
 	gameTick.Setup(gameCtx, gameTick.Schedule) // TODO should just be a call on gameCtx
-
-	color.HiWhite("Tick rate:         " + strconv.Itoa(gameTick.TickRateMs) + "ms")
-
-	// setup server routes
-	network.SetupRoutes(s, gameCtx)
-
-	return s, gameCtx, nil
+	return gameCtx
 }

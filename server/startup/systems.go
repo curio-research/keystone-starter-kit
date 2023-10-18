@@ -10,7 +10,7 @@ import (
 // some operations require the game to tick slower
 // ex: health only regenerates every 20 seconds, but you attack every 5 seconds
 
-func AddSystems(gameTick *server.GameTick) {
+func AddSystems(ctx *server.EngineCtx) {
 	// different events can happen on different ticks
 	// some operations require the game to tick slower
 	// ex: health only regenerates every 20 seconds, but you attack every 5 seconds
@@ -28,5 +28,5 @@ func AddSystems(gameTick *server.GameTick) {
 	// ---------------------
 	tickSchedule.AddTickSystem(constants.WeatherChangeIntervalMs, systems.WeatherSystem)
 
-	gameTick.Schedule = tickSchedule
+	ctx.GameTick.Schedule = tickSchedule
 }
