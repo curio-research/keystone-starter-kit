@@ -2,7 +2,7 @@ import React from "react";
 import { TableAccessor } from "../core/tableAccessor";
 import { useSelector } from "react-redux";
 import { StoreState, TableType, WorldType } from "../store/store";
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer, Text } from "@chakra-ui/react";
 
 interface TableProps<T extends WithID> {
   table: TableType<T>;
@@ -55,8 +55,8 @@ function DisplayTable<T extends WithID>(props: TableProps<T>) {
             <Tr key={entity}>
               {columnNames.map((columnName, index) => {
                 return (
-                  <Td key={index}>
-                    <>{JSON.stringify(obj[columnName])}</>
+                  <Td key={index} style={{ padding: "10px" }}>
+                    <Text fontSize="sm">{JSON.stringify(obj[columnName])}</Text>
                   </Td>
                 );
               })}
