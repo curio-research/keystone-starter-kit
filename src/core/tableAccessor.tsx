@@ -15,13 +15,10 @@ export class TableAccessor<T extends {Id: number}> {
     }
 
     getAny(table: TableType<T>): T | undefined {
-        let v: T | undefined;
-
-        table.forEach((value, key, map) => {
-            v = value
-        })
-        return undefined;
+        const {value} = table.values().next()
+        return value
     }
+
     set(table: TableType<T>, id: number, val: T) {
         table.set(id, val)
         console.log("here")
