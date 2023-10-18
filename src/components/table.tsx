@@ -12,7 +12,10 @@ interface TableProps<T extends WithID> {
 
 export default function TableDisplay<T extends {Id: number}> (props: {accessor: TableAccessor<T>}) {
     const accessor = props.accessor;
-    const slice = useSelector((state: WorldType) => state.get(accessor.name()))!
+    const slice = useSelector((state: WorldType) => state.get(accessor.name()))
+    if (slice === undefined) {
+        return null
+    }
 
     return (
         <React.Fragment>
@@ -23,6 +26,7 @@ export default function TableDisplay<T extends {Id: number}> (props: {accessor: 
 }
 
 function Table<T extends WithID>(props: TableProps<T>) {
+    console.log("mere")
     const {table, accessor} = props;
 
     const anyVal = accessor.getAny(table)
@@ -30,11 +34,13 @@ function Table<T extends WithID>(props: TableProps<T>) {
         return null
     }
 
+    console.log("mere 2")
     const columnNames = new Array<string>();
     for (const field in anyVal) {
         columnNames.push(field);
     }
 
+    console.log(accessor.filter(table).Execute())
     const allEntities = accessor.allEntities(table)
     return <React.Fragment>
         <table>

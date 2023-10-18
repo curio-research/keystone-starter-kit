@@ -1,43 +1,46 @@
 import React from 'react';
-import WS, {WebSocket} from "ws";
-import {addUpdate, store, TableUpdate} from "../store/store";
-import {Provider, useDispatch} from "react-redux";
-import {Accessors} from "../core/schemas";
+
+import {addUpdate, TableUpdate} from "../store/store";
+import {useDispatch} from "react-redux";
+import {Accessors, AccessorsMap} from "../core/schemas";
 import Table from "./table";
+
 
 function WorldApp() {
   const dispatch = useDispatch();
-  const ws = new WebSocket("ws://localhost:8080/subscribeAllTableUpdates");
+  const ws = new window.WebSocket("ws://localhost:9001/subscribeAllTableUpdates");
 
   ws.onopen = () => {
     console.log("connection opened!")
   }
 
-  ws.onmessage = (event: WS.MessageEvent) => {
-    const data = event.data as unknown as TableUpdate;
-    dispatch(addUpdate({
-      entity: data.entity,
-      op: data.op,
-      table: data.table,
-      time: data.time,
-      value: data.value
-    }))
+  ws.onmessage = (event: MessageEvent) => {
+    const jsonObj: any = JSON.parse(event.data)
+    const updates = jsonObj as unknown as Array<TableUpdate>;
+    for (const update of updates) {
+      console.log(update.value);
+      dispatch(addUpdate({
+        entity: update.entity,
+        op: update.op,
+        table: update.table,
+        time: update.time,
+        value: update.value
+      }))
+    }
   }
 
-  ws.onerror = (event: WS.ErrorEvent) => {
-    console.log(event.error)
+  ws.onerror = (event: Event) => {
+    console.log(event)
   }
 
   return (
-      <Provider store={store}>
       <React.Fragment>
         {
-          Accessors.map((accessor) => {
-            return <Table accessor={accessor} />
+          Accessors.map((accessor, index) => {
+            return <Table key={index} accessor={accessor} />
           })
         }
       </React.Fragment>
-      </Provider>
   );
 }
 

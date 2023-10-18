@@ -74,10 +74,40 @@ interface PlayerSchema {
 
 const PlayerTable = new TableAccessor<PlayerSchema>("PlayerSchema");
 
+enum CardSuit {
+    Heart,
+    Spade,
+    Club,
+    Diamond
+}
+
+enum CardDeckType {
+    DiscardLastRound,
+    DiscardCurrentRound,
+    ToDeal,
+    Dealing,
+    InHand,
+    Public
+}
+
+interface CardSchema {
+    OwnerID: number
+    Number: number
+
+    Id: number
+}
+
+const CardTable = new TableAccessor<CardSchema>("CardSchema")
 
 export const Accessors: TableAccessor<any>[] = [
     LargeTileTable,
     SmallTileTable,
     TroopStackTable,
-    PlayerTable
+    PlayerTable,
+    CardTable
 ]
+
+export const AccessorsMap = new Map<string, TableAccessor<any>>()
+for (const accessor of Accessors) {
+    AccessorsMap.set(accessor.name(), accessor);
+}

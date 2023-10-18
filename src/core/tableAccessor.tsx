@@ -15,16 +15,23 @@ export class TableAccessor<T extends {Id: number}> {
     }
 
     getAny(table: TableType<T>): T | undefined {
-        table.forEach((value) => {
-            return value
+        let v: T | undefined;
+
+        table.forEach((value, key, map) => {
+            v = value
         })
         return undefined;
     }
     set(table: TableType<T>, id: number, val: T) {
         table.set(id, val)
+        console.log("here")
     }
 
-    filter(table: TableType<T>, val: T): FilterArgs<T> {
+    remove (table: TableType<T>, id: number) {
+        table.delete(id)
+    }
+
+    filter(table: TableType<T>): FilterArgs<T> {
         return new FilterArgs(table);
     }
 
