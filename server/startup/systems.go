@@ -10,25 +10,23 @@ import (
 // some operations require the game to tick slower
 // ex: health only regenerates every 20 seconds, but you attack every 5 seconds
 
-func AddSystems(ctx *server.EngineCtx) {
+func AddSystems(gameTick *server.GameTick) {
 	// different events can happen on different ticks
 	// some operations require the game to tick slower
 	// ex: health only regenerates every 20 seconds, but you attack every 5 seconds
 
-	tickSchedule := server.NewTickSchedule()
+	tickSchedule := gameTick.Schedule
 
 	// ---------------------
 	// External Systems
 	// External systems require external input to run
 	// ---------------------
+	tickSchedule.AddTickSystem(constants.TickRate, systems.EstablishPlayerSystem)
+	tickSchedule.AddTickSystem(constants.TickRate, systems.MovementSystem)
 
 	// ---------------------
 	// Internal Systems
 	// internal systems run by themselves without external input
 	// ---------------------
 	tickSchedule.AddTickSystem(constants.WeatherChangeIntervalMs, systems.WeatherSystem)
-	tickSchedule.AddTickSystem(constants.TickRate, systems.EstablishPlayerSystem)
-	tickSchedule.AddTickSystem(constants.TickRate, systems.MovementSystem)
-
-	ctx.GameTick.Schedule = tickSchedule
 }

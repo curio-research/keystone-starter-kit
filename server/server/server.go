@@ -2,8 +2,6 @@ package server
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 	"strconv"
 	"sync"
 
@@ -16,12 +14,7 @@ import (
 	"github.com/tjarratt/babble"
 )
 
-func StartMainServer(mode string, websocketPort int, randSeedNumber int) (*gin.Engine, *server.EngineCtx, error) {
-	// for debugging using profiler
-	go func() {
-		log.Println(http.ListenAndServe("localhost:6060", nil))
-	}()
-
+func MainServer(randSeedNumber int) (*gin.Engine, error) {
 	color.HiYellow("")
 	color.HiYellow("---- 🗝  Powered by Keystone 🗿 ----")
 	fmt.Println()
@@ -32,25 +25,26 @@ func StartMainServer(mode string, websocketPort int, randSeedNumber int) (*gin.E
 
 	// initialize gameCtx (should be refactored to keystone)
 	gameId := babble.NewBabbler().Babble()
-	gameCtx := setupWorld(mode, gameId, randSeedNumber)
+	gameCtx := setupWorld(gameId)
 
 	// initialize in-game world
-	startup.InitGame(gameCtx.World, randSeedNumber)
-
+	startup.InitGame(gameCtx.World)
 	color.HiWhite("Tick rate:         " + strconv.Itoa(gameCtx.GameTick.TickRateMs) + "ms")
 
-	// add systems for game
-	startup.AddSystems(gameCtx)
-
 	// setup server routes
-	startup.SetupRoutes(s)
+	startup.SetupRoutes(s, gameCtx)
 
-	return s, gameCtx, nil
+	return s, nil
 }
 
-func setupWorld(mode string, gameId string, randSeedNumber int) *server.EngineCtx {
+// TODO this function should be in keystone
+func setupWorld(gameId string) *server.EngineCtx {
 	gameWorld := state.NewWorld()
 	gameTick := server.NewGameTick(constants.TickRate)
+
+	// add systems for game
+	gameTick.Schedule = server.NewTickSchedule() // TODO tick schedule should be initialized in `newGameTick`
+	startup.AddSystems(gameTick)
 
 	// this is the master game context being passed around, containing pointers to everything
 	gameCtx := &server.EngineCtx{ // TODO create a constructor for this
@@ -59,8 +53,6 @@ func setupWorld(mode string, gameId string, randSeedNumber int) *server.EngineCt
 		World:                  gameWorld,
 		GameTick:               gameTick,
 		TransactionsToSaveLock: sync.Mutex{},
-		Mode:                   mode,
-		RandSeed:               randSeedNumber,
 	}
 
 	// initialize a websocket streaming server for both incoming and outgoing requests

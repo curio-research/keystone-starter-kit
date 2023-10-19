@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/curio-research/keystone/game/constants"
 	"github.com/curio-research/keystone/game/server"
+	"github.com/curio-research/keystone/logging"
 	"github.com/fatih/color"
 	"github.com/joho/godotenv"
 	"log"
@@ -10,33 +12,14 @@ import (
 	"strconv"
 )
 
+// TODO use urfave cli?
 func main() {
 	godotenv.Load()
 
-	mode := os.Getenv("MODE")
-	if mode == "" {
-		log.Fatal("Mode not set. Use 'dev' or 'prod'")
-	}
-
-	wsPortString := os.Getenv("INDEXER_PORT")
-	if wsPortString == "" {
-		log.Fatal("websocket port not set in .env file. Set using INDEXER_PORT=xxxx")
-	}
-
-	wsPort, err := strconv.Atoi(wsPortString)
-	if err != nil {
-		log.Fatal("websocket port is not a number")
-	}
-
-	mySQLdsn := os.Getenv("MYSQL_DSN")
-	if mode == "prod" && mySQLdsn == "" {
-		panic("missing MYSQL_DSN env variable")
-	}
-
-	// add the default randomness object
+	// get randomness seed (controls how random numbers are created)
 	randSeed := os.Getenv("RAND_SEED")
 	if randSeed == "" {
-		log.Fatal("missing RAND_SEED env variable")
+		logging.Log().Infof("missing RAND_SEED env variable, seeding randomness with local variable", randSeed)
 	}
 
 	randSeedNumber, err := strconv.Atoi(randSeed)
@@ -44,17 +27,19 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s, _, err := server.StartMainServer(mode, wsPort, randSeedNumber)
+	s, err := server.MainServer(randSeedNumber)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// get listening port
 	port := os.Getenv("PORT")
 	if port == "" {
-		log.Fatal("missing PORT env variable")
+		port = strconv.Itoa(constants.DefaultListeningPort)
+		logging.Log().Infof("missing PORT env variable, using %s", port)
 	}
 
-	color.HiWhite("Websocket port:    " + port)
+	color.HiWhite("Listening on port:    " + port)
 	fmt.Println()
 
 	log.Fatal(s.Run(":" + port))

@@ -6,7 +6,6 @@ require (
 	github.com/curio-research/keystone v0.0.21
 	github.com/fatih/color v1.15.0
 	github.com/gin-gonic/gin v1.9.1
-	github.com/gorilla/mux v1.8.0
 	github.com/joho/godotenv v1.5.1
 	github.com/tjarratt/babble v0.0.0-20210505082055-cbca2a4833c1
 )
@@ -35,6 +34,8 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
+	go.uber.org/zap v1.25.0 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
 	golang.org/x/net v0.12.0 // indirect

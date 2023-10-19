@@ -8,23 +8,11 @@ import (
 	"math/rand"
 )
 
-var playerIds = []int{1000, 1001, 1002, 1003, 1004}
-
-func InitGame(w *state.GameWorld, randSeedNumber int) {
+func InitGame(w *state.GameWorld) {
 	// initialize game storage tables
 	RegisterTablesToWorld(w)
 
-	// add random seed
-	// TODO what is the purpose? Do we need this?
-	data.LocalRandomSeed.AddSpecific(w, constants.RandomnessEntity, data.LocalRandSeedSchema{
-		RandValue: randSeedNumber,
-	})
-
-	// add game as an object
-	data.Game.AddSpecific(w, constants.GameEntity, data.GameSchema{
-		Weather: data.Sunny,
-	})
-
+	// initialize game data into those tables
 	InitWorld(w)
 }
 
@@ -41,6 +29,10 @@ func RegisterTablesToWorld(w *state.GameWorld) {
 }
 
 func InitWorld(w *state.GameWorld) {
+	data.Game.AddSpecific(w, constants.GameEntity, data.GameSchema{
+		Weather: data.Sunny,
+	})
+
 	largeTileId := 1
 	for i := 0; i < constants.WorldHeight; i++ {
 		for j := 0; j < constants.WorldWidth; j++ {
@@ -69,13 +61,10 @@ func InitWorld(w *state.GameWorld) {
 	}
 }
 
-const randRange = 1000
-
 func weightedBoolean(trueWeight float64) bool {
 	if trueWeight > 1 || trueWeight < 0 {
 		panic("boolean weight cannot be more than 1 or less than 0")
 	}
 
-	num := float64(rand.Intn(randRange))
-	return num < (randRange * trueWeight)
+	return rand.Float64() < trueWeight
 }
