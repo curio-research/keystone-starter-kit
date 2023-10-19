@@ -37,10 +37,16 @@ type TileSchema struct {
 	Terrain  Terrain
 }
 
+type ObstacleTileSchema struct {
+	Id       int       `gorm:"primaryKey"`
+	Position state.Pos `gorm:"embedded"`
+}
+
 type PlayerSchema struct {
 	Id        int       `gorm:"primaryKey"`
 	Position  state.Pos `gorm:"embedded"`
 	Resources int
+	PlayerID  int
 }
 
 type ProjectileSchema struct {
@@ -54,23 +60,25 @@ type AnimalSchema struct {
 }
 
 // ----------------------------
-//      table accessors
+//
+//	table accessors
+//
 // ----------------------------
 
 var (
 	Game            = state.NewTableAccessor[GameSchema]()
+	LocalRandomSeed = state.NewTableAccessor[LocalRandSeedSchema]()
+	Projectile      = state.NewTableAccessor[ProjectileSchema]()
 	Tile            = state.NewTableAccessor[TileSchema]()
 	Player          = state.NewTableAccessor[PlayerSchema]()
-	LocalRandomSeed = state.NewTableAccessor[LocalRandSeedSchema]()
 	Animal          = state.NewTableAccessor[AnimalSchema]()
-	Projectile      = state.NewTableAccessor[ProjectileSchema]()
 )
 
-var TableSchemasToAccessors = map[interface{}]*state.TableBaseAccessor[any]{
-	&GameSchema{}:          (*state.TableBaseAccessor[any])(Game),
-	&TileSchema{}:          (*state.TableBaseAccessor[any])(Tile),
-	&PlayerSchema{}:        (*state.TableBaseAccessor[any])(Player),
-	&LocalRandSeedSchema{}: (*state.TableBaseAccessor[any])(LocalRandomSeed),
-	&AnimalSchema{}:        (*state.TableBaseAccessor[any])(Animal),
-	&ProjectileSchema{}:    (*state.TableBaseAccessor[any])(Projectile),
+var TableSchemasToAccessors = map[interface{}]state.ITable{
+	&GameSchema{}:          Game,
+	&LocalRandSeedSchema{}: LocalRandomSeed,
+	&ProjectileSchema{}:    Projectile,
+	&TileSchema{}:          Tile,
+	&PlayerSchema{}:        Player,
+	&AnimalSchema{}:        Animal,
 }

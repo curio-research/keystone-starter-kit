@@ -63,6 +63,7 @@ func InitWorld(w *state.GameWorld) {
 					})
 				}
 			}
+
 			largeTileId++
 		}
 	}

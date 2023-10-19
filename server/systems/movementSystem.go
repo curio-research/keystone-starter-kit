@@ -23,7 +23,7 @@ type MovementJob struct {
 	PlayerId int
 }
 
-var MovementSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[MovementJob]) {
+func movementSystem(ctx *server.TransactionCtx[MovementJob]) {
 	w := ctx.W
 	req := ctx.Req
 
@@ -35,7 +35,7 @@ var MovementSystem = server.CreateSystemFromRequestHandler(func(ctx *server.Tran
 		player.Position = targetPos
 		data.Player.Set(w, player.Id, player)
 	}
-})
+}
 
 func targetTile(position state.Pos, direction Direction) state.Pos {
 	switch direction {
@@ -72,3 +72,5 @@ func validateTile(w state.IWorld, pos state.Pos) bool {
 
 	return true
 }
+
+var MovementSystem = server.CreateSystemFromRequestHandler(movementSystem)
