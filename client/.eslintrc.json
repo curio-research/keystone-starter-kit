@@ -1,0 +1,68 @@
+{
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "moduleDirectory": ["node_modules", "src/"]
+      }
+    }
+  },
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "plugin:import/errors", "plugin:import/warnings", "plugin:import/typescript", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint"],
+  "rules": {
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+
+    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "no-use-before-define": "off",
+    "no-unused-vars": "warn",
+    "object-curly-newline": "off",
+    "object-shorthand": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/self-closing-comp": "warn",
+    "react/jsx-curly-brace-presence": "warn",
+    "import/order": "off",
+    "operator-linebreak": "off",
+    "arrow-body-style": "off",
+    "import/prefer-default-export": "off",
+    "no-param-reassign": "off",
+    "prefer-destructuring": "off",
+    "comma-dangle": "off",
+    "react/react-in-jsx-scope": "off",
+    "max-len": ["error", { "code": 200 }],
+    "react/no-unused-prop-types": "warn",
+    "no-plusplus": "off",
+    "no-empty": "warn",
+    "no-underscore-dangle": "off",
+    "react/destructuring-assignment": "off",
+    "no-static-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "no-case-declarations": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "react/jsx-key": "warn",
+    "no-empty-function": "off",
+    "@typescript-eslint/no-empty-function": ["warn"],
+    "@typescript-eslint/no-non-null-assertion": "off"
+  }
+}

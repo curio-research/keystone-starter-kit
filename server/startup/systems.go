@@ -28,5 +28,7 @@ func AddSystems(gameTick *server.GameTick) {
 	// ---------------------
 	tickSchedule.AddTickSystem(constants.WeatherChangeIntervalMs, systems.WeatherSystem)
 
+	tickSchedule.AddTickSystem(1_000, systems.TestSystem)
+
 	gameTick.Schedule = tickSchedule
 }

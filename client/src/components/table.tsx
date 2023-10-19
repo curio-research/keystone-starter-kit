@@ -1,71 +1,72 @@
-import React from "react";
-import {TableAccessor} from "../core/tableAccessor";
-import {useSelector} from "react-redux";
-import {TableType, WorldType} from "../store/store";
-import {WithID} from "../core/schemas";
-
+import { TableAccessor } from "../core/tableAccessor";
+import { useSelector } from "react-redux";
+import { StoreState, TableType } from "../store/store";
+import { Table, Tbody, Tr, Th, Td, Text } from "@chakra-ui/react";
 
 interface TableProps<T extends WithID> {
-    table: TableType<T>
-    accessor: TableAccessor<T>
+  table: TableType<T>;
+  accessor: TableAccessor<T>;
 }
 
-export default function TableDisplay<T extends WithID> (props: {accessor: TableAccessor<T>}) {
-    const accessor = props.accessor;
-    const slice = useSelector((state: WorldType) => state.get(accessor.name()))
-    if (slice === undefined) {
-        return null
-    }
+export default function TableDisplay<T extends WithID>(props: { accessor: TableAccessor<T> }) {
+  const accessor = props.accessor;
+  const slice = useSelector((state: StoreState) => state.tableState.get(accessor.name()));
+  if (slice === undefined) {
+    return null;
+  }
 
-    return (
-        <React.Fragment>
-            <div>Table Name: {accessor.name()}</div>
-            <Table table={slice} accessor={accessor} />
-        </React.Fragment>
-    )
+  return (
+    <>
+      <DisplayTable table={slice} accessor={accessor} />
+    </>
+  );
 }
 
-function Table<T extends WithID>(props: TableProps<T>) {
-    const {table, accessor} = props;
+function DisplayTable<T extends WithID>(props: TableProps<T>) {
+  const { table, accessor } = props;
 
-    const anyVal = accessor.getAny(table)
-    if (anyVal === undefined) {
-        return null
-    }
+  const anyVal = accessor.getAny(table);
+  if (anyVal === undefined) {
+    return null;
+  }
 
-    const columnNames = new Array<string>();
-    for (const field in anyVal) {
-        columnNames.push(field);
-    }
+  const columnNames = new Array<string>();
+  for (const field in anyVal) {
+    columnNames.push(field);
+  }
 
-    const allEntities = accessor.allEntities(table)
-    return <React.Fragment>
-        <table>
-            {
-                <tbody>
-                <tr>
-                    {
-                        columnNames.map((value) => {
-                            return <th key={value}>{value}</th>
-                        })
-                    }
-                </tr>
-                </tbody>
-            }
-            {
-                allEntities.map((entity) => {
-                    const obj = accessor.get(table, entity)! as any
-                    return <tbody key={entity}>
-                    <tr key={entity}>
-                        {
-                            columnNames.map((columnName, index) => {
-                                return <td key={index}>{obj[columnName]}</td>
-                            })
-                        }
-                    </tr>
-                    </tbody>
-                })
-            }
-        </table>
-    </React.Fragment>
+  const allEntities = accessor.allEntities(table);
+
+  return (
+    <Table>
+      <Tbody>
+        <Tr>
+          {columnNames.map((value) => {
+            return <Th key={value}>{value}</Th>;
+          })}
+        </Tr>
+      </Tbody>
+
+      {allEntities.map((entity) => {
+        const obj = accessor.get(table, entity)! as any;
+        return (
+          <Tbody key={entity}>
+            <Tr key={entity}>
+              {columnNames.map((columnName, index) => {
+                return (
+                  <Td key={index} style={{ padding: "10px" }}>
+                    <Text fontSize="sm">{JSON.stringify(obj[columnName])}</Text>
+                  </Td>
+                );
+              })}
+            </Tr>
+          </Tbody>
+        );
+      })}
+    </Table>
+  );
+}
+
+export interface WithID {
+  Id: number;
 }
