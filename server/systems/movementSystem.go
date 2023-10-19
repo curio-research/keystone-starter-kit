@@ -18,12 +18,12 @@ const (
 	Right Direction = "right"
 )
 
-type MovementJob struct {
+type MovementRequest struct {
 	Direction
 	PlayerId int
 }
 
-func movementSystem(ctx *server.TransactionCtx[MovementJob]) {
+func movementSystem(ctx *server.TransactionCtx[MovementRequest]) {
 	w := ctx.W
 	req := ctx.Req
 
