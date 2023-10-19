@@ -1,10 +1,10 @@
 package systems
 
 import (
+	"github.com/curio-research/keystone/game/data"
 	"math/rand"
 	"time"
 
-	"github.com/curio-research/keystone/game/tables"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
@@ -12,12 +12,11 @@ import (
 // * NOT used in production. Disable when necessary
 
 func testSystem(ctx *server.TransactionCtx[any]) {
-
 	// get random number
 	randNumber1 := randomInt()
 	randNumber2 := randomInt()
 
-	tables.Tile.Add(ctx.W, tables.TileSchema{
+	data.Tile.Add(ctx.W, data.TileSchema{
 		Position: state.Pos{
 			X: randNumber1,
 			Y: randNumber2,
