@@ -46,49 +46,15 @@ interface TroopStackSchema {
 
 const TroopStackTable = new TableAccessor<TroopStackSchema>("TroopStackSchema");
 
-enum PlayerRole {
-    Dealer,
-    NonDealer
-}
-
-enum PlayerStage {
-    Waiting,
-    Ready,
-    InGame
-}
-
 interface PlayerSchema {
-    MainWallet: string
-    GameWallet: string
-
-    Name: string
-    Role: PlayerRole
-    Stage: PlayerStage
-    AttackPoint: number
-    TradePoint: number
-    Gold: number
-    Connected: boolean
+    Position: Position
+    Resources: number
+    PlayerID: number
 
     Id: number
 }
 
 const PlayerTable = new TableAccessor<PlayerSchema>("PlayerSchema");
-
-enum CardSuit {
-    Heart,
-    Spade,
-    Club,
-    Diamond
-}
-
-enum CardDeckType {
-    DiscardLastRound,
-    DiscardCurrentRound,
-    ToDeal,
-    Dealing,
-    InHand,
-    Public
-}
 
 interface CardSchema {
     OwnerID: number

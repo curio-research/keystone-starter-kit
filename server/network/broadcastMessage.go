@@ -1,6 +1,7 @@
 package network
 
 import (
+	"fmt"
 	serverpb "github.com/curio-research/keystone/game/serverpb/output"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
@@ -17,6 +18,7 @@ type ProtoBasedErrorHandler struct {
 
 // format message into protobuf
 func (h *ProtoBasedErrorHandler) FormatMessage(transactionUuidIdentifier int, errorMessage string) *server.NetworkMessage {
+	fmt.Println(errorMessage)
 	msg, _ := server.NewMessage(0, uint32(serverpb.CMD_S2C_Error), uint32(transactionUuidIdentifier), &serverpb.S2C_ErrorMessage{
 		Content: errorMessage,
 	})

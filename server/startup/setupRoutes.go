@@ -38,7 +38,7 @@ func pushUpdateToQueue[T any](ctx *gin.Context, engine *server.EngineCtx) {
 
 	err = json.Unmarshal(b, &t)
 	if err != nil {
-		writer.Write([]byte(fmt.Sprintf("error unmarshalling request to type of %v", reflect.TypeOf(t).String())))
+		writer.Write([]byte(fmt.Sprintf("error unmarshalling request to type of %s: %s", reflect.TypeOf(t).String(), err.Error())))
 		return
 	}
 

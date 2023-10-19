@@ -12,7 +12,6 @@ import (
 	"strconv"
 )
 
-// TODO use urfave cli?
 func main() {
 	godotenv.Load()
 
@@ -47,6 +46,7 @@ func main() {
 	}
 
 	color.HiWhite("Listening on port:    " + port)
+	color.HiWhite("WS port:    " + wsPortStr)
 	fmt.Println()
 
 	log.Fatal(s.Run(":" + port))

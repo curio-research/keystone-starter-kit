@@ -1,6 +1,7 @@
 package systems
 
 import (
+	"fmt"
 	"github.com/curio-research/keystone/game/constants"
 	"github.com/curio-research/keystone/game/data"
 	"github.com/curio-research/keystone/server"
@@ -27,17 +28,23 @@ func movementSystem(ctx *server.TransactionCtx[MovementRequest]) {
 	w := ctx.W
 	req := ctx.Req
 
-	player := data.Player.Get(w, req.PlayerId) // TODO have get return a bool
-	if player.Id == 0 {
-
+	playerRes := data.Player.Filter(w,
+		data.PlayerSchema{
+			PlayerID: req.PlayerId,
+		}, []string{"PlayerID"})
+	if len(playerRes) == 0 {
+		ctx.EmitError("you have not created a player yet", []int{req.PlayerId})
+		return
 	}
 
+	player := data.Player.Get(w, playerRes[0])
 	targetPos := targetTile(player.Position, req.Direction)
 	validTileToMove := validateTile(w, targetPos)
 
 	if validTileToMove {
 		player.Position = targetPos
 		data.Player.Set(w, player.Id, player)
+		fmt.Println("player ", player.PlayerID, " new position ", targetPos)
 	}
 }
 
