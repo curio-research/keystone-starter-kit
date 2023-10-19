@@ -3,6 +3,7 @@ import {TableAccessor} from "../core/tableAccessor";
 import {useSelector} from "react-redux";
 import {TableType, WorldType} from "../store/store";
 import {WithID} from "../core/schemas";
+import * as dgram from "dgram";
 
 
 interface TableProps<T extends WithID> {
@@ -28,7 +29,7 @@ export default function TableDisplay<T extends WithID> (props: {accessor: TableA
 function Table<T extends WithID>(props: TableProps<T>) {
     const {table, accessor} = props;
 
-    const anyVal = accessor.getAny(table)
+    const anyVal = accessor.getAny(table) as any
     if (anyVal === undefined) {
         return null
     }
@@ -45,8 +46,16 @@ function Table<T extends WithID>(props: TableProps<T>) {
                 <tbody>
                 <tr>
                     {
-                        columnNames.map((value) => {
-                            return <th key={value}>{value}</th>
+                        columnNames.map((columnName) => {
+                            const val = anyVal[columnName]
+                            let keys = Object.keys(val);
+                            if (keys.length > 0) {
+                                return keys.map((fieldName, index, array) => {
+                                   return <th key={fieldName}>{fieldName}</th>
+                                })
+                            } else {
+                                return <th key={columnName}>{columnName}</th>
+                            }
                         })
                     }
                 </tr>
@@ -59,7 +68,15 @@ function Table<T extends WithID>(props: TableProps<T>) {
                     <tr key={entity}>
                         {
                             columnNames.map((columnName, index) => {
-                                return <td key={index}>{obj[columnName]}</td>
+                                const val = obj[columnName]
+                                let keys = Object.keys(val);
+                                if (keys.length > 0) {
+                                    return keys.map(function (fieldName) {
+                                        return <td key={index}>{val[fieldName]}</td>
+                                    })
+                                } else {
+                                    return <td key={index}>{obj[columnName]}</td>
+                                }
                             })
                         }
                     </tr>
