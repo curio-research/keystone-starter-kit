@@ -22,21 +22,28 @@ func main() {
 		logging.Log().Infof("missing RAND_SEED env variable, seeding randomness with local variable", randSeed)
 	}
 
-	randSeedNumber, err := strconv.Atoi(randSeed)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	s, err := server.MainServer(randSeedNumber)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	// get listening port
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = strconv.Itoa(constants.DefaultListeningPort)
 		logging.Log().Infof("missing PORT env variable, using %s", port)
+	}
+
+	// get websocket port (for streaming updates)
+	wsPortStr := os.Getenv("WS_PORT")
+	if wsPortStr == "" {
+		wsPortStr = strconv.Itoa(constants.DefaultWSPort)
+		logging.Log().Infof("missing WS_PORT env variable, using %s", wsPortStr)
+	}
+
+	wsPort, err := strconv.Atoi(wsPortStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	s, err := server.MainServer(wsPort)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	color.HiWhite("Listening on port:    " + port)

@@ -10,6 +10,8 @@ import (
 	"reflect"
 )
 
+// TODO WS routes for error + updates
+
 // each route should be a call to a system
 // setup routes that should be called
 

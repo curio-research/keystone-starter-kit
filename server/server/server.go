@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"github.com/curio-research/keystone/game/network"
 	"strconv"
 	"sync"
 
@@ -14,7 +15,7 @@ import (
 	"github.com/tjarratt/babble"
 )
 
-func MainServer(randSeedNumber int) (*gin.Engine, error) {
+func MainServer(websocketPort int) (*gin.Engine, error) {
 	color.HiYellow("")
 	color.HiYellow("---- 🗝  Powered by Keystone 🗿 ----")
 	fmt.Println()
@@ -31,7 +32,14 @@ func MainServer(randSeedNumber int) (*gin.Engine, error) {
 	startup.InitGame(gameCtx.World)
 	color.HiWhite("Tick rate:         " + strconv.Itoa(gameCtx.GameTick.TickRateMs) + "ms")
 
-	// setup server routes
+	// setting up websocket requests to receive state updates (create router to handle getting WS requests in game)
+	streamServer, err := server.NewStreamServer(s, gameCtx, nil, websocketPort)
+	if err != nil {
+		return nil, err
+	}
+	gameCtx.Stream = streamServer
+
+	// setup HTTP routes
 	startup.SetupRoutes(s, gameCtx)
 
 	return s, nil
@@ -53,6 +61,8 @@ func setupWorld(gameId string) *server.EngineCtx {
 		World:                  gameWorld,
 		GameTick:               gameTick,
 		TransactionsToSaveLock: sync.Mutex{},
+		SystemErrorHandler:     &network.ProtoBasedErrorHandler{},
+		SystemBroadcastHandler: &network.ProtoBasedBroadcastHandler{},
 	}
 
 	// initialize a websocket streaming server for both incoming and outgoing requests

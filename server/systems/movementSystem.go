@@ -19,15 +19,19 @@ const (
 )
 
 type MovementRequest struct {
-	Direction
-	PlayerId int
+	Direction `json:"direction"`
+	PlayerId  int `json:"playerId"`
 }
 
 func movementSystem(ctx *server.TransactionCtx[MovementRequest]) {
 	w := ctx.W
 	req := ctx.Req
 
-	player := data.Player.Get(w, req.PlayerId)
+	player := data.Player.Get(w, req.PlayerId) // TODO have get return a bool
+	if player.Id == 0 {
+
+	}
+
 	targetPos := targetTile(player.Position, req.Direction)
 	validTileToMove := validateTile(w, targetPos)
 
