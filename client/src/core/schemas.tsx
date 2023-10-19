@@ -33,6 +33,7 @@ interface TileSchema {
 
 interface PlayerSchema {
   Id: number;
+  PlayerId: number;
   Position: Position;
   Resources: number;
 }

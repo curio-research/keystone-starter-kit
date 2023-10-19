@@ -1,15 +1,14 @@
 package network
 
 import (
-	"strings"
-
-	pb_dict "github.com/curio-research/keystone/game/proto/output/pb.dict"
-	pb_game "github.com/curio-research/keystone/game/proto/output/pb.game"
+	"fmt"
+	serverpb "github.com/curio-research/keystone/game/serverpb/output"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
+	"strings"
 )
 
-// TODO: refurther refactor to separate proto and error handler
+// TODO: refurther refactor to separate serverpb and error handler
 
 // error handler for emitting errors from systems
 // protobuf based implementation for our game
@@ -19,8 +18,8 @@ type ProtoBasedErrorHandler struct {
 
 // format message into protobuf
 func (h *ProtoBasedErrorHandler) FormatMessage(transactionUuidIdentifier int, errorMessage string) *server.NetworkMessage {
-
-	msg, _ := server.NewMessage(0, uint32(pb_dict.CMD_pb_game_S2C_ServerMessage), uint32(transactionUuidIdentifier), &pb_game.S2C_ServerMessage{
+	fmt.Println(errorMessage)
+	msg, _ := server.NewMessage(0, uint32(serverpb.CMD_S2C_Error), uint32(transactionUuidIdentifier), &serverpb.S2C_ErrorMessage{
 		Content: errorMessage,
 	})
 
@@ -34,14 +33,12 @@ func (h *ProtoBasedBroadcastHandler) BroadcastMessage(ctx *server.EngineCtx, cli
 	stateChanges := filterTableUpdatesWithoutLocal(ctx.World.TableUpdates)
 
 	if ctx.ShouldRecordError {
-		// for error logging purposes during testing, log them
-
-		// loop through all client client events and see which one is a server message
+		// loop through all client client events and see which one is an error
 		for _, clientEvent := range clientEvents {
-			if clientEvent.NetworkMessage.GetCommand() == uint32(pb_dict.CMD_pb_game_S2C_ServerMessage) {
+			if clientEvent.NetworkMessage.GetCommand() == uint32(serverpb.CMD_S2C_Error) {
 
-				// decode the error message string from proto and log it
-				data := &pb_game.S2C_ServerMessage{}
+				// decode the error message string from serverpb and log it
+				data := &serverpb.S2C_ErrorMessage{}
 				clientEvent.NetworkMessage.GetProtoMessage(data)
 
 				ctx.ErrorLog = append(ctx.ErrorLog, server.ErrorLog{
@@ -57,7 +54,6 @@ func (h *ProtoBasedBroadcastHandler) BroadcastMessage(ctx *server.EngineCtx, cli
 	}
 
 	ctx.Stream.PublishStateChanges(stateChanges, clientEvents)
-
 }
 
 func filterTableUpdatesWithoutLocal(tableUpdates state.TableUpdateArray) state.TableUpdateArray {

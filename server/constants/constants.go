@@ -4,20 +4,6 @@ package constants
 // game constants
 // ------------------------
 
-type UnitStats struct {
-	Name            UnitType
-	Layer           Layer
-	Strength        int
-	MovementStamina int
-	Speed           float64 // milliseconds per small tile
-	CanLoad         bool
-	IsLoadable      bool
-	CanMove         bool
-	CanAttack       bool
-	CanGuard        bool
-	DeathPriority   int // the higher the priority is, the earlier the troop type dies in a battle
-}
-
 var (
 	// game tick rate (milliseconds)
 	TickRate int = 100
@@ -41,10 +27,14 @@ var (
 	AttackIdleTimeMs int = 2000
 
 	// in large tiles
-	WorldWidth  int = 7
-	WorldHeight int = 7
+	WorldWidth  int = 10
+	WorldHeight int = 10
 
 	// entity for global randomness seed
 	RandomnessEntity int = 6969
 	GameEntity       int = 200
+
+	// fractions to use when generating map
+	FreeTilesRatio          = 0.8
+	AnimalsToFreeTilesRatio = 0.3
 )

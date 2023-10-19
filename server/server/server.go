@@ -2,14 +2,11 @@ package server
 
 import (
 	"fmt"
-	"log"
-	"net/http"
+	"github.com/curio-research/keystone/game/network"
 	"strconv"
 	"sync"
 
 	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/helper"
-	"github.com/curio-research/keystone/game/network"
 	"github.com/curio-research/keystone/game/startup"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
@@ -18,12 +15,7 @@ import (
 	"github.com/tjarratt/babble"
 )
 
-func StartMainServer(mode string, websocketPort int, mySQLdsn string, randSeedNumber int) (*gin.Engine, *server.EngineCtx, error) {
-	// for debugging using profiler
-	go func() {
-		log.Println(http.ListenAndServe("localhost:6060", nil))
-	}()
-
+func MainServer(websocketPort int) (*gin.Engine, error) {
 	color.HiYellow("")
 	color.HiYellow("---- 🗝  Powered by Keystone 🗿 ----")
 	fmt.Println()
@@ -32,16 +24,35 @@ func StartMainServer(mode string, websocketPort int, mySQLdsn string, randSeedNu
 	s := gin.Default()
 	s.Use(server.CORSMiddleware())
 
-	// initialize the in-memory world
-	gameWorld := state.NewWorld()
-	helper.InitGame(gameWorld, 0)
-
-	gameTick := server.NewGameTick(constants.TickRate)
-	// this is where you setup the tick schedules for your game
-	startup.AddSystems(gameTick)
-
-	// randomly generate gameID
+	// initialize gameCtx (should be refactored to keystone)
 	gameId := babble.NewBabbler().Babble()
+	gameCtx := setupWorld(gameId)
+
+	// initialize in-game world
+	startup.InitGame(gameCtx.World)
+	color.HiWhite("Tick rate:         " + strconv.Itoa(gameCtx.GameTick.TickRateMs) + "ms")
+
+	// setting up websocket requests to receive state updates (create router to handle getting WS requests in game)
+	streamServer, err := server.NewStreamServer(s, gameCtx, nil, websocketPort)
+	if err != nil {
+		return nil, err
+	}
+	gameCtx.Stream = streamServer
+
+	// setup HTTP routes
+	startup.SetupRoutes(s, gameCtx)
+
+	return s, nil
+}
+
+// TODO this function should be in keystone
+func setupWorld(gameId string) *server.EngineCtx {
+	gameWorld := state.NewWorld()
+	gameTick := server.NewGameTick(constants.TickRate)
+
+	// add systems for game
+	gameTick.Schedule = server.NewTickSchedule() // TODO tick schedule should be initialized in `newGameTick`
+	startup.AddSystems(gameTick)
 
 	// this is the master game context being passed around, containing pointers to everything
 	gameCtx := &server.EngineCtx{ // TODO create a constructor for this
@@ -50,44 +61,11 @@ func StartMainServer(mode string, websocketPort int, mySQLdsn string, randSeedNu
 		World:                  gameWorld,
 		GameTick:               gameTick,
 		TransactionsToSaveLock: sync.Mutex{},
-		Mode:                   mode,
 		SystemErrorHandler:     &network.ProtoBasedErrorHandler{},
 		SystemBroadcastHandler: &network.ProtoBasedBroadcastHandler{},
-		RandSeed:               randSeedNumber,
 	}
 
 	// initialize a websocket streaming server for both incoming and outgoing requests
-	streamServer, err := server.NewStreamServer(s, gameCtx, network.SocketRequestRouter, websocketPort)
-	if err != nil {
-		return nil, nil, err
-	}
-	gameCtx.Stream = streamServer
-	gameTick.Setup(gameCtx, gameTick.Schedule)
-
-	// ////////////////////////
-	//    save state loop
-	// ////////////////////////
-
-	if mode == "prod" {
-		// TODO: re-enable after stability in SQL mode achieves stability with more testing
-		err = network.InitializeSQLHandlers(gameCtx, mySQLdsn)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		fmt.Println("Saving initial game state ... ")
-		// first, save the initial game state before game started
-		initialStateUpdatesToSave := gameCtx.World.GetAndClearTableUpdates()
-		gameCtx.SaveStateHandler.SaveState(initialStateUpdatesToSave)
-
-		// initialize mySQL connection for state sync
-		server.SetupSaveStateLoop(gameCtx, constants.SaveStateToDatabaseRate)
-	}
-
-	color.HiWhite("Tick rate:         " + strconv.Itoa(gameTick.TickRateMs) + "ms")
-
-	// setup server routes
-	network.SetupRoutes(s, gameCtx)
-
-	return s, gameCtx, nil
+	gameTick.Setup(gameCtx, gameTick.Schedule) // TODO should just be a call on gameCtx
+	return gameCtx
 }

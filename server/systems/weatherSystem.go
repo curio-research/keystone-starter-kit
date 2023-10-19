@@ -2,22 +2,22 @@ package systems
 
 import (
 	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/tables"
+	"github.com/curio-research/keystone/game/data"
 	"github.com/curio-research/keystone/server"
 )
 
 // weather automatically changes
 func weatherSystem(ctx *server.TransactionCtx[any]) {
-	game := tables.Game.Get(ctx.W, constants.GameEntity)
+	game := data.Game.Get(ctx.W, constants.GameEntity)
 
 	// change weather
-	if game.Weather == tables.Sunny {
-		game.Weather = tables.Windy
+	if game.Weather == data.Sunny {
+		game.Weather = data.Windy
 	} else {
-		game.Weather = tables.Sunny
+		game.Weather = data.Sunny
 	}
 
-	tables.Game.Set(ctx.W, constants.GameEntity, game)
+	data.Game.Set(ctx.W, constants.GameEntity, game)
 }
 
 var WeatherSystem = server.CreateGeneralSystem(weatherSystem)

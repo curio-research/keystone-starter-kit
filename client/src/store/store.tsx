@@ -1,6 +1,5 @@
 import { enableMapSet } from "immer";
 import { configureStore, createSlice, getDefaultMiddleware, PayloadAction } from "@reduxjs/toolkit";
-import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
 import { AccessorsMap } from "../core/schemas";
 
 enableMapSet();
@@ -27,7 +26,7 @@ export interface StoreState {
   uiControls: {
     selectedTableDisplay: string | null;
   };
-  tableState: Map<string, Map<number, any>>;
+  tableState: WorldType;
 }
 
 export const InitializeState = (): StoreState => {
@@ -45,7 +44,7 @@ const slice = createSlice({
   reducers: {
     addUpdate: function (state: StoreState, action: PayloadAction<TableUpdate>) {
       const payload = action.payload;
-      let op = payload.op;
+      const op = payload.op;
       if (op === TableOperationType.Add) {
         return undefined;
       }
@@ -78,9 +77,8 @@ const slice = createSlice({
 
 export type TableType<T> = Map<number, T>;
 export type WorldType = Map<string, TableType<any>>;
-export type StoreType = ToolkitStore<StoreState>;
 
-export const store: StoreType = configureStore({
+export const store = configureStore({
   reducer: slice.reducer,
   middleware: customizedMiddleware,
 });
