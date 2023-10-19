@@ -1,79 +1,75 @@
-import "reflect-metadata"
-import {TableAccessor} from "./tableAccessor";
+import "reflect-metadata";
+import { TableAccessor } from "./tableAccessor";
 
-export interface WithID {
-    Id: number
+// ------------------------
+// game schemas
+// TODO: add automatic code-generation for this step
+// ------------------------
+interface LocalRandSeedSchema {
+  RandValue: number;
+  Id: number;
+}
+
+enum Weather {
+  Sunny = 1,
+  Windy = 2,
+}
+
+interface GameSchema {
+  Id: number;
+  Weather: Weather;
+}
+
+enum Terrain {
+  Grass = 1,
+  Wall = 2,
+}
+
+interface TileSchema {
+  Id: number;
+  Position: Position;
+  Terrain: Terrain;
+}
+
+interface PlayerSchema {
+  Id: number;
+  PlayerId: number;
+  Position: Position;
+  Resources: number;
+}
+
+interface ProjectileSchema {
+  Id: number;
+  Position: Position;
+}
+
+interface AnimalSchema {
+  Id: number;
+  Type: number;
+  Position: Position;
 }
 
 interface Position {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 }
 
-interface LargeTileSchema {
-    Pos: Position
-    OwnerId: number
-    Level: number
-    Visible: boolean
-    Locked: boolean
-    Id: number
-}
+// ---------------------------
+// table accessors
+// ---------------------------
 
-const LargeTileTable = new TableAccessor<LargeTileSchema>("LargeTileSchema");
+export const PlayerTable = new TableAccessor<PlayerSchema>("PlayerSchema");
+export const TileTable = new TableAccessor<TileSchema>("TileSchema");
+export const GameTable = new TableAccessor<GameSchema>("GameSchema");
+export const AnimalTable = new TableAccessor<AnimalSchema>("AnimalSchema");
+export const ProjectileTable = new TableAccessor<ProjectileSchema>("ProjectileSchema");
+export const LocalRandSeedTable = new TableAccessor<LocalRandSeedSchema>("LocalRandSeedSchema");
 
-interface SmallTileSchema {
-    Pos: Position
-    Id: number
-}
+// ------------------------------
+export const Accessors: TableAccessor<any>[] = [PlayerTable, TileTable, GameTable, AnimalTable, ProjectileTable, LocalRandSeedTable];
 
-const SmallTileTable = new TableAccessor<SmallTileSchema>("SmallTileSchema");
-
-type TroopType = string
-type Layer = string
-
-interface TroopStackSchema {
-    TroopType: TroopType
-    Layer: Layer
-    Amount: number
-    Pos: Position
-    OwnerId: number
-    MovementStamina: number
-    Moving: boolean
-    IsGuarding: boolean
-    LoadedStackId: number
-    Id: number
-}
-
-const TroopStackTable = new TableAccessor<TroopStackSchema>("TroopStackSchema");
-
-interface PlayerSchema {
-    Position: Position
-    Resources: number
-    PlayerID: number
-
-    Id: number
-}
-
-const PlayerTable = new TableAccessor<PlayerSchema>("PlayerSchema");
-
-interface CardSchema {
-    OwnerID: number
-    Number: number
-
-    Id: number
-}
-
-const CardTable = new TableAccessor<CardSchema>("CardSchema")
-
-export const Accessors: TableAccessor<any>[] = [
-    LargeTileTable,
-    SmallTileTable,
-    TroopStackTable,
-    PlayerTable,
-    CardTable
-]
-
-export const AccessorsMap = new Map<string, TableAccessor<any>>()
+// TODO: initialize in a better way
+export const AccessorsMap = new Map<string, TableAccessor<any>>();
 for (const accessor of Accessors) {
-    AccessorsMap.set(accessor.name(), accessor);
+  AccessorsMap.set(accessor.name(), accessor);
 }
