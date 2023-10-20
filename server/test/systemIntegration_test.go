@@ -22,11 +22,17 @@ func TestPickUpGold(t *testing.T) {
 	w := ctx.World
 	playerID := 3
 
+	assert.Len(t, data.Animal.Entities(w), 1)
+
+	player, found := getPlayer(w, 3)
+	require.True(t, found)
+	require.Equal(t, 0, player.Resources)
+
 	server.QueueTxFromExternal(ctx, systems.CreateProjectileRequest{
 		Direction: systems.Right,
 		PlayerId:  playerID,
 	}, "")
-	utils.TickWorldForward(ctx, 4)
+	utils.TickWorldForward(ctx, 50) // create projectile + queue projectile update jobs
 
 	assert.Len(t, data.Animal.Entities(w), 0)
 
@@ -38,9 +44,8 @@ func TestPickUpGold(t *testing.T) {
 		utils.TickWorldForward(ctx, 100)
 	}
 
-	player, found := getPlayer(w, 3)
+	player, found = getPlayer(w, 3)
 	require.True(t, found)
-
 	assert.Equal(t, constants.AnimalGold, player.Resources)
 
 }
