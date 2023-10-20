@@ -58,7 +58,7 @@ class FilterArgs<T> {
     const matchingValues = new Array<T>();
 
     this.table.forEach(function (value: T) {
-      for (let cb of callbacks) {
+      for (const cb of callbacks) {
         if (!cb(value)) {
           return;
         }
