@@ -31,7 +31,9 @@ func AddSystems(gameTick *server.GameTick) {
 	// internal systems run by themselves without external input
 	// ---------------------
 	tickSchedule.AddTickSystem(constants.WeatherChangeIntervalMs, systems.WeatherSystem)
-	tickSchedule.AddTickSystem(1_000, systems.TestSystem)
+
+	// TODO: remove in prod
+	// tickSchedule.AddTickSystem(1_000, systems.TestSystem)
 
 	tickSchedule.AddTickSystem(constants.TickRate, systems.UpdateProjectileSystem)
 

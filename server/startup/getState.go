@@ -1,7 +1,9 @@
 package startup
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/curio-research/keystone/server"
 	"github.com/gin-gonic/gin"
@@ -15,15 +17,16 @@ type DownloadStateRequest struct {
 
 // response
 type GameStateResponse struct {
+	Tick   int         `json:"tick"`
 	Tables []TableData `json:"tables"`
 }
 
 type TableData struct {
-	Name   string             `json:"name"`
-	Values []EntityValuePairs `json:"entityValuePairs"`
+	Name   string  `json:"name"`
+	Values []Value `json:"values"`
 }
 
-type EntityValuePairs struct {
+type Value struct {
 	Entity int `json:"entity"`
 	Value  any `json:"value"`
 }
@@ -35,7 +38,10 @@ func DownloadStateHandler(ctx *server.EngineCtx) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, "Invalid request body")
 		}
 
+		startTime := time.Now()
+
 		gameStateResponse := &GameStateResponse{
+			Tick:   ctx.GameTick.TickNumber,
 			Tables: make([]TableData, 0),
 		}
 
@@ -47,11 +53,11 @@ func DownloadStateHandler(ctx *server.EngineCtx) gin.HandlerFunc {
 
 				tableData := TableData{
 					Name:   tableName,
-					Values: make([]EntityValuePairs, 0),
+					Values: make([]Value, 0),
 				}
 
 				for entity, value := range table.EntityToValue {
-					tableData.Values = append(tableData.Values, EntityValuePairs{
+					tableData.Values = append(tableData.Values, Value{
 						Entity: entity,
 						Value:  value,
 					})
@@ -60,6 +66,8 @@ func DownloadStateHandler(ctx *server.EngineCtx) gin.HandlerFunc {
 
 			}
 		}
+
+		fmt.Println("DownloadStateHandler took", time.Since(startTime))
 
 		c.JSON(http.StatusOK, gameStateResponse)
 	}
