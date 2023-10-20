@@ -42,4 +42,7 @@ var (
 
 	// speed in terms of ticks between each movement (lower the number, the faster the speed!)
 	BulletSpeed = 10
+
+	PlayerGold = 10
+	AnimalGold = 5
 )

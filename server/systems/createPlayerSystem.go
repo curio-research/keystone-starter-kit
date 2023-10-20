@@ -29,8 +29,7 @@ var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 	}
 
 	data.Player.Add(w, data.PlayerSchema{
-		Position:  availablePos,
-		Resources: 10,
-		PlayerId:  req.PlayerID,
+		Position: availablePos,
+		PlayerId: req.PlayerID,
 	})
 })

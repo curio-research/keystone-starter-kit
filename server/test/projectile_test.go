@@ -5,7 +5,6 @@ import (
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/utils"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"testing"
 )
 
@@ -25,12 +24,12 @@ func Test_Projectile(t *testing.T) {
 	}, "")
 	utils.TickWorldForward(ctx, 10)
 
-	player2 := getPlayers(w, 2)
-	require.Len(t, player2, 1)
+	_, found := getPlayer(w, 2)
+	assert.True(t, found)
 
 	utils.TickWorldForward(ctx, 30)
-	player2 = getPlayers(w, 2)
-	assert.Len(t, player2, 0)
+	_, found = getPlayer(w, 2)
+	assert.False(t, found)
 }
 
 func Test_Projectile_SavedByObstacle(t *testing.T) {
@@ -49,6 +48,6 @@ func Test_Projectile_SavedByObstacle(t *testing.T) {
 	}, "")
 	utils.TickWorldForward(ctx, 40)
 
-	player2 := getPlayers(w, 2)
-	assert.Len(t, player2, 1)
+	_, found := getPlayer(w, 2)
+	assert.True(t, found)
 }

@@ -85,9 +85,8 @@ func parseIntoWorld(t *testing.T, w *state.GameWorld, input string) {
 				} else if playerRegex.Match([]byte(symbol)) {
 					p, _ := strconv.Atoi(symbol)
 					data.Player.Add(w, data.PlayerSchema{
-						Position:  pos,
-						Resources: 10,
-						PlayerId:  p,
+						Position: pos,
+						PlayerId: p,
 					})
 				} else {
 					t.Fatal(fmt.Sprintf("character %s does not match any known symbol", symbol))
@@ -97,19 +96,14 @@ func parseIntoWorld(t *testing.T, w *state.GameWorld, input string) {
 	}
 }
 
-func getPlayers(w *state.GameWorld, playerID int) []data.PlayerSchema {
+func getPlayer(w *state.GameWorld, playerID int) (data.PlayerSchema, bool) {
 	playerEntity := data.Player.Filter(w, data.PlayerSchema{
 		PlayerId: playerID,
 	}, []string{"PlayerId"})
 
 	if len(playerEntity) == 0 {
-		return nil
+		return data.PlayerSchema{}, false
 	}
 
-	var players []data.PlayerSchema
-	for _, p := range playerEntity {
-		players = append(players, data.Player.Get(w, p))
-	}
-
-	return players
+	return data.Player.Get(w, playerEntity[0]), true
 }

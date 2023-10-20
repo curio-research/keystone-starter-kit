@@ -2,6 +2,7 @@ package systems
 
 import (
 	"encoding/json"
+	"github.com/curio-research/keystone/game/constants"
 	"github.com/curio-research/keystone/game/data"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
@@ -70,6 +71,10 @@ func updateWorldForCollision(w state.IWorld, position state.Pos) (collision bool
 		for _, player := range players {
 			data.Player.RemoveEntity(w, player)
 		}
+		data.Resource.Add(w, data.ResourceSchema{
+			Position: position,
+			Amount:   constants.PlayerGold,
+		})
 	}
 
 	animals := animalsAtLocation(w, position)
@@ -78,6 +83,10 @@ func updateWorldForCollision(w state.IWorld, position state.Pos) (collision bool
 		for _, animal := range animals {
 			data.Animal.RemoveEntity(w, animal)
 		}
+		data.Resource.Add(w, data.ResourceSchema{
+			Position: position,
+			Amount:   constants.AnimalGold,
+		})
 	}
 
 	if isObstacleTile(w, position) {

@@ -21,7 +21,7 @@ func SetupRoutes(router *gin.Engine, engine *server.EngineCtx) {
 		pushUpdateToQueue[systems.CreatePlayerRequest](ctx, engine)
 	})
 	router.POST("/move", func(ctx *gin.Context) {
-		pushUpdateToQueue[systems.PlayerMovementRequest](ctx, engine)
+		pushUpdateToQueue[systems.UpdatePlayerRequest](ctx, engine)
 	})
 }
 

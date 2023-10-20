@@ -3,6 +3,7 @@ package systems
 import (
 	"github.com/curio-research/keystone/game/data"
 	"github.com/curio-research/keystone/server"
+	"github.com/curio-research/keystone/state"
 )
 
 // TODO: add movement system
@@ -16,12 +17,12 @@ const (
 	Right Direction = "right"
 )
 
-type PlayerMovementRequest struct {
+type UpdatePlayerRequest struct {
 	Direction `json:"direction"`
 	PlayerId  int `json:"playerId"`
 }
 
-var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[PlayerMovementRequest]) {
+var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[UpdatePlayerRequest]) {
 	w := ctx.W
 	req := ctx.Req
 
@@ -40,6 +41,25 @@ var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 
 	if validTileToMove {
 		player.Position = targetPos
+
+		// add any resources the player gained at the position
+		resource, found := resourceAtPosition(w, targetPos)
+		if found {
+			data.Resource.RemoveEntity(w, resource.Id)
+			player.Resources += resource.Amount
+		}
+
 		data.Player.Set(w, player.Id, player)
 	}
 })
+
+func resourceAtPosition(w state.IWorld, position state.Pos) (data.ResourceSchema, bool) {
+	resource := data.Resource.Filter(w, data.ResourceSchema{
+		Position: position,
+	}, []string{"Position"})
+
+	if len(resource) == 0 {
+		return data.ResourceSchema{}, false
+	}
+	return data.Resource.Get(w, resource[0]), true
+}
