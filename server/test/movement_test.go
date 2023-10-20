@@ -25,22 +25,26 @@ var playerRegex, _ = regexp.Compile("[0-9]")
 func TestMovement(t *testing.T) {
 	ctx := worldWithPath(t, `
 ....X.......
-....1X......
+...21A......
 ............
 ............
 ............
 `)
-	playerID := 1
-	// doesn't move up => obstacle above
-	server.QueueTxFromExternal(ctx, systems.MovementRequest{
-		Direction: systems.Up,
-		PlayerId:  1,
-	}, "")
-	utils.TickWorldForward(ctx, 100)
 
 	w := ctx.World
-	player := getPlayers(w, playerID)[0]
-	assert.Equal(t, state.Pos{X: 4, Y: 3}, player.Position)
+	playerID := 1
+
+	// doesn't move up/right/left because of obstacles
+	for _, direction := range []systems.Direction{systems.Up, systems.Right, systems.Left} {
+		server.QueueTxFromExternal(ctx, systems.MovementRequest{
+			Direction: direction,
+			PlayerId:  1,
+		}, "")
+		utils.TickWorldForward(ctx, 100)
+
+		player := getPlayers(w, playerID)[0]
+		assert.Equal(t, state.Pos{X: 4, Y: 3}, player.Position)
+	}
 
 	// move down
 	server.QueueTxFromExternal(ctx, systems.MovementRequest{
@@ -49,7 +53,7 @@ func TestMovement(t *testing.T) {
 	}, "")
 	utils.TickWorldForward(ctx, 100)
 
-	player = getPlayers(w, playerID)[0]
+	player := getPlayers(w, playerID)[0]
 	assert.Equal(t, state.Pos{X: 4, Y: 2}, player.Position)
 
 	// move right
