@@ -1,28 +1,36 @@
 import { TableAccessor } from "../core/tableAccessor";
-import { useSelector } from "react-redux";
-import { StoreState, TableType } from "../store/store";
+// import { useSelector } from "react-redux";
+// import { StoreState, TableType } from "../store/store";
 import { Table, Tbody, Tr, Th, Td, Text } from "@chakra-ui/react";
+import { TableType } from "../store/types";
+import { stateStore } from "..";
+import { observer } from "mobx-react";
 
 interface TableProps<T extends WithID> {
   table: TableType<T>;
   accessor: TableAccessor<T>;
 }
 
-export default function TableDisplay<T extends WithID>(props: { accessor: TableAccessor<T> }) {
-  const accessor = props.accessor;
-  const slice = useSelector((state: StoreState) => state.tableState.get(accessor.name()));
-  if (slice === undefined) {
+// <T extends WithID>(props: { accessor: TableAccessor<T> }) => {
+export const TableDisplay = observer(<T extends WithID>(props: { accessor: TableAccessor<T> }) => {
+  const { accessor } = props;
+
+  const tableName = stateStore.tableState.get(accessor.name());
+  if (tableName === undefined) {
     return null;
   }
 
   return (
     <>
-      <DisplayTable table={slice} accessor={accessor} />
+      <DisplayTable table={tableName} accessor={accessor} />
     </>
   );
-}
+});
 
-function DisplayTable<T extends WithID>(props: TableProps<T>) {
+export default TableDisplay;
+
+// <T extends WithID>(props: TableProps<T>) => {
+const DisplayTable = observer(<T extends WithID>(props: TableProps<T>) => {
   const { table, accessor } = props;
 
   const anyVal = accessor.getAny(table);
@@ -65,7 +73,7 @@ function DisplayTable<T extends WithID>(props: TableProps<T>) {
       })}
     </Table>
   );
-}
+});
 
 export interface WithID {
   Id: number;

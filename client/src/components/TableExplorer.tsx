@@ -1,16 +1,15 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import { Box, Select } from "@chakra-ui/react";
 // eslint-disable-next-line max-len
-import { addTableUpdateToPendingUpdates, addUpdate, applyAllPendingUpdates, GetStateResponse, setIsFetchingState, setSelectedTableDisplay, store, StoreState, TableOperationType, TableUpdate } from "../store/store";
+// import { addTableUpdateToPendingUpdates, addUpdate, applyAllPendingUpdates, GetStateResponse, setIsFetchingState, setSelectedTableDisplay, store, StoreState, TableOperationType, TableUpdate } from "../store/store";
 import { Accessors } from "../core/schemas";
-import Table from "./table";
-import { Box } from "@chakra-ui/react";
-import { Select } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { observer } from "mobx-react";
+import Table from "./Table";
 import axios from "axios";
+import { GetStateResponse, TableOperationType, TableUpdate } from "../store/types";
+import { stateStore, uiStore } from "..";
 
-function TableExplorer() {
-  const uiControls = useSelector((state: StoreState) => state.uiControls);
-
+const TableExplorer = observer(() => {
   const startup = async () => {
     // TODO: this is being pinged twice for some reason
     // TODO: move this to init file
@@ -25,10 +24,10 @@ function TableExplorer() {
       const updates = jsonObj as TableUpdate[];
 
       for (const update of updates) {
-        if (store.getState().isFetchingState) {
-          store.dispatch(addTableUpdateToPendingUpdates(update));
+        if (stateStore.isFetchingState) {
+          stateStore.addTableUpdateToPendingUpdates(update);
         } else {
-          store.dispatch(addUpdate(update));
+          stateStore.addUpdate(update);
         }
       }
     };
@@ -37,7 +36,7 @@ function TableExplorer() {
       console.log(event);
     };
 
-    store.dispatch(setIsFetchingState(true));
+    stateStore.setIsFetchingState(true);
 
     // call api
     const url = "http://localhost:9000/getState";
@@ -58,13 +57,12 @@ function TableExplorer() {
           time: date,
         };
 
-        store.dispatch(addUpdate(tableUpdate));
+        stateStore.addUpdate(tableUpdate);
       }
     }
 
-    store.dispatch(applyAllPendingUpdates(0));
-
-    store.dispatch(setIsFetchingState(false));
+    stateStore.applyAllPendingUpdates();
+    stateStore.setIsFetchingState(false);
   };
 
   useEffect(() => {
@@ -73,25 +71,29 @@ function TableExplorer() {
 
   return (
     <Box m={10}>
-      <Box w={"200px"} mb={10}>
+      <Box w="200px" mb={10}>
         <Select
-          value={uiControls.selectedTableDisplay || ""}
+          value={uiStore.selectedTableToDisplay || ""}
           placeholder="Select table"
           onChange={(e) => {
-            store.dispatch(setSelectedTableDisplay(e.target.value));
+            uiStore.setSelectedTableToDisplay(e.target.value);
           }}
         >
-          {Accessors.map((accessor, index) => {
-            return <option value={accessor.name()}>{accessor.name()}</option>;
+          {Accessors.map((accessor) => {
+            return (
+              <option value={accessor.name()} key={accessor.name()}>
+                {accessor.name()}
+              </option>
+            );
           })}
         </Select>
       </Box>
 
       {Accessors.map((accessor, index) => {
-        return uiControls.selectedTableDisplay === accessor.name() && <Table key={index} accessor={accessor} />;
+        return uiStore.selectedTableToDisplay === accessor.name() && <Table key={index} accessor={accessor} />;
       })}
     </Box>
   );
-}
+});
 
 export default TableExplorer;

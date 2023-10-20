@@ -1,4 +1,4 @@
-import { store, TableType } from "../store/store";
+import { TableType } from "../store/types";
 
 export class TableAccessor<T extends { Id: number }> {
   private tableName: string;
