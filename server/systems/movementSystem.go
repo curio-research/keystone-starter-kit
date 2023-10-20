@@ -81,7 +81,7 @@ func validateTile(w state.IWorld, pos state.Pos) bool {
 		return false
 	}
 
-	return true
+	return !isObstacleTile(w, pos)
 }
 
 var MovementSystem = server.CreateSystemFromRequestHandler(movementSystem)

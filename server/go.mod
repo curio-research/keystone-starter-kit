@@ -6,8 +6,10 @@ require (
 	github.com/curio-research/keystone v0.0.21
 	github.com/fatih/color v1.15.0
 	github.com/gin-gonic/gin v1.9.1
+	github.com/go-playground/assert/v2 v2.2.0
 	github.com/joho/godotenv v1.5.1
 	github.com/tjarratt/babble v0.0.0-20210505082055-cbca2a4833c1
+	google.golang.org/protobuf v1.31.0
 )
 
 require (
@@ -41,6 +43,5 @@ require (
 	golang.org/x/net v0.12.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/text v0.11.0 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
