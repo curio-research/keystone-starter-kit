@@ -29,8 +29,8 @@ func movementSystem(ctx *server.TransactionCtx[MovementRequest]) {
 
 	playerRes := data.Player.Filter(w,
 		data.PlayerSchema{
-			PlayerID: req.PlayerId,
-		}, []string{"PlayerID"})
+			PlayerId: req.PlayerId,
+		}, []string{"PlayerId"})
 	if len(playerRes) == 0 {
 		ctx.EmitError("you have not created a player yet", []int{req.PlayerId})
 		return
@@ -38,7 +38,7 @@ func movementSystem(ctx *server.TransactionCtx[MovementRequest]) {
 
 	player := data.Player.Get(w, playerRes[0])
 	targetPos := targetTile(player.Position, req.Direction)
-	validTileToMove := validateTile(w, targetPos)
+	validTileToMove := validateTileToMoveTo(w, targetPos)
 
 	if validTileToMove {
 		player.Position = targetPos
@@ -62,8 +62,8 @@ func targetTile(position state.Pos, direction Direction) state.Pos {
 }
 
 // TODO can we have a position entity?
-func validateTile(w state.IWorld, pos state.Pos) bool {
-	if (pos.X >= constants.WorldWidth || pos.X < 0) || (pos.Y >= constants.WorldHeight || pos.Y < 0) {
+func validateTileToMoveTo(w state.IWorld, pos state.Pos) bool {
+	if !withinBoardBoundary(pos) {
 		return false
 	}
 
@@ -80,6 +80,13 @@ func validateTile(w state.IWorld, pos state.Pos) bool {
 	}
 
 	return !isObstacleTile(w, pos)
+}
+
+func withinBoardBoundary(pos state.Pos) bool {
+	if (pos.X >= constants.WorldWidth || pos.X < 0) || (pos.Y >= constants.WorldHeight || pos.Y < 0) {
+		return false
+	}
+	return true
 }
 
 var MovementSystem = server.CreateSystemFromRequestHandler(movementSystem)

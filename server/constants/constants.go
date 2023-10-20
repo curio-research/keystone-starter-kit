@@ -39,5 +39,5 @@ var (
 	AnimalsToFreeTilesRatio = 0.3
 
 	// speed in terms of ticks between each movement (lower the number, the faster the speed!)
-	BulletSpeed = 100
+	BulletSpeed = 10
 )

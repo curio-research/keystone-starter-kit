@@ -8,9 +8,8 @@ import (
 )
 
 type CreateProjectileRequest struct {
-	Position  state.Pos `json:"position"`
 	Direction Direction `json:"direction"`
-	PlayerID  int       `json:"playerID"`
+	PlayerId  int       `json:"playerId"`
 }
 
 var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[CreateProjectileRequest]) {
@@ -18,29 +17,35 @@ var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 	w := ctx.W
 
 	direction := req.Direction
-	position := req.Position
-	if !validateTile(w, position) {
+	initialPosition, found := locationOfPlayer(w, req.PlayerId)
+	if !found {
 		return
 	}
 
-	var projectileID int
+	projectileID := data.Projectile.Add(w, data.ProjectileSchema{
+		Position: initialPosition,
+	})
+	position := targetTile(initialPosition, direction)
 	tickNumber := ctx.GameCtx.GameTick.TickNumber + constants.BulletSpeed
-	for validateTile(w, position) {
-		if position == req.Position {
-			position = targetTile(position, direction)
-			projectileID = data.Projectile.Add(w, data.ProjectileSchema{ // starts one tile in the direction it was shot
-				Position: position,
-			})
-		} else {
-			server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
-				NewPosition:  position,
-				Direction:    direction,
-				ProjectileID: projectileID,
-				PlayerID:     req.PlayerID,
-			}, "")
-			tickNumber += constants.BulletSpeed
-		}
-
+	for withinBoardBoundary(position) {
+		server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
+			NewPosition:  position,
+			Direction:    direction,
+			ProjectileID: projectileID,
+			PlayerID:     req.PlayerId,
+		}, "")
+		tickNumber += constants.BulletSpeed
 		position = targetTile(position, direction) // updates the position one step in the direction it was shot
 	}
+
 })
+
+func locationOfPlayer(w state.IWorld, playerId int) (state.Pos, bool) {
+	playerEntity := data.Player.Filter(w, data.PlayerSchema{PlayerId: playerId}, []string{"PlayerId"})
+	if len(playerEntity) == 0 {
+		return state.Pos{}, false
+	}
+
+	player := data.Player.Get(w, playerEntity[0])
+	return player.Position, true
+}

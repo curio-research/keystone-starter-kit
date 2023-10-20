@@ -15,8 +15,8 @@ var EstablishPlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *serv
 
 	player := data.Player.Filter(w,
 		data.PlayerSchema{
-			PlayerID: req.PlayerID,
-		}, []string{"PlayerID"})
+			PlayerId: req.PlayerID,
+		}, []string{"PlayerId"})
 	if len(player) != 0 {
 		ctx.EmitError("already created a player", []int{req.PlayerID})
 		return
@@ -31,6 +31,6 @@ var EstablishPlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *serv
 	data.Player.Add(w, data.PlayerSchema{
 		Position:  availablePos,
 		Resources: 10,
-		PlayerID:  req.PlayerID,
+		PlayerId:  req.PlayerID,
 	})
 })

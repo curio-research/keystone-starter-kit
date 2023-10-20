@@ -46,7 +46,7 @@ type PlayerSchema struct {
 	Id        int       `gorm:"primaryKey"`
 	Position  state.Pos `gorm:"embedded"`
 	Resources int
-	PlayerID  int
+	PlayerId  int
 }
 
 type ProjectileSchema struct {

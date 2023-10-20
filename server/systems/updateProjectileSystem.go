@@ -25,7 +25,7 @@ var UpdateProjectileSystem = server.CreateGeneralSystem(func(ctx *server.Transac
 		TickNumber: tickNumber,
 	}, []string{"Type", "TickNumber"})
 
-	for projectileUpdateEntity := range projectileUpdatesAtTick {
+	for _, projectileUpdateEntity := range projectileUpdatesAtTick {
 		projectileUpdateJob := server.TransactionTable.Get(w, projectileUpdateEntity)
 
 		var projectileReq UpdateProjectileRequest
@@ -50,7 +50,7 @@ var UpdateProjectileSystem = server.CreateGeneralSystem(func(ctx *server.Transac
 				json.Unmarshal([]byte(projectileTx.Data), &futureProjectileReq)
 
 				if futureProjectileReq.ProjectileID == projectileReq.ProjectileID {
-					data.Projectile.RemoveEntity(w, futureProjectileReq.ProjectileID)
+					server.TransactionTable.RemoveEntity(w, projectileJobEntity)
 				}
 			}
 		} else {

@@ -6,7 +6,6 @@ import (
 	"github.com/curio-research/keystone/game/data"
 	"github.com/curio-research/keystone/game/network"
 	"github.com/curio-research/keystone/game/startup"
-	"github.com/curio-research/keystone/game/systems"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 	"regexp"
@@ -49,12 +48,12 @@ func newTestEngine(gameWorld *state.GameWorld, systems ...server.TickSystemFunct
 	return gameCtx
 }
 
-func worldWithPath(t *testing.T, input string) *server.EngineCtx {
+func worldWithPath(t *testing.T, input string, systems ...server.TickSystemFunction) *server.EngineCtx {
 	w := state.NewWorld()
 	startup.RegisterTablesToWorld(w)
 	parseIntoWorld(t, w, input)
 
-	ctx := newTestEngine(w, systems.MovementSystem)
+	ctx := newTestEngine(w, systems...)
 
 	return ctx
 }
@@ -88,7 +87,7 @@ func parseIntoWorld(t *testing.T, w *state.GameWorld, input string) {
 					data.Player.Add(w, data.PlayerSchema{
 						Position:  pos,
 						Resources: 10,
-						PlayerID:  p,
+						PlayerId:  p,
 					})
 				} else {
 					t.Fatal(fmt.Sprintf("character %s does not match any known symbol", symbol))
@@ -100,8 +99,8 @@ func parseIntoWorld(t *testing.T, w *state.GameWorld, input string) {
 
 func getPlayers(w *state.GameWorld, playerID int) []data.PlayerSchema {
 	playerEntity := data.Player.Filter(w, data.PlayerSchema{
-		PlayerID: playerID,
-	}, []string{"PlayerID"})
+		PlayerId: playerID,
+	}, []string{"PlayerId"})
 
 	if len(playerEntity) == 0 {
 		return nil
