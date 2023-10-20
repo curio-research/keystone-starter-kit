@@ -2,7 +2,7 @@ package network
 
 import (
 	"fmt"
-	serverpb "github.com/curio-research/keystone/game/serverpb/output"
+	serverpb "github.com/curio-research/keystone-starter-kit/serverpb/output"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 	"strings"

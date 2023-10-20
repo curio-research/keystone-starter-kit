@@ -1,8 +1,8 @@
 package startup
 
 import (
-	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/systems"
+	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/curio-research/keystone/server"
 )
 

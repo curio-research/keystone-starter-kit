@@ -1,7 +1,7 @@
 package systems
 
 import (
-	"github.com/curio-research/keystone/game/data"
+	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone/server"
 )
 
