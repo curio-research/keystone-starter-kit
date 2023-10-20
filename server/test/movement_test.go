@@ -16,14 +16,14 @@ func TestMovement(t *testing.T) {
 ............
 ............
 ............
-`, systems.MovementSystem)
+`, systems.UpdatePlayerSystem)
 
 	w := ctx.World
 	playerID := 1
 
 	// doesn't move up/right/left because of obstacles
 	for _, direction := range []systems.Direction{systems.Up, systems.Right, systems.Left} {
-		server.QueueTxFromExternal(ctx, systems.MovementRequest{
+		server.QueueTxFromExternal(ctx, systems.PlayerMovementRequest{
 			Direction: direction,
 			PlayerId:  1,
 		}, "")
@@ -34,7 +34,7 @@ func TestMovement(t *testing.T) {
 	}
 
 	// move down
-	server.QueueTxFromExternal(ctx, systems.MovementRequest{
+	server.QueueTxFromExternal(ctx, systems.PlayerMovementRequest{
 		Direction: systems.Down,
 		PlayerId:  1,
 	}, "")
@@ -44,7 +44,7 @@ func TestMovement(t *testing.T) {
 	assert.Equal(t, state.Pos{X: 4, Y: 2}, player.Position)
 
 	// move right
-	server.QueueTxFromExternal(ctx, systems.MovementRequest{
+	server.QueueTxFromExternal(ctx, systems.PlayerMovementRequest{
 		Direction: systems.Right,
 		PlayerId:  1,
 	}, "")
@@ -54,7 +54,7 @@ func TestMovement(t *testing.T) {
 	assert.Equal(t, state.Pos{X: 5, Y: 2}, player.Position)
 
 	// can't move up
-	server.QueueTxFromExternal(ctx, systems.MovementRequest{
+	server.QueueTxFromExternal(ctx, systems.PlayerMovementRequest{
 		Direction: systems.Up,
 		PlayerId:  1,
 	}, "")

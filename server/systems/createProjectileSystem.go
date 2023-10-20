@@ -37,7 +37,6 @@ var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 		tickNumber += constants.BulletSpeed
 		position = targetTile(position, direction) // updates the position one step in the direction it was shot
 	}
-
 })
 
 func locationOfPlayer(w state.IWorld, playerId int) (state.Pos, bool) {

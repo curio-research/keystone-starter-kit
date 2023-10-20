@@ -5,11 +5,11 @@ import (
 	"github.com/curio-research/keystone/server"
 )
 
-type EstablishPlayerRequest struct {
+type CreatePlayerRequest struct {
 	PlayerID int `json:"playerId"`
 }
 
-var EstablishPlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[EstablishPlayerRequest]) {
+var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[CreatePlayerRequest]) {
 	w := ctx.W
 	req := ctx.Req
 
@@ -22,7 +22,7 @@ var EstablishPlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *serv
 		return
 	}
 
-	availablePos, ok := data.RandomAvailablePosition(w)
+	availablePos, ok := randomAvailablePosition(w)
 	if !ok {
 		ctx.EmitError("this is awkward... there is no more space for a new player :(", []int{req.PlayerID})
 		return
