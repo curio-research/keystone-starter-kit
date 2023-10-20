@@ -1,7 +1,6 @@
 package systems
 
 import (
-	"fmt"
 	"github.com/curio-research/keystone/game/constants"
 	"github.com/curio-research/keystone/game/data"
 	"github.com/curio-research/keystone/server"
@@ -44,7 +43,6 @@ func movementSystem(ctx *server.TransactionCtx[MovementRequest]) {
 	if validTileToMove {
 		player.Position = targetPos
 		data.Player.Set(w, player.Id, player)
-		fmt.Println("player ", player.PlayerID, " new position ", targetPos)
 	}
 }
 
