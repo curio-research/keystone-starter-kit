@@ -46,7 +46,7 @@ type PlayerSchema struct {
 	Id        int       `gorm:"primaryKey"`
 	Position  state.Pos `gorm:"embedded"`
 	Resources int
-	PlayerID  int
+	PlayerId  int
 }
 
 type ProjectileSchema struct {
@@ -57,6 +57,12 @@ type ProjectileSchema struct {
 type AnimalSchema struct {
 	Id       int       `gorm:"primaryKey"`
 	Position state.Pos `gorm:"embedded"`
+}
+
+type ResourceSchema struct {
+	Id       int       `gorm:"primaryKey"`
+	Position state.Pos `gorm:"embedded"`
+	Amount   int
 }
 
 // ----------------------------
@@ -72,6 +78,7 @@ var (
 	Tile            = state.NewTableAccessor[TileSchema]()
 	Player          = state.NewTableAccessor[PlayerSchema]()
 	Animal          = state.NewTableAccessor[AnimalSchema]()
+	Resource        = state.NewTableAccessor[ResourceSchema]()
 )
 
 var TableSchemasToAccessors = map[interface{}]state.ITable{
@@ -81,4 +88,5 @@ var TableSchemasToAccessors = map[interface{}]state.ITable{
 	&TileSchema{}:          Tile,
 	&PlayerSchema{}:        Player,
 	&AnimalSchema{}:        Animal,
+	&ResourceSchema{}:      Resource,
 }

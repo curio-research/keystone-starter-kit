@@ -21,8 +21,10 @@ func AddSystems(gameTick *server.GameTick) {
 	// External Systems
 	// External systems require external input to run
 	// ---------------------
-	tickSchedule.AddTickSystem(constants.TickRate, systems.EstablishPlayerSystem)
-	tickSchedule.AddTickSystem(constants.TickRate, systems.MovementSystem)
+	tickSchedule.AddTickSystem(constants.TickRate, systems.CreatePlayerSystem)
+	tickSchedule.AddTickSystem(constants.TickRate, systems.UpdatePlayerSystem)
+
+	tickSchedule.AddTickSystem(constants.TickRate, systems.CreateProjectileSystem)
 
 	// ---------------------
 	// Internal Systems
@@ -30,6 +32,11 @@ func AddSystems(gameTick *server.GameTick) {
 	// ---------------------
 	tickSchedule.AddTickSystem(constants.WeatherChangeIntervalMs, systems.WeatherSystem)
 	tickSchedule.AddTickSystem(1_000, systems.TestSystem)
+
+	tickSchedule.AddTickSystem(constants.TickRate, systems.UpdateProjectileSystem)
+
+	tickSchedule.AddTickSystem(constants.AnimalCreationRate, systems.CreateAnimalSystem)
+	tickSchedule.AddTickSystem(constants.AnimalUpdateRate, systems.UpdateAnimalSystem)
 
 	gameTick.Schedule = tickSchedule
 }

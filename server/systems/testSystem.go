@@ -2,11 +2,9 @@ package systems
 
 import (
 	"github.com/curio-research/keystone/game/data"
-	"math/rand"
-	"time"
-
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
+	"math/rand"
 )
 
 // * NOT used in production. Disable when necessary
@@ -25,7 +23,6 @@ func testSystem(ctx *server.TransactionCtx[any]) {
 }
 
 func randomInt() int {
-	rand.Seed(time.Now().UnixNano())
 	return rand.Intn(100) + 1
 }
 

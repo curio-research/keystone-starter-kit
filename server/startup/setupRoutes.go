@@ -18,10 +18,10 @@ import (
 func SetupRoutes(router *gin.Engine, engine *server.EngineCtx) {
 	// Setup any http requests here
 	router.POST("/establishPlayer", func(ctx *gin.Context) {
-		pushUpdateToQueue[systems.EstablishPlayerRequest](ctx, engine)
+		pushUpdateToQueue[systems.CreatePlayerRequest](ctx, engine)
 	})
 	router.POST("/move", func(ctx *gin.Context) {
-		pushUpdateToQueue[systems.MovementRequest](ctx, engine)
+		pushUpdateToQueue[systems.UpdatePlayerRequest](ctx, engine)
 	})
 }
 
