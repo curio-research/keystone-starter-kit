@@ -1,4 +1,4 @@
-import { TableType } from "../store/types";
+import { ITable, IWorld } from 'store/types';
 
 export class TableAccessor<T extends { Id: number }> {
   private tableName: string;
@@ -10,35 +10,37 @@ export class TableAccessor<T extends { Id: number }> {
     return this.tableName;
   }
 
-  get(table: TableType<T>, id: number): T | undefined {
+  get(table: ITable<T>, id: number): T | undefined {
     return table.get(id);
   }
 
-  getAll(table: TableType<T>): Array<T> {
+  getAll(world: IWorld): Array<T> {
+    const table = world.get(this.tableName);
+
     if (!table) {
       return [];
     }
     return Array.from<T>(table.values());
   }
 
-  getAny(table: TableType<T>): T | undefined {
+  getAny(table: ITable<T>): T | undefined {
     const { value } = table.values().next();
     return value;
   }
 
-  set(table: TableType<T>, id: number, val: T) {
+  set(table: ITable<T>, id: number, val: T) {
     table.set(id, val);
   }
 
-  remove(table: TableType<T>, id: number) {
+  remove(table: ITable<T>, id: number) {
     table.delete(id);
   }
 
-  filter(table: TableType<T>): FilterArgs<T> {
+  filter(table: ITable<T>): FilterArgs<T> {
     return new FilterArgs(table);
   }
 
-  allEntities(table: TableType<T>): Array<number> {
+  allEntities(table: ITable<T>): Array<number> {
     return Array.from<number>(table.keys());
   }
 }

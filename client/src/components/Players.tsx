@@ -1,28 +1,15 @@
 import { observer } from 'mobx-react';
-import { PlayerTable, TileTable } from '../core/schemas';
+import { PlayerTable } from 'core/schemas';
 import { stateStore } from '..';
-import { tileSideWidth } from './TerrainTiles';
+import { PositionWrapper } from './TerrainTiles';
 
 const Players = observer(() => {
-  const players = PlayerTable.getAll(stateStore.tableState.get(PlayerTable.name())!);
-
-  console.log(players);
+  const players = PlayerTable.getAll(stateStore.tableState);
 
   return (
     <div>
       {players.map((player) => {
-        return (
-          <div
-            key={player.Id}
-            style={{
-              position: 'absolute',
-              left: player.Position.x * tileSideWidth,
-              top: player.Position.y * tileSideWidth,
-              width: `${tileSideWidth}px`,
-              height: `${tileSideWidth}px`,
-            }}
-          ></div>
-        );
+        return <PositionWrapper position={player.Position} key={player.Id} />;
       })}
     </div>
   );

@@ -19,7 +19,7 @@ import (
 func SetupRoutes(router *gin.Engine, gameCtx *server.EngineCtx) {
 
 	// Setup any http requests here
-	router.POST("/establishPlayer", func(ctx *gin.Context) {
+	router.POST("/createPlayer", func(ctx *gin.Context) {
 		pushUpdateToQueue[systems.CreatePlayerRequest](ctx, gameCtx)
 	})
 	router.POST("/move", func(ctx *gin.Context) {

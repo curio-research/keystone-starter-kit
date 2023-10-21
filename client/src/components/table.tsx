@@ -1,13 +1,13 @@
-import { TableAccessor } from "../core/tableAccessor";
+import { TableAccessor } from '../core/tableAccessor';
 // import { useSelector } from "react-redux";
-// import { StoreState, TableType } from "../store/store";
-import { Table, Tbody, Tr, Th, Td, Text } from "@chakra-ui/react";
-import { TableType } from "../store/types";
-import { stateStore } from "..";
-import { observer } from "mobx-react";
+// import { StoreState, ITable } from "../store/store";
+import { Table, Tbody, Tr, Th, Td, Text } from '@chakra-ui/react';
+import { ITable } from '../store/types';
+import { stateStore } from '..';
+import { observer } from 'mobx-react';
 
 interface TableProps<T extends WithID> {
-  table: TableType<T>;
+  table: ITable<T>;
   accessor: TableAccessor<T>;
 }
 
@@ -62,7 +62,7 @@ const DisplayTable = observer(<T extends WithID>(props: TableProps<T>) => {
             <Tr key={entity}>
               {columnNames.map((columnName, index) => {
                 return (
-                  <Td key={index} style={{ padding: "10px" }}>
+                  <Td key={index} style={{ padding: '10px' }}>
                     <Text fontSize="sm">{JSON.stringify(obj[columnName])}</Text>
                   </Td>
                 );

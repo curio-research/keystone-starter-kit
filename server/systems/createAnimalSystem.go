@@ -4,7 +4,6 @@ import (
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
-	"github.com/curio-research/keystone/logging"
 	"github.com/curio-research/keystone/server"
 )
 
@@ -14,10 +13,7 @@ var CreateAnimalSystem = server.CreateGeneralSystem(func(ctx *server.Transaction
 	w := ctx.W
 
 	entities := data.Animal.Entities(w)
-	if len(entities) >= constants.MaxNPCInWorld {
-		if len(entities) > constants.MaxNPCInWorld {
-			logging.Log().Errorf("too many entities in the world")
-		}
+	if len(entities) >= constants.MaxAnimals {
 		return
 	}
 

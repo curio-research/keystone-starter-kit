@@ -6,9 +6,12 @@ package constants
 
 var (
 	// game tick rate (milliseconds)
-	TickRate           int = 20
+	TickRate int = 20
+
+	// animials
 	AnimalCreationRate     = 500
-	AnimalUpdateRate       = 200
+	AnimalUpdateRate       = 100
+	MaxAnimals         int = 10
 
 	// rate to save world to database (seconds)
 	// 0 means never save
@@ -16,8 +19,6 @@ var (
 
 	// time in milliseconds per turn timer count down
 	WeatherChangeIntervalMs = 20_000
-
-	MaxNPCInWorld int = 20
 
 	// total players count
 	TotalPlayersCount = 5
@@ -38,7 +39,7 @@ var (
 
 	// fractions to use when generating map
 	FreeTilesRatio    = 0.9
-	AnimalUpdateRatio = 0.7
+	AnimalUpdateRatio = 0.2
 
 	// speed in terms of ticks between each movement (lower the number, the faster the speed!)
 	BulletSpeed = 10

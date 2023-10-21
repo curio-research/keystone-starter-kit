@@ -1,5 +1,5 @@
-import "reflect-metadata";
-import { TableAccessor } from "./tableAccessor";
+import 'reflect-metadata';
+import { TableAccessor } from './tableAccessor';
 
 // ------------------------
 // game schemas
@@ -43,7 +43,7 @@ interface AnimalSchema {
   Position: Position;
 }
 
-interface Position {
+export interface Position {
   x: number;
   y: number;
 }
@@ -52,12 +52,12 @@ interface Position {
 // table accessors
 // ---------------------------
 
-export const PlayerTable = new TableAccessor<PlayerSchema>("PlayerSchema");
-export const TileTable = new TableAccessor<TileSchema>("TileSchema");
-export const GameTable = new TableAccessor<GameSchema>("GameSchema");
-export const AnimalTable = new TableAccessor<AnimalSchema>("AnimalSchema");
-export const ProjectileTable = new TableAccessor<ProjectileSchema>("ProjectileSchema");
-export const LocalRandSeedTable = new TableAccessor<LocalRandSeedSchema>("LocalRandSeedSchema");
+export const PlayerTable = new TableAccessor<PlayerSchema>('PlayerSchema');
+export const TileTable = new TableAccessor<TileSchema>('TileSchema');
+export const GameTable = new TableAccessor<GameSchema>('GameSchema');
+export const AnimalTable = new TableAccessor<AnimalSchema>('AnimalSchema');
+export const ProjectileTable = new TableAccessor<ProjectileSchema>('ProjectileSchema');
+export const LocalRandSeedTable = new TableAccessor<LocalRandSeedSchema>('LocalRandSeedSchema');
 
 // ------------------------------
 export const Accessors: TableAccessor<any>[] = [PlayerTable, TileTable, GameTable, AnimalTable, ProjectileTable, LocalRandSeedTable];

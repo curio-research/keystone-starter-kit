@@ -4,14 +4,12 @@ import Game from './Game';
 import { Box, Text } from '@chakra-ui/react';
 import { GetStateResponse, TableOperationType, TableUpdate } from '../store/types';
 import { stateStore } from '..';
-import axios from 'axios';
 import { useEffect } from 'react';
+import { KeystoneWebsocketUrl, api } from 'core/config';
 
 export const AppRouter = () => {
   const startup = async () => {
-    // TODO: this is being pinged twice for some reason
-    // TODO: move this to init file
-    const ws = new WebSocket('ws://localhost:9001/subscribeAllTableUpdates');
+    const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
 
     ws.onopen = () => {
       console.log('connection opened!');
@@ -37,14 +35,12 @@ export const AppRouter = () => {
     stateStore.setIsFetchingState(true);
 
     // call api
-    const url = 'http://localhost:9000/getState';
-    const res = await axios.post(url, {});
+    const res = await api.post('/getState', {});
 
     const data = res.data as GetStateResponse;
 
     for (const table of data.tables) {
       for (const value of table.values) {
-        // TODO: fix time
         const date = new Date();
 
         const tableUpdate: TableUpdate = {

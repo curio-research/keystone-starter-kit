@@ -1,12 +1,12 @@
-import _ from "lodash";
-import { AccessorsMap } from "../core/schemas";
-import { TableOperationType, TableUpdate, WorldType } from "./types";
+import _ from 'lodash';
+import { AccessorsMap } from '../core/schemas';
+import { TableOperationType, TableUpdate, IWorld } from './types';
 
 // keystone's table state store
 export class TableStateStore {
   public isFetchingState: boolean;
   public pendingTableUpdatesToInsert: TableUpdate[];
-  public tableState: WorldType;
+  public tableState: IWorld;
 
   constructor() {
     this.isFetchingState = false;
