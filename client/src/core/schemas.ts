@@ -43,6 +43,12 @@ interface AnimalSchema {
   Position: Position;
 }
 
+interface ResourceSchema {
+  Id: number;
+  Position: Position;
+  Amount: number;
+}
+
 export interface Position {
   x: number;
   y: number;
@@ -58,9 +64,18 @@ export const GameTable = new TableAccessor<GameSchema>('GameSchema');
 export const AnimalTable = new TableAccessor<AnimalSchema>('AnimalSchema');
 export const ProjectileTable = new TableAccessor<ProjectileSchema>('ProjectileSchema');
 export const LocalRandSeedTable = new TableAccessor<LocalRandSeedSchema>('LocalRandSeedSchema');
+export const ResourceTable = new TableAccessor<ResourceSchema>('ResourceSchema');
 
 // ------------------------------
-export const Accessors: TableAccessor<any>[] = [PlayerTable, TileTable, GameTable, AnimalTable, ProjectileTable, LocalRandSeedTable];
+export const Accessors: TableAccessor<any>[] = [
+  PlayerTable,
+  TileTable,
+  GameTable,
+  AnimalTable,
+  ProjectileTable,
+  LocalRandSeedTable,
+  ResourceTable,
+];
 
 // TODO: initialize in a better way
 export const AccessorsMap = new Map<string, TableAccessor<any>>();

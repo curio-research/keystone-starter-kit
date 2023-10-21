@@ -8,6 +8,7 @@ import { Fire, Move } from 'core/requests';
 import { useNavigate } from 'react-router-dom';
 import Projectiles from 'components/Projectiles';
 import { uiStore } from 'index';
+import Resources from 'components/Resources';
 
 // TODO: remove
 const playerId = -100;
@@ -78,6 +79,7 @@ const Game = observer(() => {
         <Animals />
         <Players />
         <Projectiles />
+        <Resources />
       </div>
     </Box>
   );
