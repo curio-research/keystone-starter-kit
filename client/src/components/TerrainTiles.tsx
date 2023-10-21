@@ -32,7 +32,7 @@ interface IPositionWrapper {
 export const PositionWrapper = styled.div<IPositionWrapper>`
   position: absolute;
   left: ${(props) => props.position.x * tileSideWidth}px;
-  top: ${(props) => props.position.y * tileSideWidth}px;
+  bottom: ${(props) => props.position.y * tileSideWidth}px;
   width: ${tileSideWidth}px;
   height: ${tileSideWidth}px;
 `;

@@ -49,7 +49,14 @@ const Game = observer(() => {
       <div>/state explorer</div>
       <a href={'/explore'} style={{ height: '20px' }} />
 
-      <div style={{ width: '700px', height: '700px', border: '1px solid black', position: 'relative' }}>
+      <div
+        style={{
+          width: '700px',
+          height: '700px',
+          border: '1px solid black',
+          position: 'relative',
+        }}
+      >
         <TerrainTile />
         <Animals />
         <Players />
