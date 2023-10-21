@@ -9,8 +9,16 @@ export class TableAccessor<T extends { Id: number }> {
   name(): string {
     return this.tableName;
   }
+
   get(table: TableType<T>, id: number): T | undefined {
     return table.get(id);
+  }
+
+  getAll(table: TableType<T>): Array<T> {
+    if (!table) {
+      return [];
+    }
+    return Array.from<T>(table.values());
   }
 
   getAny(table: TableType<T>): T | undefined {
