@@ -1,8 +1,9 @@
 package systems
 
 import (
-	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/data"
+	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/data"
+	"github.com/curio-research/keystone-starter-kit/helper"
 	"github.com/curio-research/keystone/logging"
 	"github.com/curio-research/keystone/server"
 )
@@ -20,7 +21,7 @@ var CreateAnimalSystem = server.CreateGeneralSystem(func(ctx *server.Transaction
 		return
 	}
 
-	pos, ok := randomAvailablePosition(w)
+	pos, ok := helper.RandomAvailablePosition(w)
 	if !ok {
 		return
 	}

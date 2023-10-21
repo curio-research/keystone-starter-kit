@@ -36,7 +36,6 @@ func AddSystems(gameTick *server.GameTick) {
 	// tickSchedule.AddTickSystem(1_000, systems.TestSystem)
 
 	tickSchedule.AddTickSystem(constants.TickRate, systems.UpdateProjectileSystem)
-
 	tickSchedule.AddTickSystem(constants.AnimalCreationRate, systems.CreateAnimalSystem)
 	tickSchedule.AddTickSystem(constants.AnimalUpdateRate, systems.UpdateAnimalSystem)
 

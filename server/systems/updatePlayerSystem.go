@@ -1,25 +1,15 @@
 package systems
 
 import (
-	"github.com/curio-research/keystone/game/data"
+	"github.com/curio-research/keystone-starter-kit/data"
+	"github.com/curio-research/keystone-starter-kit/helper"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
 
-// TODO: add movement system
-
-type Direction string
-
-const (
-	Up    Direction = "up"
-	Down  Direction = "down"
-	Left  Direction = "left"
-	Right Direction = "right"
-)
-
 type UpdatePlayerRequest struct {
-	Direction `json:"direction"`
-	PlayerId  int `json:"playerId"`
+	Direction helper.Direction `json:"direction"`
+	PlayerId  int              `json:"playerId"`
 }
 
 var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[UpdatePlayerRequest]) {
@@ -36,8 +26,8 @@ var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 	}
 
 	player := data.Player.Get(w, playerRes[0])
-	targetPos := targetTile(player.Position, req.Direction)
-	validTileToMove := validateTileToMoveTo(w, targetPos)
+	targetPos := helper.TargetTile(player.Position, req.Direction)
+	validTileToMove := helper.ValidateTileToMoveTo(w, targetPos)
 
 	if validTileToMove {
 		player.Position = targetPos

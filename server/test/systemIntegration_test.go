@@ -1,14 +1,17 @@
 package test
 
 import (
-	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/data"
-	"github.com/curio-research/keystone/game/systems"
+	"testing"
+
+	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/data"
+	"github.com/curio-research/keystone-starter-kit/helper"
+	"github.com/curio-research/keystone-starter-kit/systems"
+
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestPickUpGold(t *testing.T) {
@@ -29,7 +32,7 @@ func TestPickUpGold(t *testing.T) {
 	require.Equal(t, 0, player.Resources)
 
 	server.QueueTxFromExternal(ctx, systems.CreateProjectileRequest{
-		Direction: systems.Right,
+		Direction: helper.Right,
 		PlayerId:  playerID,
 	}, "")
 	utils.TickWorldForward(ctx, 50) // create projectile + queue projectile update jobs
@@ -38,7 +41,7 @@ func TestPickUpGold(t *testing.T) {
 
 	for i := 0; i < 4; i++ {
 		server.QueueTxFromExternal(ctx, systems.UpdatePlayerRequest{
-			Direction: systems.Right,
+			Direction: helper.Right,
 			PlayerId:  playerID,
 		}, "")
 		utils.TickWorldForward(ctx, 100)

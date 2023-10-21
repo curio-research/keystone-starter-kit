@@ -2,17 +2,19 @@ package test
 
 import (
 	"fmt"
-	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/data"
-	"github.com/curio-research/keystone/game/network"
-	"github.com/curio-research/keystone/game/startup"
-	"github.com/curio-research/keystone/server"
-	"github.com/curio-research/keystone/state"
+
 	"regexp"
 	"strconv"
 	"strings"
 	"sync"
 	"testing"
+
+	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/data"
+	"github.com/curio-research/keystone-starter-kit/network"
+	"github.com/curio-research/keystone-starter-kit/startup"
+	"github.com/curio-research/keystone/server"
+	"github.com/curio-research/keystone/state"
 )
 
 var terrainKind = map[rune]data.Terrain{

@@ -1,13 +1,15 @@
 package test
 
 import (
-	"github.com/curio-research/keystone/game/systems"
+	"testing"
+
+	"github.com/curio-research/keystone-starter-kit/helper"
+	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 	"github.com/curio-research/keystone/utils"
 	"github.com/go-playground/assert/v2"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestMovement(t *testing.T) {
@@ -23,7 +25,7 @@ func TestMovement(t *testing.T) {
 	playerID := 1
 
 	// doesn't move up/right/left because of obstacles
-	for _, direction := range []systems.Direction{systems.Up, systems.Right, systems.Left} {
+	for _, direction := range []helper.Direction{helper.Up, helper.Right, helper.Left} {
 		server.QueueTxFromExternal(ctx, systems.UpdatePlayerRequest{
 			Direction: direction,
 			PlayerId:  1,
@@ -37,7 +39,7 @@ func TestMovement(t *testing.T) {
 
 	// move down
 	server.QueueTxFromExternal(ctx, systems.UpdatePlayerRequest{
-		Direction: systems.Down,
+		Direction: helper.Down,
 		PlayerId:  1,
 	}, "")
 	utils.TickWorldForward(ctx, 100)
@@ -48,7 +50,7 @@ func TestMovement(t *testing.T) {
 
 	// move right
 	server.QueueTxFromExternal(ctx, systems.UpdatePlayerRequest{
-		Direction: systems.Right,
+		Direction: helper.Right,
 		PlayerId:  1,
 	}, "")
 	utils.TickWorldForward(ctx, 100)
@@ -59,7 +61,7 @@ func TestMovement(t *testing.T) {
 
 	// can't move up
 	server.QueueTxFromExternal(ctx, systems.UpdatePlayerRequest{
-		Direction: systems.Up,
+		Direction: helper.Up,
 		PlayerId:  1,
 	}, "")
 	utils.TickWorldForward(ctx, 100)

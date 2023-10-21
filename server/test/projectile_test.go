@@ -1,11 +1,13 @@
 package test
 
 import (
-	"github.com/curio-research/keystone/game/systems"
+	"testing"
+
+	"github.com/curio-research/keystone-starter-kit/helper"
+	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/utils"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func Test_Projectile(t *testing.T) {
@@ -19,7 +21,7 @@ func Test_Projectile(t *testing.T) {
 
 	w := ctx.World
 	server.QueueTxFromExternal(ctx, systems.CreateProjectileRequest{
-		Direction: systems.Down,
+		Direction: helper.Down,
 		PlayerId:  1,
 	}, "")
 	utils.TickWorldForward(ctx, 10)
@@ -43,7 +45,7 @@ func Test_Projectile_SavedByObstacle(t *testing.T) {
 
 	w := ctx.World
 	server.QueueTxFromExternal(ctx, systems.CreateProjectileRequest{
-		Direction: systems.Down,
+		Direction: helper.Down,
 		PlayerId:  1,
 	}, "")
 	utils.TickWorldForward(ctx, 40)
