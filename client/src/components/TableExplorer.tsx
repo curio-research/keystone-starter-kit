@@ -5,9 +5,7 @@ import { Box, Select } from '@chakra-ui/react';
 import { Accessors } from '../core/schemas';
 import { observer } from 'mobx-react';
 import Table from './Table';
-import axios from 'axios';
-import { GetStateResponse, TableOperationType, TableUpdate } from '../store/types';
-import { stateStore, uiStore } from '..';
+import { uiStore } from '..';
 
 const TableExplorer = observer(() => {
   return (

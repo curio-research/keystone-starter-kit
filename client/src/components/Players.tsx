@@ -9,7 +9,15 @@ const Players = observer(() => {
   return (
     <div>
       {players.map((player) => {
-        return <PositionWrapper position={player.Position} key={player.Id} />;
+        return (
+          <PositionWrapper
+            position={player.Position}
+            key={player.Id}
+            style={{
+              backgroundColor: 'blue',
+            }}
+          />
+        );
       })}
     </div>
   );

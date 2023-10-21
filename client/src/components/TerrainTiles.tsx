@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Position, TileTable } from '../core/schemas';
+import { Position, TileTable } from 'core/schemas';
 import { stateStore } from '..';
 import styled from '@emotion/styled';
 

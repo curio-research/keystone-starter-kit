@@ -1,6 +1,4 @@
 import { TableAccessor } from '../core/tableAccessor';
-// import { useSelector } from "react-redux";
-// import { StoreState, ITable } from "../store/store";
 import { Table, Tbody, Tr, Th, Td, Text } from '@chakra-ui/react';
 import { ITable } from '../store/types';
 import { stateStore } from '..';

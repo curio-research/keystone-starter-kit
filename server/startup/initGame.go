@@ -4,16 +4,17 @@ import (
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
+	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
 
-func InitGame(w *state.GameWorld) {
+func InitGame(ctx *server.EngineCtx) {
 	// initialize game storage tables
-	RegisterTablesToWorld(w)
+	RegisterTablesToWorld(ctx.World)
 
 	// initialize game data into those tables
-	InitWorld(w)
+	InitWorld(ctx)
 }
 
 // register tables to the world
@@ -28,8 +29,8 @@ func RegisterTablesToWorld(w *state.GameWorld) {
 	w.AddTables(tableInterfacesToAdd...)
 }
 
-func InitWorld(w *state.GameWorld) {
-	data.Game.AddSpecific(w, constants.GameEntity, data.GameSchema{
+func InitWorld(ctx *server.EngineCtx) {
+	data.Game.AddSpecific(ctx.World, constants.GameEntity, data.GameSchema{
 		Weather: data.Sunny,
 	})
 
@@ -42,7 +43,7 @@ func InitWorld(w *state.GameWorld) {
 				Y: i,
 			}
 
-			data.Tile.AddSpecific(w, largeTileId, data.TileSchema{
+			data.Tile.AddSpecific(ctx.World, largeTileId, data.TileSchema{
 				Position: pos,
 				Terrain:  terrain,
 			})
@@ -50,4 +51,12 @@ func InitWorld(w *state.GameWorld) {
 			largeTileId++
 		}
 	}
+
+	// add admin player
+	adminPlayerId := -100
+	createPlayerRequest := systems.CreatePlayerRequest{
+		PlayerID: adminPlayerId,
+	}
+
+	server.QueueTxFromExternal(ctx, createPlayerRequest, "")
 }

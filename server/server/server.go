@@ -29,7 +29,7 @@ func MainServer(websocketPort int) (*gin.Engine, error) {
 	gameCtx := setupWorld(gameId)
 
 	// initialize in-game world
-	startup.InitGame(gameCtx.World)
+	startup.InitGame(gameCtx)
 	color.HiWhite("Tick rate:         " + strconv.Itoa(gameCtx.GameTick.TickRateMs) + "ms")
 
 	// setting up websocket requests to receive state updates (create router to handle getting WS requests in game)

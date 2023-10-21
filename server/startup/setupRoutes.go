@@ -25,6 +25,9 @@ func SetupRoutes(router *gin.Engine, gameCtx *server.EngineCtx) {
 	router.POST("/move", func(ctx *gin.Context) {
 		pushUpdateToQueue[systems.UpdatePlayerRequest](ctx, gameCtx)
 	})
+	router.POST("/fire", func(ctx *gin.Context) {
+		pushUpdateToQueue[systems.CreateProjectileRequest](ctx, gameCtx)
+	})
 
 	// get game state
 	router.POST("/getState", DownloadStateHandler(gameCtx))
