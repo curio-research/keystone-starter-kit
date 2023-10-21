@@ -27,7 +27,6 @@ var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 		// if collided, remove the projectile
 		data.Projectile.RemoveEntity(w, ctx.Req.ProjectileID)
 
-		// TODO: have better query methods
 		// remove future jobs for the projectile
 		projectileJobs := server.TransactionTable.Filter(w, server.TransactionSchema{
 			Type: reflect.TypeOf(UpdateProjectileRequest{}).String(),
@@ -53,6 +52,12 @@ var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 })
 
 func updateWorldForCollision(w state.IWorld, position state.Pos) (collision bool) {
+
+	// check if position is within world
+	if !helper.WithinBoardBoundary(position) {
+		return true
+	}
+
 	players := playersAtLocation(w, position)
 	if len(players) != 0 {
 		collision = true

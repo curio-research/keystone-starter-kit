@@ -28,7 +28,7 @@ var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 	})
 	position := helper.TargetTile(initialPosition, direction)
 	tickNumber := ctx.GameCtx.GameTick.TickNumber + constants.BulletSpeed
-	for helper.WithinBoardBoundary(position) {
+	for helper.WithinBoardBoundaryWithExtraLayer(position) {
 		server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
 			NewPosition:  position,
 			Direction:    direction,

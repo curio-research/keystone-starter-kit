@@ -107,6 +107,13 @@ func WithinBoardBoundary(pos state.Pos) bool {
 	return true
 }
 
+func WithinBoardBoundaryWithExtraLayer(pos state.Pos) bool {
+	if (pos.X > constants.WorldWidth || pos.X < -1) || (pos.Y > constants.WorldHeight || pos.Y < -1) {
+		return false
+	}
+	return true
+}
+
 func IsObstacleTile(w state.IWorld, pos state.Pos) bool {
 	ids := data.Tile.Filter(w, data.TileSchema{
 		Position: pos,
