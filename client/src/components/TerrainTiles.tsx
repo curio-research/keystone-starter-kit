@@ -16,7 +16,7 @@ const TerrainTile = observer(() => {
             position={tile.Position}
             key={tile.Id}
             style={{
-              background: tile.Terrain ? 'green' : 'brown',
+              background: tile.Terrain ? 'green' : 'black',
             }}
           />
         );

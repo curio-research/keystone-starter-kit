@@ -22,8 +22,8 @@ export const CreatePlayer = async (request: CreatePlayerRequest) => {
   return api.post('/player', request);
 };
 
-export const CreateProjectile = async (request: CreateProjectileRequest) => {
-  return api.post('/projectile', request);
+export const Fire = async (request: CreateProjectileRequest) => {
+  return api.post('/fire', request);
 };
 
 export const Move = async (request: MoveRequest) => {

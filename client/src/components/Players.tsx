@@ -14,7 +14,7 @@ const Players = observer(() => {
             position={player.Position}
             key={player.Id}
             style={{
-              backgroundColor: 'blue',
+              backgroundColor: 'white',
             }}
           />
         );

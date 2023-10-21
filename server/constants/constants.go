@@ -42,7 +42,7 @@ var (
 	AnimalUpdateRatio = 0.2
 
 	// speed in terms of ticks between each movement (lower the number, the faster the speed!)
-	BulletSpeed = 10
+	BulletSpeed = 5
 
 	PlayerGold = 10
 	AnimalGold = 5
