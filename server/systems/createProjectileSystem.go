@@ -1,15 +1,16 @@
 package systems
 
 import (
-	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/data"
+	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/data"
+	"github.com/curio-research/keystone-starter-kit/helper"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
 
 type CreateProjectileRequest struct {
-	Direction Direction `json:"direction"`
-	PlayerId  int       `json:"playerId"`
+	Direction helper.Direction `json:"direction"`
+	PlayerId  int              `json:"playerId"`
 }
 
 var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[CreateProjectileRequest]) {
@@ -25,9 +26,9 @@ var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 	projectileID := data.Projectile.Add(w, data.ProjectileSchema{
 		Position: initialPosition,
 	})
-	position := targetTile(initialPosition, direction)
+	position := helper.TargetTile(initialPosition, direction)
 	tickNumber := ctx.GameCtx.GameTick.TickNumber + constants.BulletSpeed
-	for withinBoardBoundary(position) {
+	for helper.WithinBoardBoundary(position) {
 		server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
 			NewPosition:  position,
 			Direction:    direction,
@@ -35,7 +36,7 @@ var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 			PlayerID:     req.PlayerId,
 		}, "")
 		tickNumber += constants.BulletSpeed
-		position = targetTile(position, direction) // updates the position one step in the direction it was shot
+		position = helper.TargetTile(position, direction) // updates the position one step in the direction it was shot
 	}
 })
 

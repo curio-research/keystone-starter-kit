@@ -37,11 +37,6 @@ type TileSchema struct {
 	Terrain  Terrain
 }
 
-type ObstacleTileSchema struct {
-	Id       int       `gorm:"primaryKey"`
-	Position state.Pos `gorm:"embedded"`
-}
-
 type PlayerSchema struct {
 	Id        int       `gorm:"primaryKey"`
 	Position  state.Pos `gorm:"embedded"`

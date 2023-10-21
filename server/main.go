@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/server"
-	"github.com/curio-research/keystone/logging"
-	"github.com/fatih/color"
-	"github.com/joho/godotenv"
 	"log"
 	"os"
 	"strconv"
+
+	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/server"
+	"github.com/curio-research/keystone/logging"
+	"github.com/fatih/color"
+	"github.com/joho/godotenv"
 )
 
 func main() {

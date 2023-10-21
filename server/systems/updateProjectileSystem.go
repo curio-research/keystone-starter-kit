@@ -2,16 +2,18 @@ package systems
 
 import (
 	"encoding/json"
-	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/data"
+	"reflect"
+
+	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/data"
+	"github.com/curio-research/keystone-starter-kit/helper"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
-	"reflect"
 )
 
 type UpdateProjectileRequest struct {
 	NewPosition  state.Pos
-	Direction    Direction
+	Direction    helper.Direction
 	ProjectileID int
 	PlayerID     int
 }
@@ -89,7 +91,7 @@ func updateWorldForCollision(w state.IWorld, position state.Pos) (collision bool
 		})
 	}
 
-	if isObstacleTile(w, position) {
+	if helper.IsObstacleTile(w, position) {
 		collision = true
 	}
 
@@ -107,13 +109,4 @@ func animalsAtLocation(w state.IWorld, pos state.Pos) []int {
 	return data.Animal.Filter(w, data.AnimalSchema{
 		Position: pos,
 	}, []string{"Position"})
-}
-
-func isObstacleTile(w state.IWorld, pos state.Pos) bool {
-	ids := data.Tile.Filter(w, data.TileSchema{
-		Position: pos,
-		Terrain:  data.Obstacle,
-	}, []string{"Position", "Terrain"})
-
-	return len(ids) != 0
 }

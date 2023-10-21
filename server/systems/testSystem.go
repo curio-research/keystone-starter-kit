@@ -1,10 +1,12 @@
 package systems
 
 import (
-	"github.com/curio-research/keystone/game/data"
+	"math/rand"
+
+	"github.com/curio-research/keystone-starter-kit/data"
+
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
-	"math/rand"
 )
 
 // * NOT used in production. Disable when necessary

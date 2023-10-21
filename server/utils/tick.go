@@ -1,6 +1,6 @@
 package utils
 
-import "github.com/curio-research/keystone/game/constants"
+import "github.com/curio-research/keystone-starter-kit/constants"
 
 // =========================
 // Query

@@ -1,7 +1,8 @@
 package systems
 
 import (
-	"github.com/curio-research/keystone/game/data"
+	"github.com/curio-research/keystone-starter-kit/data"
+	"github.com/curio-research/keystone-starter-kit/helper"
 	"github.com/curio-research/keystone/server"
 )
 
@@ -22,7 +23,7 @@ var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 		return
 	}
 
-	availablePos, ok := randomAvailablePosition(w)
+	availablePos, ok := helper.RandomAvailablePosition(w)
 	if !ok {
 		ctx.EmitError("this is awkward... there is no more space for a new player :(", []int{req.PlayerID})
 		return

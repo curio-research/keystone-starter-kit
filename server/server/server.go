@@ -2,12 +2,12 @@ package server
 
 import (
 	"fmt"
-	"github.com/curio-research/keystone/game/network"
 	"strconv"
 	"sync"
 
-	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/startup"
+	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/network"
+	"github.com/curio-research/keystone-starter-kit/startup"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 	"github.com/fatih/color"

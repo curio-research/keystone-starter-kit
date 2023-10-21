@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
-import { addUpdate, setSelectedTableDisplay, store, StoreState, TableUpdate } from "../store/store";
+import { useEffect } from "react";
+import { Box, Select } from "@chakra-ui/react";
+// eslint-disable-next-line max-len
+// import { addTableUpdateToPendingUpdates, addUpdate, applyAllPendingUpdates, GetStateResponse, setIsFetchingState, setSelectedTableDisplay, store, StoreState, TableOperationType, TableUpdate } from "../store/store";
 import { Accessors } from "../core/schemas";
-import Table from "./table";
-import { Box } from "@chakra-ui/react";
-import { Select } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { observer } from "mobx-react";
+import Table from "./Table";
+import axios from "axios";
+import { GetStateResponse, TableOperationType, TableUpdate } from "../store/types";
+import { stateStore, uiStore } from "..";
 
-function TableExplorer() {
-  const uiControls = useSelector((state: StoreState) => state.uiControls);
-
-  useEffect(() => {
+const TableExplorer = observer(() => {
+  const startup = async () => {
     // TODO: this is being pinged twice for some reason
     // TODO: move this to init file
     const ws = new WebSocket("ws://localhost:9001/subscribeAllTableUpdates");
@@ -20,46 +21,79 @@ function TableExplorer() {
 
     ws.onmessage = (event: MessageEvent) => {
       const jsonObj: any = JSON.parse(event.data);
-      const updates = jsonObj as unknown as Array<TableUpdate>;
+      const updates = jsonObj as TableUpdate[];
+
       for (const update of updates) {
-        store.dispatch(
-          addUpdate({
-            entity: update.entity,
-            op: update.op,
-            table: update.table,
-            time: update.time,
-            value: update.value,
-          })
-        );
+        if (stateStore.isFetchingState) {
+          stateStore.addTableUpdateToPendingUpdates(update);
+        } else {
+          stateStore.addUpdate(update);
+        }
       }
     };
 
     ws.onerror = (event: Event) => {
       console.log(event);
     };
+
+    stateStore.setIsFetchingState(true);
+
+    // call api
+    const url = "http://localhost:9000/getState";
+    const res = await axios.post(url, {});
+
+    const data = res.data as GetStateResponse;
+
+    for (const table of data.tables) {
+      for (const value of table.values) {
+        // TODO: fix time
+        const date = new Date();
+
+        const tableUpdate: TableUpdate = {
+          op: TableOperationType.Update,
+          entity: value.entity,
+          table: table.name,
+          value: value.value,
+          time: date,
+        };
+
+        stateStore.addUpdate(tableUpdate);
+      }
+    }
+
+    stateStore.applyAllPendingUpdates();
+    stateStore.setIsFetchingState(false);
+  };
+
+  useEffect(() => {
+    startup();
   }, []);
 
   return (
     <Box m={10}>
-      <Box w={"200px"} mb={10}>
+      <Box w="200px" mb={10}>
         <Select
-          value={uiControls.selectedTableDisplay || ""}
+          value={uiStore.selectedTableToDisplay || ""}
           placeholder="Select table"
           onChange={(e) => {
-            store.dispatch(setSelectedTableDisplay(e.target.value));
+            uiStore.setSelectedTableToDisplay(e.target.value);
           }}
         >
-          {Accessors.map((accessor, index) => {
-            return <option value={accessor.name()}>{accessor.name()}</option>;
+          {Accessors.map((accessor) => {
+            return (
+              <option value={accessor.name()} key={accessor.name()}>
+                {accessor.name()}
+              </option>
+            );
           })}
         </Select>
       </Box>
 
       {Accessors.map((accessor, index) => {
-        return uiControls.selectedTableDisplay === accessor.name() && <Table key={index} accessor={accessor} />;
+        return uiStore.selectedTableToDisplay === accessor.name() && <Table key={index} accessor={accessor} />;
       })}
     </Box>
   );
-}
+});
 
 export default TableExplorer;

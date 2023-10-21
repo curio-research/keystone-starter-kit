@@ -1,9 +1,9 @@
 package startup
 
 import (
-	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/data"
-	"github.com/curio-research/keystone/game/helpers"
+	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/data"
+	"github.com/curio-research/keystone-starter-kit/helper"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
@@ -36,7 +36,7 @@ func InitWorld(w *state.GameWorld) {
 	largeTileId := 1
 	for i := 0; i < constants.WorldHeight; i++ {
 		for j := 0; j < constants.WorldWidth; j++ {
-			terrain := data.Terrain(systems.WeightedBoolean(constants.FreeTilesRatio))
+			terrain := data.Terrain(helper.WeightedBoolean(constants.FreeTilesRatio))
 			pos := state.Pos{
 				X: j,
 				Y: i,

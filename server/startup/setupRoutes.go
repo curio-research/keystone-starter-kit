@@ -3,11 +3,12 @@ package startup
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/curio-research/keystone/game/systems"
-	"github.com/curio-research/keystone/server"
-	"github.com/gin-gonic/gin"
 	"io"
 	"reflect"
+
+	"github.com/curio-research/keystone-starter-kit/systems"
+	"github.com/curio-research/keystone/server"
+	"github.com/gin-gonic/gin"
 )
 
 // TODO WS routes for error + updates
@@ -15,14 +16,18 @@ import (
 // each route should be a call to a system
 // setup routes that should be called
 
-func SetupRoutes(router *gin.Engine, engine *server.EngineCtx) {
+func SetupRoutes(router *gin.Engine, gameCtx *server.EngineCtx) {
+
 	// Setup any http requests here
 	router.POST("/establishPlayer", func(ctx *gin.Context) {
-		pushUpdateToQueue[systems.CreatePlayerRequest](ctx, engine)
+		pushUpdateToQueue[systems.CreatePlayerRequest](ctx, gameCtx)
 	})
 	router.POST("/move", func(ctx *gin.Context) {
-		pushUpdateToQueue[systems.UpdatePlayerRequest](ctx, engine)
+		pushUpdateToQueue[systems.UpdatePlayerRequest](ctx, gameCtx)
 	})
+
+	// get game state
+	router.POST("/getState", DownloadStateHandler(gameCtx))
 }
 
 func pushUpdateToQueue[T any](ctx *gin.Context, engine *server.EngineCtx) {

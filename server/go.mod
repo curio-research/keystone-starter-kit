@@ -1,4 +1,4 @@
-module github.com/curio-research/keystone/game
+module github.com/curio-research/keystone-starter-kit
 
 go 1.20
 

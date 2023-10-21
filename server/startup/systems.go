@@ -1,8 +1,8 @@
 package startup
 
 import (
-	"github.com/curio-research/keystone/game/constants"
-	"github.com/curio-research/keystone/game/systems"
+	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/curio-research/keystone/server"
 )
 
@@ -31,10 +31,11 @@ func AddSystems(gameTick *server.GameTick) {
 	// internal systems run by themselves without external input
 	// ---------------------
 	tickSchedule.AddTickSystem(constants.WeatherChangeIntervalMs, systems.WeatherSystem)
-	tickSchedule.AddTickSystem(1_000, systems.TestSystem)
+
+	// TODO: remove in prod
+	// tickSchedule.AddTickSystem(1_000, systems.TestSystem)
 
 	tickSchedule.AddTickSystem(constants.TickRate, systems.UpdateProjectileSystem)
-
 	tickSchedule.AddTickSystem(constants.AnimalCreationRate, systems.CreateAnimalSystem)
 	tickSchedule.AddTickSystem(constants.AnimalUpdateRate, systems.UpdateAnimalSystem)
 

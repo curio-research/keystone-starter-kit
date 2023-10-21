@@ -20,22 +20,17 @@ interface GameSchema {
   Weather: Weather;
 }
 
-enum Terrain {
-  Grass = 1,
-  Wall = 2,
-}
-
 interface TileSchema {
   Id: number;
   Position: Position;
-  Terrain: Terrain;
+  Terrain: boolean; // true: ground, false: obstacle
 }
 
 interface PlayerSchema {
   Id: number;
-  PlayerId: number;
   Position: Position;
   Resources: number;
+  PlayerId: number;
 }
 
 interface ProjectileSchema {
@@ -45,7 +40,6 @@ interface ProjectileSchema {
 
 interface AnimalSchema {
   Id: number;
-  Type: number;
   Position: Position;
 }
 
