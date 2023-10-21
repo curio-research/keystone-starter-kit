@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import TerrainTile from '../components/TerrainTiles';
 import Animals from '../components/Animals';
 import Players from 'components/Players';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Fire, Move } from 'core/requests';
 import { useNavigate } from 'react-router-dom';
 import Projectiles from 'components/Projectiles';

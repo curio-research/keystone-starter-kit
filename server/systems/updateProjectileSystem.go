@@ -18,50 +18,36 @@ type UpdateProjectileRequest struct {
 	PlayerID     int
 }
 
-var UpdateProjectileSystem = server.CreateGeneralSystem(func(ctx *server.TransactionCtx[any]) {
+var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[UpdateProjectileRequest]) {
 	w := ctx.W
-	tickNumber := ctx.GameCtx.GameTick.TickNumber
 
-	projectileJobType := reflect.TypeOf(UpdateProjectileRequest{}).String()
-	projectileUpdatesAtTick := server.TransactionTable.Filter(w, server.TransactionSchema{
-		Type:       projectileJobType,
-		TickNumber: tickNumber,
-	}, []string{"Type", "TickNumber"})
+	// check collisions
+	collision := updateWorldForCollision(w, ctx.Req.NewPosition)
+	if collision {
+		// if collided, remove the projectile
+		data.Projectile.RemoveEntity(w, ctx.Req.ProjectileID)
 
-	for _, projectileUpdateEntity := range projectileUpdatesAtTick {
-		projectileUpdateJob := server.TransactionTable.Get(w, projectileUpdateEntity)
+		// TODO: have better query methods
+		// remove future jobs for the projectile
+		projectileJobs := server.TransactionTable.Filter(w, server.TransactionSchema{
+			Type: reflect.TypeOf(UpdateProjectileRequest{}).String(),
+		}, []string{"Type"})
 
-		var projectileReq UpdateProjectileRequest
-		json.Unmarshal([]byte(projectileUpdateJob.Data), &projectileReq)
+		for _, projectileJobEntity := range projectileJobs {
+			projectileTx := server.TransactionTable.Get(w, projectileJobEntity)
 
-		// check collisions
-		collision := updateWorldForCollision(w, projectileReq.NewPosition)
-		if collision {
-			// if collided, remove the projectile
-			data.Projectile.RemoveEntity(w, projectileReq.ProjectileID)
+			var futureProjectileReq UpdateProjectileRequest
+			json.Unmarshal([]byte(projectileTx.Data), &futureProjectileReq)
 
-			// TODO have better query methods
-			// remove future jobs for the projectile
-			projectileJobs := server.TransactionTable.Filter(w, server.TransactionSchema{
-				Type: projectileJobType,
-			}, []string{"Type"})
-
-			for _, projectileJobEntity := range projectileJobs {
-				projectileTx := server.TransactionTable.Get(w, projectileJobEntity)
-
-				var futureProjectileReq UpdateProjectileRequest
-				json.Unmarshal([]byte(projectileTx.Data), &futureProjectileReq)
-
-				if futureProjectileReq.ProjectileID == projectileReq.ProjectileID {
-					server.TransactionTable.RemoveEntity(w, projectileJobEntity)
-				}
+			if futureProjectileReq.ProjectileID == ctx.Req.ProjectileID {
+				server.TransactionTable.RemoveEntity(w, projectileJobEntity)
 			}
-		} else {
-			// update the position of the projectile
-			projectile := data.Projectile.Get(w, projectileReq.ProjectileID)
-			projectile.Position = projectileReq.NewPosition
-			data.Projectile.Set(w, projectileReq.ProjectileID, projectile)
 		}
+	} else {
+		// update the position of the projectile
+		projectile := data.Projectile.Get(w, ctx.Req.ProjectileID)
+		projectile.Position = ctx.Req.NewPosition
+		data.Projectile.Set(w, ctx.Req.ProjectileID, projectile)
 	}
 
 })
