@@ -1,7 +1,9 @@
+import styled from '@emotion/styled';
 import { observer } from 'mobx-react';
 import { Position, TileTable } from 'core/schemas';
 import { stateStore } from '..';
-import styled from '@emotion/styled';
+import Dirt from 'assets/Dirt.png';
+import Bush from 'assets/BerryBush.png';
 
 export const tileSideWidth = 70;
 
@@ -12,13 +14,17 @@ const TerrainTile = observer(() => {
     <div>
       {tiles.map((tile) => {
         return (
-          <PositionWrapper
-            position={tile.Position}
-            key={tile.Id}
-            style={{
-              background: tile.Terrain ? 'green' : 'black',
-            }}
-          />
+          <>
+            <PositionWrapper position={tile.Position} key={tile.Id}>
+              <img src={Dirt} />
+            </PositionWrapper>
+
+            {tile.Terrain === false && (
+              <PositionWrapper position={tile.Position} key={tile.Id}>
+                <img src={Bush} />
+              </PositionWrapper>
+            )}
+          </>
         );
       })}
     </div>
@@ -35,6 +41,10 @@ export const PositionWrapper = styled.div<IPositionWrapper>`
   bottom: ${(props) => props.position.y * tileSideWidth}px;
   width: ${tileSideWidth}px;
   height: ${tileSideWidth}px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default TerrainTile;
