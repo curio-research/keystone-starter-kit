@@ -1,9 +1,6 @@
 package systems
 
 import (
-	"encoding/json"
-	"reflect"
-
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
@@ -27,26 +24,22 @@ var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 		// if collided, remove the projectile
 		data.Projectile.RemoveEntity(w, ctx.Req.ProjectileID)
 
-		// remove future jobs for the projectile
-		projectileJobs := server.TransactionTable.Filter(w, server.TransactionSchema{
-			Type: reflect.TypeOf(UpdateProjectileRequest{}).String(),
-		}, []string{"Type"})
-
-		for _, projectileJobEntity := range projectileJobs {
-			projectileTx := server.TransactionTable.Get(w, projectileJobEntity)
-
-			var futureProjectileReq UpdateProjectileRequest
-			json.Unmarshal([]byte(projectileTx.Data), &futureProjectileReq)
-
-			if futureProjectileReq.ProjectileID == ctx.Req.ProjectileID {
-				server.TransactionTable.RemoveEntity(w, projectileJobEntity)
-			}
-		}
 	} else {
 		// update the position of the projectile
 		projectile := data.Projectile.Get(w, ctx.Req.ProjectileID)
 		projectile.Position = ctx.Req.NewPosition
 		data.Projectile.Set(w, ctx.Req.ProjectileID, projectile)
+
+		// queue another update
+		tickNumber := ctx.GameCtx.GameTick.TickNumber + constants.BulletSpeed
+		position := helper.TargetTile(ctx.Req.NewPosition, ctx.Req.Direction)
+		server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
+			NewPosition:  position,
+			Direction:    ctx.Req.Direction,
+			ProjectileID: ctx.Req.ProjectileID,
+			PlayerID:     ctx.Req.PlayerID,
+		}, "")
+
 	}
 
 })
