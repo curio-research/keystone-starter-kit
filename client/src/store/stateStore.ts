@@ -54,6 +54,7 @@ export class TableStateStore {
 
   // apply all pending updates
   public applyAllPendingUpdates() {
+    console.log('pending table updates to apply: ', this.pendingTableUpdatesToInsert.length);
     this.pendingTableUpdatesToInsert.forEach((update) => {
       this.addUpdate(update);
     });

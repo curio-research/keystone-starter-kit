@@ -12,7 +12,7 @@ export const AppRouter = () => {
     const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
 
     ws.onopen = () => {
-      console.log('connection opened!');
+      console.log('connection to keystone websocket ✅');
     };
 
     ws.onmessage = (event: MessageEvent) => {
@@ -55,6 +55,8 @@ export const AppRouter = () => {
       }
     }
 
+    console.log('initial state synced ✅');
+
     stateStore.applyAllPendingUpdates();
     stateStore.setIsFetchingState(false);
   };
@@ -68,13 +70,13 @@ export const AppRouter = () => {
       <Routes>
         <Route path="/explore" element={<TableExplorer />} />
         <Route path="/" element={<Game />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
 };
 
-const NotFoundPage = () => {
+const NotFound = () => {
   return (
     <Box p="10">
       <Text fontSize="2xl">Page not found :-/</Text>
