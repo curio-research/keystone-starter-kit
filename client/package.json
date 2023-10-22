@@ -16,7 +16,6 @@
     "axios": "^1.5.1",
     "class-transformer": "^0.5.1",
     "framer-motion": "^10.16.4",
-    "immer": "^9.0.21",
     "lodash": "^4.17.21",
     "mobx": "^6.10.2",
     "mobx-react": "^9.0.1",

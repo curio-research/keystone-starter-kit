@@ -1,4 +1,4 @@
-import { Box, Button, createStandaloneToast } from '@chakra-ui/react';
+import { Box, Button, Text, createStandaloneToast } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
 import TerrainTile from '../components/TerrainTiles';
 import Animals from '../components/Animals';
@@ -69,13 +69,16 @@ const Game = observer(() => {
 
   return (
     <Box p="10">
-      <Button
+      <Text
+        fontSize="sm"
         onClick={() => {
           navigate('/explore');
         }}
+        style={{ cursor: 'pointer' }}
       >
         state explorer →
-      </Button>
+      </Text>
+
       <div style={{ height: '12px' }} />
 
       <div
