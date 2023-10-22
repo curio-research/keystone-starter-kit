@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react';
 import { AnimalTable } from '../core/schemas';
-import { stateStore } from '..';
+import { worldState } from '..';
 import { PositionWrapper } from './TerrainTiles';
-import Duck from 'assets/DuckMale_east.png';
+import Duck from 'assets/Duck.png';
 
 const Animals = observer(() => {
-  const animals = AnimalTable.getAll(stateStore.tableState);
+  const animals = AnimalTable.getAll(worldState.tableState);
 
   return (
     <div>

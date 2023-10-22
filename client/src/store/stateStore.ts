@@ -1,17 +1,25 @@
 import _ from 'lodash';
-import { AccessorsMap } from '../core/schemas';
+import { AllTableAccessors } from '../core/schemas';
 import { TableOperationType, TableUpdate, IWorld } from './types';
+import { TableAccessor } from 'core/tableAccessor';
 
 // keystone's table state store
-export class TableStateStore {
+export class WorldState {
   public isFetchingState: boolean;
   public pendingTableUpdatesToInsert: TableUpdate[];
   public tableState: IWorld;
+  public tableAccessors: Map<string, TableAccessor<any>>;
 
   constructor() {
     this.isFetchingState = false;
     this.pendingTableUpdatesToInsert = [];
     this.tableState = new Map<string, Map<number, any>>();
+    this.tableAccessors = new Map<string, TableAccessor<any>>();
+
+    // add table to worlds
+    AllTableAccessors.forEach((accessor) => {
+      this.tableAccessors.set(accessor.name(), accessor);
+    });
   }
 
   // add update
@@ -22,7 +30,7 @@ export class TableStateStore {
     }
 
     const tableName = update.table;
-    const accessor = AccessorsMap.get(tableName);
+    const accessor = this.tableAccessors.get(tableName);
     if (accessor === undefined) {
       return undefined;
     }

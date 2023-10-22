@@ -1,19 +1,23 @@
 import { ITable, IWorld } from 'store/types';
 
+// typed table accessor
 export class TableAccessor<T extends { Id: number }> {
   private tableName: string;
   constructor(tableName: string) {
     this.tableName = tableName;
   }
 
+  // table name
   name(): string {
     return this.tableName;
   }
 
-  get(table: ITable<T>, id: number): T | undefined {
-    return table.get(id);
+  // get struct from entity
+  get(table: ITable<T>, entity: number): T | undefined {
+    return table.get(entity);
   }
 
+  // get all entities
   getAll(world: IWorld): Array<T> {
     const table = world.get(this.tableName);
 

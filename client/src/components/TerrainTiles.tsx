@@ -1,14 +1,15 @@
 import styled from '@emotion/styled';
 import { observer } from 'mobx-react';
 import { Position, TileTable } from 'core/schemas';
-import { stateStore } from '..';
-import Dirt from 'assets/Dirt.png';
-import Bush from 'assets/BerryBush.png';
+import { worldState } from '..';
+import Marsh from 'assets/Marsh.png';
+import Bush from 'assets/Bush.png';
+import Grass from 'assets/Grass.png';
 
 export const tileSideWidth = 70;
 
 const TerrainTile = observer(() => {
-  const tiles = TileTable.getAll(stateStore.tableState);
+  const tiles = TileTable.getAll(worldState.tableState);
 
   return (
     <div>
@@ -16,12 +17,16 @@ const TerrainTile = observer(() => {
         return (
           <>
             <PositionWrapper position={tile.Position} key={tile.Id}>
-              <img src={Dirt} />
+              <img src={Marsh} />
             </PositionWrapper>
 
-            {tile.Terrain === false && (
+            {tile.Terrain === false ? (
               <PositionWrapper position={tile.Position} key={tile.Id}>
                 <img src={Bush} />
+              </PositionWrapper>
+            ) : (
+              <PositionWrapper position={tile.Position} key={tile.Id}>
+                <img src={Grass} style={{ opacity: 0.3 }} />
               </PositionWrapper>
             )}
           </>
@@ -31,11 +36,11 @@ const TerrainTile = observer(() => {
   );
 });
 
-interface IPositionWrapper {
+interface PositionWrapperProps {
   position: Position;
 }
 
-export const PositionWrapper = styled.div<IPositionWrapper>`
+export const PositionWrapper = styled.div<PositionWrapperProps>`
   position: absolute;
   left: ${(props) => props.position.x * tileSideWidth}px;
   bottom: ${(props) => props.position.y * tileSideWidth}px;

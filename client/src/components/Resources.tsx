@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react';
 import { ResourceTable } from '../core/schemas';
-import { stateStore } from '..';
+import { worldState } from '..';
 import { PositionWrapper } from './TerrainTiles';
 import Meat from 'assets/Meat.png';
 
 const Resources = observer(() => {
-  const resources = ResourceTable.getAll(stateStore.tableState);
+  const resources = ResourceTable.getAll(worldState.tableState);
 
   return (
     <>

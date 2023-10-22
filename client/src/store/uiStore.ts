@@ -1,5 +1,5 @@
 // ui store
-export class UIStore {
+export class UIState {
   public selectedTableToDisplay: string;
   public lastMovedDirection: string;
 

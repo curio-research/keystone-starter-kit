@@ -1,7 +1,7 @@
 import { TableAccessor } from '../core/tableAccessor';
 import { Table, Tbody, Tr, Th, Td, Text } from '@chakra-ui/react';
 import { ITable } from '../store/types';
-import { stateStore } from '..';
+import { worldState } from '..';
 import { observer } from 'mobx-react';
 
 interface TableProps<T extends WithID> {
@@ -13,7 +13,7 @@ interface TableProps<T extends WithID> {
 export const TableDisplay = observer(<T extends WithID>(props: { accessor: TableAccessor<T> }) => {
   const { accessor } = props;
 
-  const tableName = stateStore.tableState.get(accessor.name());
+  const tableName = worldState.tableState.get(accessor.name());
   if (tableName === undefined) {
     return null;
   }

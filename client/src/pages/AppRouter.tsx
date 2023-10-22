@@ -3,7 +3,7 @@ import TableExplorer from '../components/TableExplorer';
 import Game from './Game';
 import { Box, Text } from '@chakra-ui/react';
 import { GetStateResponse, TableOperationType, TableUpdate } from '../store/types';
-import { stateStore } from '..';
+import { worldState } from '..';
 import { useEffect } from 'react';
 import { KeystoneWebsocketUrl, api } from 'core/config';
 
@@ -20,10 +20,10 @@ export const AppRouter = () => {
       const updates = jsonObj as TableUpdate[];
 
       for (const update of updates) {
-        if (stateStore.isFetchingState) {
-          stateStore.addTableUpdateToPendingUpdates(update);
+        if (worldState.isFetchingState) {
+          worldState.addTableUpdateToPendingUpdates(update);
         } else {
-          stateStore.addUpdate(update);
+          worldState.addUpdate(update);
         }
       }
     };
@@ -32,7 +32,7 @@ export const AppRouter = () => {
       console.log(event);
     };
 
-    stateStore.setIsFetchingState(true);
+    worldState.setIsFetchingState(true);
 
     // call api
     const res = await api.post('/getState', {});
@@ -51,14 +51,14 @@ export const AppRouter = () => {
           time: date,
         };
 
-        stateStore.addUpdate(tableUpdate);
+        worldState.addUpdate(tableUpdate);
       }
     }
 
     console.log('initial state synced ✅');
 
-    stateStore.applyAllPendingUpdates();
-    stateStore.setIsFetchingState(false);
+    worldState.applyAllPendingUpdates();
+    worldState.setIsFetchingState(false);
   };
 
   useEffect(() => {

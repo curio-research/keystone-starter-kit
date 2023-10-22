@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react';
 import { ProjectileTable } from '../core/schemas';
-import { stateStore } from '..';
+import { worldState } from '..';
 import { PositionWrapper } from './TerrainTiles';
 import Fire from 'assets/Fire.png';
 
 const Projectiles = observer(() => {
-  const projectile = ProjectileTable.getAll(stateStore.tableState);
+  const projectile = ProjectileTable.getAll(worldState.tableState);
 
   return (
     <>

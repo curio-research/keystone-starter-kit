@@ -10,7 +10,7 @@ interface LocalRandSeedSchema {
   Id: number;
 }
 
-enum Weather {
+export enum Weather {
   Sunny = 1,
   Windy = 2,
 }
@@ -66,8 +66,7 @@ export const ProjectileTable = new TableAccessor<ProjectileSchema>('ProjectileSc
 export const LocalRandSeedTable = new TableAccessor<LocalRandSeedSchema>('LocalRandSeedSchema');
 export const ResourceTable = new TableAccessor<ResourceSchema>('ResourceSchema');
 
-// ------------------------------
-export const Accessors: TableAccessor<any>[] = [
+export const AllTableAccessors: TableAccessor<any>[] = [
   PlayerTable,
   TileTable,
   GameTable,
@@ -76,9 +75,3 @@ export const Accessors: TableAccessor<any>[] = [
   LocalRandSeedTable,
   ResourceTable,
 ];
-
-// TODO: initialize in a better way
-export const AccessorsMap = new Map<string, TableAccessor<any>>();
-for (const accessor of Accessors) {
-  AccessorsMap.set(accessor.name(), accessor);
-}

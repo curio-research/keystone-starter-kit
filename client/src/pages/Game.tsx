@@ -1,4 +1,4 @@
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, createStandaloneToast } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
 import TerrainTile from '../components/TerrainTiles';
 import Animals from '../components/Animals';
@@ -7,10 +7,12 @@ import { useEffect } from 'react';
 import { Fire, Move } from 'core/requests';
 import { useNavigate } from 'react-router-dom';
 import Projectiles from 'components/Projectiles';
-import { uiStore } from 'index';
+import { uiState } from 'index';
 import Resources from 'components/Resources';
 
-// TODO: remove
+export const toast = createStandaloneToast();
+
+// hard coded playerID. See InitGame.go
 const playerId = -100;
 
 // game page
@@ -20,27 +22,27 @@ const Game = observer(() => {
   const handleKeyPress = (event: KeyboardEvent) => {
     switch (event.key) {
       case 'a':
-        uiStore.lastMovedDirection = 'left';
+        uiState.lastMovedDirection = 'left';
         Move({ Direction: 'left', PlayerId: playerId });
         break;
 
       case 's':
-        uiStore.lastMovedDirection = 'down';
+        uiState.lastMovedDirection = 'down';
         Move({ Direction: 'down', PlayerId: playerId });
         break;
 
       case 'd':
-        uiStore.lastMovedDirection = 'right';
+        uiState.lastMovedDirection = 'right';
         Move({ Direction: 'right', PlayerId: playerId });
         break;
 
       case 'w':
-        uiStore.lastMovedDirection = 'up';
+        uiState.lastMovedDirection = 'up';
         Move({ Direction: 'up', PlayerId: playerId });
         break;
 
       case ' ':
-        const lastPressedDirection = uiStore.lastMovedDirection;
+        const lastPressedDirection = uiState.lastMovedDirection;
         Fire({ Direction: lastPressedDirection, PlayerId: playerId });
         break;
 
@@ -51,6 +53,14 @@ const Game = observer(() => {
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
+
+    toast.toast({
+      title: 'Welcome to the game!',
+      description: 'Use WASD to move and space to shoot.',
+      status: 'info',
+      duration: 10_000,
+      isClosable: true,
+    });
 
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
