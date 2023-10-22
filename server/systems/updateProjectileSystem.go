@@ -9,7 +9,6 @@ import (
 )
 
 type UpdateProjectileRequest struct {
-	NewPosition  state.Pos
 	Direction    helper.Direction
 	ProjectileID int
 	PlayerID     int
@@ -18,23 +17,27 @@ type UpdateProjectileRequest struct {
 var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[UpdateProjectileRequest]) {
 	w := ctx.W
 
+	// get projectile's position
+	projectile := data.Projectile.Get(w, ctx.Req.ProjectileID)
+
+	nextPosition := helper.TargetTile(projectile.Position, ctx.Req.Direction)
+
 	// check collisions
-	collision := updateWorldForCollision(w, ctx.Req.NewPosition)
+	collision := updateWorldForCollision(w, nextPosition)
 	if collision {
 		// if collided, remove the projectile
 		data.Projectile.RemoveEntity(w, ctx.Req.ProjectileID)
 
 	} else {
 		// update the position of the projectile
-		projectile := data.Projectile.Get(w, ctx.Req.ProjectileID)
-		projectile.Position = ctx.Req.NewPosition
+		projectile.Position = nextPosition
 		data.Projectile.Set(w, ctx.Req.ProjectileID, projectile)
 
-		// queue another update
+		// queue the next projectile update
 		tickNumber := ctx.GameCtx.GameTick.TickNumber + constants.BulletSpeed
-		position := helper.TargetTile(ctx.Req.NewPosition, ctx.Req.Direction)
+
 		server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
-			NewPosition:  position,
+
 			Direction:    ctx.Req.Direction,
 			ProjectileID: ctx.Req.ProjectileID,
 			PlayerID:     ctx.Req.PlayerID,
