@@ -1,13 +1,11 @@
-import { TableAccessor } from "../core/tableAccessor";
-// import { useSelector } from "react-redux";
-// import { StoreState, TableType } from "../store/store";
-import { Table, Tbody, Tr, Th, Td, Text } from "@chakra-ui/react";
-import { TableType } from "../store/types";
-import { stateStore } from "..";
-import { observer } from "mobx-react";
+import { TableAccessor } from '../core/tableAccessor';
+import { Table, Tbody, Tr, Th, Td, Text } from '@chakra-ui/react';
+import { ITable } from '../store/types';
+import { worldState } from '..';
+import { observer } from 'mobx-react';
 
 interface TableProps<T extends WithID> {
-  table: TableType<T>;
+  table: ITable<T>;
   accessor: TableAccessor<T>;
 }
 
@@ -15,7 +13,7 @@ interface TableProps<T extends WithID> {
 export const TableDisplay = observer(<T extends WithID>(props: { accessor: TableAccessor<T> }) => {
   const { accessor } = props;
 
-  const tableName = stateStore.tableState.get(accessor.name());
+  const tableName = worldState.tableState.get(accessor.name());
   if (tableName === undefined) {
     return null;
   }
@@ -62,7 +60,7 @@ const DisplayTable = observer(<T extends WithID>(props: TableProps<T>) => {
             <Tr key={entity}>
               {columnNames.map((columnName, index) => {
                 return (
-                  <Td key={index} style={{ padding: "10px" }}>
+                  <Td key={index} style={{ padding: '10px' }}>
                     <Text fontSize="sm">{JSON.stringify(obj[columnName])}</Text>
                   </Td>
                 );

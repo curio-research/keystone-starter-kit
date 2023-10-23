@@ -1,5 +1,5 @@
-export type TableType<T> = Map<number, T>;
-export type WorldType = Map<string, TableType<any>>;
+export type ITable<T> = Map<number, T>;
+export type IWorld = Map<string, ITable<any>>;
 
 export interface StoreState {
   uiControls: {
@@ -7,7 +7,7 @@ export interface StoreState {
   };
   isFetchingState: boolean;
   pendingTableUpdatesToInsert: TableUpdate[];
-  tableState: WorldType;
+  tableState: IWorld;
 }
 
 export interface TableUpdate {
@@ -19,9 +19,9 @@ export interface TableUpdate {
 }
 
 export enum TableOperationType {
-  Remove = "removal",
-  Update = "set",
-  Add = "add",
+  Remove = 'removal',
+  Update = 'set',
+  Add = 'add',
 }
 
 // get state types

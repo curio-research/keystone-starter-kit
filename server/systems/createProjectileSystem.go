@@ -26,18 +26,15 @@ var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 	projectileID := data.Projectile.Add(w, data.ProjectileSchema{
 		Position: initialPosition,
 	})
-	position := helper.TargetTile(initialPosition, direction)
+
 	tickNumber := ctx.GameCtx.GameTick.TickNumber + constants.BulletSpeed
-	for helper.WithinBoardBoundary(position) {
-		server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
-			NewPosition:  position,
-			Direction:    direction,
-			ProjectileID: projectileID,
-			PlayerID:     req.PlayerId,
-		}, "")
-		tickNumber += constants.BulletSpeed
-		position = helper.TargetTile(position, direction) // updates the position one step in the direction it was shot
-	}
+
+	server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
+		Direction:    direction,
+		ProjectileID: projectileID,
+		PlayerID:     req.PlayerId,
+	}, "")
+
 })
 
 func locationOfPlayer(w state.IWorld, playerId int) (state.Pos, bool) {

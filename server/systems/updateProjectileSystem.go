@@ -1,9 +1,6 @@
 package systems
 
 import (
-	"encoding/json"
-	"reflect"
-
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
@@ -12,61 +9,51 @@ import (
 )
 
 type UpdateProjectileRequest struct {
-	NewPosition  state.Pos
 	Direction    helper.Direction
 	ProjectileID int
 	PlayerID     int
 }
 
-var UpdateProjectileSystem = server.CreateGeneralSystem(func(ctx *server.TransactionCtx[any]) {
+var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[UpdateProjectileRequest]) {
 	w := ctx.W
-	tickNumber := ctx.GameCtx.GameTick.TickNumber
 
-	projectileJobType := reflect.TypeOf(UpdateProjectileRequest{}).String()
-	projectileUpdatesAtTick := server.TransactionTable.Filter(w, server.TransactionSchema{
-		Type:       projectileJobType,
-		TickNumber: tickNumber,
-	}, []string{"Type", "TickNumber"})
+	// get projectile's position
+	projectile := data.Projectile.Get(w, ctx.Req.ProjectileID)
 
-	for _, projectileUpdateEntity := range projectileUpdatesAtTick {
-		projectileUpdateJob := server.TransactionTable.Get(w, projectileUpdateEntity)
+	nextPosition := helper.TargetTile(projectile.Position, ctx.Req.Direction)
 
-		var projectileReq UpdateProjectileRequest
-		json.Unmarshal([]byte(projectileUpdateJob.Data), &projectileReq)
+	// check collisions
+	collision := updateWorldForCollision(w, nextPosition)
+	if collision {
+		// if collided, remove the projectile
+		data.Projectile.RemoveEntity(w, ctx.Req.ProjectileID)
 
-		// check collisions
-		collision := updateWorldForCollision(w, projectileReq.NewPosition)
-		if collision {
-			// if collided, remove the projectile
-			data.Projectile.RemoveEntity(w, projectileReq.ProjectileID)
+	} else {
+		// update the position of the projectile
+		projectile.Position = nextPosition
+		data.Projectile.Set(w, ctx.Req.ProjectileID, projectile)
 
-			// TODO have better query methods
-			// remove future jobs for the projectile
-			projectileJobs := server.TransactionTable.Filter(w, server.TransactionSchema{
-				Type: projectileJobType,
-			}, []string{"Type"})
+		// queue the next projectile update
+		tickNumber := ctx.GameCtx.GameTick.TickNumber + constants.BulletSpeed
 
-			for _, projectileJobEntity := range projectileJobs {
-				projectileTx := server.TransactionTable.Get(w, projectileJobEntity)
+		server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
 
-				var futureProjectileReq UpdateProjectileRequest
-				json.Unmarshal([]byte(projectileTx.Data), &futureProjectileReq)
+			Direction:    ctx.Req.Direction,
+			ProjectileID: ctx.Req.ProjectileID,
+			PlayerID:     ctx.Req.PlayerID,
+		}, "")
 
-				if futureProjectileReq.ProjectileID == projectileReq.ProjectileID {
-					server.TransactionTable.RemoveEntity(w, projectileJobEntity)
-				}
-			}
-		} else {
-			// update the position of the projectile
-			projectile := data.Projectile.Get(w, projectileReq.ProjectileID)
-			projectile.Position = projectileReq.NewPosition
-			data.Projectile.Set(w, projectileReq.ProjectileID, projectile)
-		}
 	}
 
 })
 
 func updateWorldForCollision(w state.IWorld, position state.Pos) (collision bool) {
+
+	// check if position is within world
+	if !helper.WithinBoardBoundary(position) {
+		return true
+	}
+
 	players := playersAtLocation(w, position)
 	if len(players) != 0 {
 		collision = true

@@ -1,36 +1,50 @@
-import { TableType } from "../store/types";
+import { ITable, IWorld } from 'store/types';
 
+// typed table accessor
 export class TableAccessor<T extends { Id: number }> {
   private tableName: string;
   constructor(tableName: string) {
     this.tableName = tableName;
   }
 
+  // table name
   name(): string {
     return this.tableName;
   }
-  get(table: TableType<T>, id: number): T | undefined {
-    return table.get(id);
+
+  // get struct from entity
+  get(table: ITable<T>, entity: number): T | undefined {
+    return table.get(entity);
   }
 
-  getAny(table: TableType<T>): T | undefined {
+  // get all entities
+  getAll(world: IWorld): Array<T> {
+    const table = world.get(this.tableName);
+
+    if (!table) {
+      return [];
+    }
+    return Array.from<T>(table.values());
+  }
+
+  getAny(table: ITable<T>): T | undefined {
     const { value } = table.values().next();
     return value;
   }
 
-  set(table: TableType<T>, id: number, val: T) {
+  set(table: ITable<T>, id: number, val: T) {
     table.set(id, val);
   }
 
-  remove(table: TableType<T>, id: number) {
+  remove(table: ITable<T>, id: number) {
     table.delete(id);
   }
 
-  filter(table: TableType<T>): FilterArgs<T> {
+  filter(table: ITable<T>): FilterArgs<T> {
     return new FilterArgs(table);
   }
 
-  allEntities(table: TableType<T>): Array<number> {
+  allEntities(table: ITable<T>): Array<number> {
     return Array.from<number>(table.keys());
   }
 }
