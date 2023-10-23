@@ -1,4 +1,4 @@
-import { Box, Button, Text, createStandaloneToast } from '@chakra-ui/react';
+import { Box, Text, createStandaloneToast } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
 import TerrainTile from '../components/TerrainTiles';
 import Animals from '../components/Animals';

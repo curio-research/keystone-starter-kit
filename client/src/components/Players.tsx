@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { PlayerTable } from 'core/schemas';
 import { worldState } from '..';
 import { PositionWrapper } from './TerrainTiles';
-import Wolf from 'assets/Wolf.png';
+import Caribou from 'assets/Caribou.png';
 
 const Players = observer(() => {
   const players = PlayerTable.getAll(worldState.tableState);
@@ -12,7 +12,7 @@ const Players = observer(() => {
       {players.map((player) => {
         return (
           <PositionWrapper position={player.Position} key={player.Id}>
-            <img src={Wolf} style={{}} />
+            <img src={Caribou} />
           </PositionWrapper>
         );
       })}
