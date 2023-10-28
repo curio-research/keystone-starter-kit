@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/server"
-	"github.com/curio-research/keystone/logging"
 	"github.com/fatih/color"
 	"github.com/joho/godotenv"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -19,21 +19,21 @@ func main() {
 	// get randomness seed (controls how random numbers are created)
 	randSeed := os.Getenv("RAND_SEED")
 	if randSeed == "" {
-		logging.Log().Infof("missing RAND_SEED env variable, seeding randomness with local variable", randSeed)
+		log.Info("missing RAND_SEED env variable, seeding randomness with local variable", randSeed)
 	}
 
 	// get listening port
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = strconv.Itoa(constants.DefaultListeningPort)
-		logging.Log().Infof("missing PORT env variable, using %s", port)
+		log.Infof("missing PORT env variable, using %s", port)
 	}
 
 	// get websocket port (for streaming updates)
 	wsPortStr := os.Getenv("WS_PORT")
 	if wsPortStr == "" {
 		wsPortStr = strconv.Itoa(constants.DefaultWSPort)
-		logging.Log().Infof("missing WS_PORT env variable, using %s", wsPortStr)
+		log.Infof("missing WS_PORT env variable, using %s", wsPortStr)
 	}
 
 	wsPort, err := strconv.Atoi(wsPortStr)

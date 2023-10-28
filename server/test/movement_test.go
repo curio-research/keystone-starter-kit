@@ -7,7 +7,6 @@ import (
 	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
-	"github.com/curio-research/keystone/utils"
 	"github.com/go-playground/assert/v2"
 	"github.com/stretchr/testify/require"
 )
@@ -30,7 +29,7 @@ func TestMovement(t *testing.T) {
 			Direction: direction,
 			PlayerId:  1,
 		}, "")
-		utils.TickWorldForward(ctx, 100)
+		server.TickWorldForward(ctx, 100)
 
 		player, found := getPlayer(w, playerID)
 		require.True(t, found)
@@ -42,7 +41,7 @@ func TestMovement(t *testing.T) {
 		Direction: helper.Down,
 		PlayerId:  1,
 	}, "")
-	utils.TickWorldForward(ctx, 100)
+	server.TickWorldForward(ctx, 100)
 
 	player, found := getPlayer(w, playerID)
 	require.True(t, found)
@@ -53,7 +52,7 @@ func TestMovement(t *testing.T) {
 		Direction: helper.Right,
 		PlayerId:  1,
 	}, "")
-	utils.TickWorldForward(ctx, 100)
+	server.TickWorldForward(ctx, 100)
 
 	player, found = getPlayer(w, playerID)
 	require.True(t, found)
@@ -64,7 +63,7 @@ func TestMovement(t *testing.T) {
 		Direction: helper.Up,
 		PlayerId:  1,
 	}, "")
-	utils.TickWorldForward(ctx, 100)
+	server.TickWorldForward(ctx, 100)
 
 	player, found = getPlayer(w, playerID)
 	require.True(t, found)

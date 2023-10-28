@@ -2,17 +2,15 @@ package server
 
 import (
 	"fmt"
-	"strconv"
-	"sync"
-
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/network"
 	"github.com/curio-research/keystone-starter-kit/startup"
 	"github.com/curio-research/keystone/server"
-	"github.com/curio-research/keystone/state"
+	ks "github.com/curio-research/keystone/startup"
 	"github.com/fatih/color"
 	"github.com/gin-gonic/gin"
 	"github.com/tjarratt/babble"
+	"strconv"
 )
 
 func MainServer(websocketPort int) (*gin.Engine, error) {
@@ -33,11 +31,10 @@ func MainServer(websocketPort int) (*gin.Engine, error) {
 	color.HiWhite("Tick rate:         " + strconv.Itoa(gameCtx.GameTick.TickRateMs) + "ms")
 
 	// setting up websocket requests to receive state updates (create router to handle getting WS requests in game)
-	streamServer, err := server.NewStreamServer(s, gameCtx, nil, websocketPort)
+	err := ks.RegisterWSRoutes(gameCtx, s, nil, websocketPort)
 	if err != nil {
 		return nil, err
 	}
-	gameCtx.Stream = streamServer
 
 	// setup HTTP routes
 	startup.SetupRoutes(s, gameCtx)
@@ -47,25 +44,14 @@ func MainServer(websocketPort int) (*gin.Engine, error) {
 
 // TODO this function should be in keystone
 func setupWorld(gameId string) *server.EngineCtx {
-	gameWorld := state.NewWorld()
-	gameTick := server.NewGameTick(constants.TickRate)
+	ctx := ks.NewGameEngine(gameId, constants.TickRate, 0)
+	ks.RegisterErrorHandler(ctx, &network.ProtoBasedErrorHandler{})
+	ks.RegisterBroadcastHandler(ctx, &network.ProtoBasedBroadcastHandler{})
 
 	// add systems for game
-	gameTick.Schedule = server.NewTickSchedule() // TODO tick schedule should be initialized in `newGameTick`
-	startup.AddSystems(gameTick)
-
-	// this is the master game context being passed around, containing pointers to everything
-	gameCtx := &server.EngineCtx{ // TODO create a constructor for this
-		GameId:                 gameId,
-		IsLive:                 true,
-		World:                  gameWorld,
-		GameTick:               gameTick,
-		TransactionsToSaveLock: sync.Mutex{},
-		SystemErrorHandler:     &network.ProtoBasedErrorHandler{},
-		SystemBroadcastHandler: &network.ProtoBasedBroadcastHandler{},
-	}
+	startup.AddSystems(ctx.GameTick)
 
 	// initialize a websocket streaming server for both incoming and outgoing requests
-	gameTick.Setup(gameCtx, gameTick.Schedule) // TODO should just be a call on gameCtx
-	return gameCtx
+	ks.Start(ctx)
+	return ctx
 }

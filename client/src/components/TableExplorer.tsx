@@ -1,6 +1,6 @@
 import { Box, Select } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
-import Table from './Table';
+import TableDisplay from './Table';
 import { uiState } from '..';
 import { AllTableAccessors } from 'core/schemas';
 
@@ -26,7 +26,7 @@ const TableExplorer = observer(() => {
       </Box>
 
       {AllTableAccessors.map((accessor, index) => {
-        return uiState.selectedTableToDisplay === accessor.name() && <Table key={index} accessor={accessor} />;
+        return uiState.selectedTableToDisplay === accessor.name() && <TableDisplay key={index} accessor={accessor} />;
       })}
     </Box>
   );
