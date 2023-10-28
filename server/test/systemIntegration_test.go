@@ -9,7 +9,6 @@ import (
 	"github.com/curio-research/keystone-starter-kit/systems"
 
 	"github.com/curio-research/keystone/server"
-	"github.com/curio-research/keystone/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -35,7 +34,7 @@ func TestPickUpGold(t *testing.T) {
 		Direction: helper.Right,
 		PlayerId:  playerID,
 	}, "")
-	utils.TickWorldForward(ctx, 50) // create projectile + queue projectile update jobs
+	server.TickWorldForward(ctx, 50) // create projectile + queue projectile update jobs
 
 	assert.Len(t, data.Animal.Entities(w), 0)
 
@@ -44,7 +43,7 @@ func TestPickUpGold(t *testing.T) {
 			Direction: helper.Right,
 			PlayerId:  playerID,
 		}, "")
-		utils.TickWorldForward(ctx, 100)
+		server.TickWorldForward(ctx, 100)
 	}
 
 	player, found = getPlayer(w, 3)
