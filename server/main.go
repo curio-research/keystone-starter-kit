@@ -9,10 +9,21 @@ import (
 )
 
 func main() {
+
 	godotenv.Load()
 
 	// Initialize new game engine
 	ctx := ks.NewGameEngine()
+
+	///
+
+	// gin.SetMode(gin.ReleaseMode)
+	// s := gin.Default()
+	// s.Use(server.CORSMiddleware())
+
+	// s.POST("/getState", startup.DownloadStateHandler(ctx))
+
+	///
 
 	ctx.SetTickRate(constants.TickRate)
 
