@@ -31,7 +31,7 @@ func newTestEngine(gameWorld *state.GameWorld, systems ...server.TickSystemFunct
 	tickSchedule := server.NewTickSchedule()
 	gameTick.Schedule = tickSchedule
 	for _, system := range systems {
-		tickSchedule.AddTickSystem(constants.TickRate, system)
+		tickSchedule.AddSystem(constants.TickRate, system)
 	}
 
 	gameCtx := &server.EngineCtx{

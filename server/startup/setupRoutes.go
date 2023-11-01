@@ -16,21 +16,21 @@ import (
 // each route should be a call to a system
 // setup routes that should be called
 
-func SetupRoutes(router *gin.Engine, gameCtx *server.EngineCtx) {
+func SetupRoutes(ctx *server.EngineCtx) {
 
 	// Setup any http requests here
-	router.POST("/createPlayer", func(ctx *gin.Context) {
-		pushUpdateToQueue[systems.CreatePlayerRequest](ctx, gameCtx)
+	ctx.GinHttpEngine.POST("/createPlayer", func(ginCtx *gin.Context) {
+		pushUpdateToQueue[systems.CreatePlayerRequest](ginCtx, ctx)
 	})
-	router.POST("/move", func(ctx *gin.Context) {
-		pushUpdateToQueue[systems.UpdatePlayerRequest](ctx, gameCtx)
+	ctx.GinHttpEngine.POST("/move", func(ginCtx *gin.Context) {
+		pushUpdateToQueue[systems.UpdatePlayerRequest](ginCtx, ctx)
 	})
-	router.POST("/fire", func(ctx *gin.Context) {
-		pushUpdateToQueue[systems.CreateProjectileRequest](ctx, gameCtx)
+	ctx.GinHttpEngine.POST("/fire", func(ginCtx *gin.Context) {
+		pushUpdateToQueue[systems.CreateProjectileRequest](ginCtx, ctx)
 	})
 
 	// get game state
-	router.POST("/getState", DownloadStateHandler(gameCtx))
+	ctx.GinHttpEngine.POST("/getState", DownloadStateHandler(ctx))
 }
 
 func pushUpdateToQueue[T any](ctx *gin.Context, engine *server.EngineCtx) {

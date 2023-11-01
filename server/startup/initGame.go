@@ -9,17 +9,8 @@ import (
 	"github.com/curio-research/keystone/state"
 )
 
-func InitGame(ctx *server.EngineCtx) {
-	// initialize game storage tables
-	RegisterTablesToWorld(ctx.World)
-
-	// initialize game data into those tables
-	InitWorld(ctx)
-}
-
 // register tables to the world
 func RegisterTablesToWorld(w *state.GameWorld) {
-	server.RegisterDefaultTables(w)
 
 	var tableInterfacesToAdd []state.ITable
 	for _, accessor := range data.TableSchemasToAccessors {
