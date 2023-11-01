@@ -15,20 +15,7 @@ func main() {
 	// Initialize new game engine
 	ctx := ks.NewGameEngine()
 
-	///
-
-	// gin.SetMode(gin.ReleaseMode)
-	// s := gin.Default()
-	// s.Use(server.CORSMiddleware())
-
-	// s.POST("/getState", startup.DownloadStateHandler(ctx))
-
-	///
-
 	ctx.SetTickRate(constants.TickRate)
-
-	// ctx.SetPort(9000)
-	// ctx.SetWebsocketPort(9001)
 
 	ctx.SetEmitErrorHandler(&network.ProtoBasedErrorHandler{})
 	ctx.SetEmitEventHandler(&network.ProtoBasedBroadcastHandler{})
