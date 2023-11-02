@@ -2,10 +2,14 @@ package main
 
 import (
 	"github.com/curio-research/keystone-starter-kit/constants"
+	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/network"
 	"github.com/curio-research/keystone-starter-kit/startup"
+	gamedb "github.com/curio-research/keystone/db"
 	ks "github.com/curio-research/keystone/server/startup"
 	"github.com/joho/godotenv"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
@@ -30,7 +34,16 @@ func main() {
 	// Register tables schemas to world
 	startup.RegisterTablesToWorld(ctx.World)
 
-	// ctx.addTables
+	// provision SQLite
+	gormDB, err := gorm.Open(sqlite.Open("test.db"))
+	if err != nil {
+		panic("failed to connect database: " + err.Error())
+	}
+
+	SQLiteSaveStateHandler, SQLiteSaveTxHandler, err := gamedb.SQLHandlersFromDialector(gormDB.Dialector, ctx.GameId, data.TableSchemasToAccessors)
+
+	ctx.SetSaveStateHandler(SQLiteSaveStateHandler, 0)
+	ctx.SetSaveTxHandler(SQLiteSaveTxHandler, 0)
 
 	// Initialize game map
 	startup.InitWorld(ctx)
