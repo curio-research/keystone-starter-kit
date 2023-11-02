@@ -30,6 +30,8 @@ func main() {
 	// Register tables schemas to world
 	startup.RegisterTablesToWorld(ctx.World)
 
+	// ctx.addTables
+
 	// Initialize game map
 	startup.InitWorld(ctx)
 
