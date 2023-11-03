@@ -1,8 +1,6 @@
-import {Buffer} from "buffer";
-import {ECDSASignature, ecsign} from "ethereumjs-util";
 import {ECDSAPublicKeyAuthHeader} from "../requests";
-import {Signature} from "ethers";
 import {HeaderEntry, playerWallet} from "./middleware";
+import sjcl from "sjcl";
 
 interface ECDSAPublicKeyAuth {
     Base64Signature: string
@@ -11,51 +9,22 @@ interface ECDSAPublicKeyAuth {
 }
 
 export function WithECDSAAuth<T>(request: T): HeaderEntry {
-    const hash = Buffer.from(JSON.stringify(request), "utf8");
-    console.log(hash)
-    const base64Hash = bytesToBase64(hash);
-    console.log(base64Hash)
+    const jsonReq = JSON.stringify(request);
+    const hashBits = sjcl.hash.sha256.hash(jsonReq);
+    const hashHex = sjcl.codec.hex.fromBits(hashBits);
+    const hashBase64 = sjcl.codec.base64.fromBits(hashBits);
 
-    const privateKey = Buffer.from(playerWallet.privateKey.slice(2), "hex");
-    console.log(playerWallet.privateKey)
-    const signature = ecsign(hash, privateKey);
-    const base64Sig = ecdsaSignatureToBase64(signature)!;
+    const signatureHex = playerWallet.signMessageSync(hashHex);// Convert the hex signature to a bitArray
+    const signatureBits = sjcl.codec.hex.toBits(signatureHex);
+    const signatureBase64 = sjcl.codec.base64.fromBits(signatureBits);
 
-    const publicKey = Buffer.from(playerWallet.publicKey.slice(2), "hex");
-    const base64PublicKey = bytesToBase64(publicKey);
+    const publicKey = sjcl.codec.hex.toBits(playerWallet.publicKey);
+    const publicKeyBase64 = sjcl.codec.base64.fromBits(publicKey);
 
     const publicKeyAuth: ECDSAPublicKeyAuth = {
-        Base64Hash: base64Hash,
-        Base64Signature: base64Sig,
-        Base64PublicKey: base64PublicKey,
+        Base64Hash: hashBase64,
+        Base64Signature: signatureBase64,
+        Base64PublicKey: publicKeyBase64,
     }
     return [ECDSAPublicKeyAuthHeader, publicKeyAuth];
-}
-
-function ecdsaSignatureToBase64(e: ECDSASignature): string | null {
-    // Step 1: Convert the signature to the desired format (if necessary)
-    // If you're already getting the signature in the right format, you can skip this step
-    let ecdsaSignature: Signature
-    if (e.v === 27 || e.v === 28) {
-        ecdsaSignature = new Signature(null, e.r.toString(), e.s.toString(), e.v);
-    } else {
-        return null // TODO when to return null or undefined?
-    }
-
-    // Step 2: Get the 'r' and 's' components in hexadecimal format
-    const rHex = ecdsaSignature.r.padStart(64, '0');  // Ensuring it's 32 bytes
-    const sHex = ecdsaSignature.s.padStart(64, '0');  // Ensuring it's 32 bytes
-
-    // Step 3: Concatenate the 'r' and 's' components as a single hexadecimal string
-    const concatenatedHex = rHex + sHex;
-
-    // Step 4: Convert the concatenated hexadecimal string to bytes
-    const concatenatedBytes = Buffer.from(concatenatedHex, 'hex');
-
-    // Step 5: Encode the bytes as Base64
-    return bytesToBase64(concatenatedBytes);
-}
-
-function bytesToBase64(b: Buffer): string {
-    return b.toString("base64")
 }
