@@ -1,3 +1,1 @@
-# start server using Air (similar to nodemon)
-
-air -c .air.toml
+go run main.go
