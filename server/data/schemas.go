@@ -83,4 +83,5 @@ var TableSchemasToAccessors = map[interface{}]*state.TableBaseAccessor[any]{
 	&TileSchema{}:          (*state.TableBaseAccessor[any])(Tile),
 	&PlayerSchema{}:        (*state.TableBaseAccessor[any])(Player),
 	&AnimalSchema{}:        (*state.TableBaseAccessor[any])(Animal),
+	&ResourceSchema{}:      (*state.TableBaseAccessor[any])(Resource),
 }
