@@ -9,14 +9,12 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"sync"
 	"testing"
 
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/data"
-	"github.com/curio-research/keystone-starter-kit/network"
-	"github.com/curio-research/keystone-starter-kit/startup"
 	"github.com/curio-research/keystone/server"
+	ks "github.com/curio-research/keystone/server/startup"
 	"github.com/curio-research/keystone/state"
 )
 
@@ -28,37 +26,25 @@ var terrainKind = map[rune]data.Terrain{
 var playerRegex, _ = regexp.Compile("[0-9]")
 
 func newTestEngine(gameWorld *state.GameWorld, systems ...server.TickSystemFunction) *server.EngineCtx {
-	gameTick := server.NewGameTick(constants.TickRate)
 
-	// initiate an empty tick schedule
-	tickSchedule := server.NewTickSchedule()
-	gameTick.Schedule = tickSchedule
+	ctx := ks.NewGameEngine()
 	for _, system := range systems {
-		tickSchedule.AddSystem(constants.TickRate, system)
+		ctx.AddSystem(constants.TickRate, system)
 	}
 
-	gameCtx := &server.EngineCtx{
-		GameId:                 "prototype-game",
-		IsLive:                 true,
-		World:                  gameWorld,
-		GameTick:               gameTick,
-		TransactionsToSaveLock: sync.Mutex{},
-		ShouldRecordError:      true,
-		ErrorLog:               []server.ErrorLog{},
-		Mode:                   "dev",
-		SystemErrorHandler:     &network.ProtoBasedErrorHandler{},
-		SystemBroadcastHandler: &network.ProtoBasedBroadcastHandler{},
-	}
-
-	return gameCtx
+	return ctx
 }
 
 func worldWithPath(t *testing.T, input string, systems ...server.TickSystemFunction) *server.EngineCtx {
 	w := state.NewWorld()
-	startup.RegisterTablesToWorld(w)
-	parseIntoWorld(t, w, input)
 
 	ctx := newTestEngine(w, systems...)
+
+	// Register tables
+	server.RegisterDefaultTables(ctx.World)
+	ctx.AddTables(data.TableSchemasToAccessors)
+
+	parseIntoWorld(t, ctx.World, input)
 
 	return ctx
 }

@@ -27,9 +27,8 @@ func main() {
 	// Setup HTTP routes
 	startup.SetupRoutes(ctx)
 
-	// TODO: kevin: make this cleaner imo
 	// Register tables schemas to world
-	startup.RegisterTablesToWorld(ctx.World)
+	ctx.AddTables(data.TableSchemasToAccessors)
 
 	// Provision local SQLite
 	gormDB, err := gorm.Open(sqlite.Open("local.db"))
