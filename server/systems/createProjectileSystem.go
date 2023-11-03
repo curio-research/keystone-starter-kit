@@ -34,8 +34,7 @@ var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 		ProjectileID: projectileID,
 		PlayerID:     req.PlayerId,
 	}, nil), "")
-
-})
+}, server.VerifyECDSAPublicKeyAuth[CreateProjectileRequest]())
 
 func locationOfPlayer(w state.IWorld, playerId int) (state.Pos, bool) {
 	playerEntity := data.Player.Filter(w, data.PlayerSchema{PlayerId: playerId}, []string{"PlayerId"})

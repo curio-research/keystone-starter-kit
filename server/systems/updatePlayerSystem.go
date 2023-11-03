@@ -41,7 +41,7 @@ var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 
 		data.Player.Set(w, player.Id, player)
 	}
-})
+}, server.VerifyECDSAPublicKeyAuth[UpdatePlayerRequest]())
 
 func resourceAtPosition(w state.IWorld, position state.Pos) (data.ResourceSchema, bool) {
 	resource := data.Resource.Filter(w, data.ResourceSchema{
