@@ -3,10 +3,9 @@ package main
 import (
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/data"
-	"github.com/curio-research/keystone-starter-kit/network"
 	"github.com/curio-research/keystone-starter-kit/startup"
 	gamedb "github.com/curio-research/keystone/db"
-	ks "github.com/curio-research/keystone/server/startup"
+	startKeystone "github.com/curio-research/keystone/server/startup"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -14,12 +13,9 @@ import (
 func main() {
 
 	// Initialize new game engine
-	ctx := ks.NewGameEngine()
+	ctx := startKeystone.NewGameEngine()
 
 	ctx.SetTickRate(constants.TickRate)
-
-	ctx.SetEmitErrorHandler(&network.ProtoBasedErrorHandler{})
-	ctx.SetEmitEventHandler(&network.ProtoBasedBroadcastHandler{})
 
 	// Add systems
 	startup.AddSystems(ctx)
