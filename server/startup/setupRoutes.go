@@ -8,6 +8,7 @@ import (
 
 	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/curio-research/keystone/server"
+	"github.com/curio-research/keystone/server/routes"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,7 +31,7 @@ func SetupRoutes(ctx *server.EngineCtx) {
 	})
 
 	// get game state
-	ctx.GinHttpEngine.POST("/getState", DownloadStateHandler(ctx))
+	ctx.GinHttpEngine.POST("/getState", routes.GetStateRouteHandler(ctx))
 }
 
 func pushUpdateToQueue[T any](ctx *gin.Context, engine *server.EngineCtx) {

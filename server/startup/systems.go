@@ -6,30 +6,25 @@ import (
 	"github.com/curio-research/keystone/server"
 )
 
-// different systems can be triggered on different ticks
-// some operations require the game to tick slower
-// ex: health only regenerates every 20 seconds, but you attack every 5 seconds
+// Different systems can be triggered on different ticks
+// Some operations require the game to tick slower
+// Ex: health only regenerates every 20 seconds, but you attack every 5 seconds
 
 func AddSystems(ctx *server.EngineCtx) {
 
 	// ---------------------
-	// External Systems
-	// External systems require external input to run
+	// External Systems - require external transactions to trigger
 	// ---------------------
 	ctx.AddSystem(constants.TickRate, systems.CreatePlayerSystem)
 	ctx.AddSystem(constants.TickRate, systems.UpdatePlayerSystem)
 	ctx.AddSystem(constants.TickRate, systems.CreateProjectileSystem)
 
 	// ---------------------
-	// Internal Systems
-	// internal systems run by themselves without external input
+	// Internal Systems - run by themselves (like a cron job)
 	// ---------------------
 	ctx.AddSystem(constants.WeatherChangeIntervalMs, systems.WeatherSystem)
 	ctx.AddSystem(constants.TickRate, systems.UpdateProjectileSystem)
 	ctx.AddSystem(constants.AnimalCreationRate, systems.CreateAnimalSystem)
 	ctx.AddSystem(constants.AnimalUpdateRate, systems.UpdateAnimalSystem)
-
-	// TODO: remove in prod
-	// tickSchedule.AddTickSystem(1_000, systems.TestSystem)
 
 }
