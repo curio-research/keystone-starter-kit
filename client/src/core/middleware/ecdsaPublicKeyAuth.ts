@@ -12,13 +12,16 @@ interface ECDSAPublicKeyAuth {
 
 export function WithECDSAAuth<T>(request: T): HeaderEntry {
     const hash = Buffer.from(JSON.stringify(request), "utf8");
+    console.log(hash)
     const base64Hash = bytesToBase64(hash);
+    console.log(base64Hash)
 
-    const privateKey = Buffer.from(playerWallet.privateKey, "hex");
+    const privateKey = Buffer.from(playerWallet.privateKey.slice(2), "hex");
+    console.log(playerWallet.privateKey)
     const signature = ecsign(hash, privateKey);
     const base64Sig = ecdsaSignatureToBase64(signature)!;
 
-    const publicKey = Buffer.from(playerWallet.publicKey, "hex");
+    const publicKey = Buffer.from(playerWallet.publicKey.slice(2), "hex");
     const base64PublicKey = bytesToBase64(publicKey);
 
     const publicKeyAuth: ECDSAPublicKeyAuth = {
@@ -54,5 +57,5 @@ function ecdsaSignatureToBase64(e: ECDSASignature): string | null {
 }
 
 function bytesToBase64(b: Buffer): string {
-    return btoa(String.fromCharCode.apply(null, Array.from(b)));
+    return b.toString("base64")
 }
