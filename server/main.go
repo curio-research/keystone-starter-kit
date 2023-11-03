@@ -7,14 +7,11 @@ import (
 	"github.com/curio-research/keystone-starter-kit/startup"
 	gamedb "github.com/curio-research/keystone/db"
 	ks "github.com/curio-research/keystone/server/startup"
-	"github.com/joho/godotenv"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 func main() {
-
-	godotenv.Load()
 
 	// Initialize new game engine
 	ctx := ks.NewGameEngine()
@@ -47,6 +44,9 @@ func main() {
 
 	ctx.SetSaveStateHandler(SQLiteSaveStateHandler, 0)
 	ctx.SetSaveTxHandler(SQLiteSaveTxHandler, 0)
+
+	ctx.SetSaveState(false)
+	ctx.SetSaveTx(false)
 
 	// Initialize game map
 	startup.InitWorld(ctx)
