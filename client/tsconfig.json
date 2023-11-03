@@ -15,7 +15,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "paths": {
+      "stream": ["./node_modules/readable-stream"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules"]

@@ -33,4 +33,4 @@ var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 		Position: availablePos,
 		PlayerId: req.PlayerID,
 	})
-}, server.VerifyECDSAPublicKeyAuth[CreatePlayerRequest]())
+})
