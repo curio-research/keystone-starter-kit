@@ -25,10 +25,10 @@ func TestMovement(t *testing.T) {
 
 	// doesn't move up/right/left because of obstacles
 	for _, direction := range []helper.Direction{helper.Up, helper.Right, helper.Left} {
-		server.QueueTxFromExternal(ctx, systems.UpdatePlayerRequest{
+		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(systems.UpdatePlayerRequest{
 			Direction: direction,
 			PlayerId:  1,
-		}, "")
+		}, nil), "")
 		server.TickWorldForward(ctx, 100)
 
 		player, found := getPlayer(w, playerID)
@@ -37,10 +37,10 @@ func TestMovement(t *testing.T) {
 	}
 
 	// move down
-	server.QueueTxFromExternal(ctx, systems.UpdatePlayerRequest{
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(systems.UpdatePlayerRequest{
 		Direction: helper.Down,
 		PlayerId:  1,
-	}, "")
+	}, nil), "")
 	server.TickWorldForward(ctx, 100)
 
 	player, found := getPlayer(w, playerID)
@@ -48,10 +48,10 @@ func TestMovement(t *testing.T) {
 	assert.Equal(t, state.Pos{X: 4, Y: 2}, player.Position)
 
 	// move right
-	server.QueueTxFromExternal(ctx, systems.UpdatePlayerRequest{
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(systems.UpdatePlayerRequest{
 		Direction: helper.Right,
 		PlayerId:  1,
-	}, "")
+	}, nil), "")
 	server.TickWorldForward(ctx, 100)
 
 	player, found = getPlayer(w, playerID)
@@ -59,10 +59,10 @@ func TestMovement(t *testing.T) {
 	assert.Equal(t, state.Pos{X: 5, Y: 2}, player.Position)
 
 	// can't move up
-	server.QueueTxFromExternal(ctx, systems.UpdatePlayerRequest{
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(systems.UpdatePlayerRequest{
 		Direction: helper.Up,
 		PlayerId:  1,
-	}, "")
+	}, nil), "")
 	server.TickWorldForward(ctx, 100)
 
 	player, found = getPlayer(w, playerID)

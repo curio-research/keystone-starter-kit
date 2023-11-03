@@ -19,10 +19,10 @@ func Test_Projectile(t *testing.T) {
 `, systems.CreateProjectileSystem, systems.UpdateProjectileSystem)
 
 	w := ctx.World
-	server.QueueTxFromExternal(ctx, systems.CreateProjectileRequest{
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(systems.CreateProjectileRequest{
 		Direction: helper.Down,
 		PlayerId:  1,
-	}, "")
+	}, nil), "")
 	server.TickWorldForward(ctx, 10)
 
 	_, found := getPlayer(w, 2)
@@ -43,10 +43,10 @@ func Test_Projectile_SavedByObstacle(t *testing.T) {
 `, systems.CreateProjectileSystem, systems.UpdateProjectileSystem)
 
 	w := ctx.World
-	server.QueueTxFromExternal(ctx, systems.CreateProjectileRequest{
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(systems.CreateProjectileRequest{
 		Direction: helper.Down,
 		PlayerId:  1,
-	}, "")
+	}, nil), "")
 	server.TickWorldForward(ctx, 40)
 
 	_, found := getPlayer(w, 2)

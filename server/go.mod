@@ -3,7 +3,7 @@ module github.com/curio-research/keystone-starter-kit
 go 1.20
 
 require (
-	github.com/curio-research/keystone v0.1.12
+	github.com/curio-research/keystone v0.1.13-0.20231102202612-ca4114318fdf
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/assert/v2 v2.2.0
 	github.com/joho/godotenv v1.5.1
@@ -12,10 +12,13 @@ require (
 )
 
 require (
+	github.com/btcsuite/btcd/btcec/v2 v2.2.0 // indirect
 	github.com/bytedance/sonic v1.10.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
 	github.com/chenzhuoyu/iasm v0.9.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 // indirect
+	github.com/ethereum/go-ethereum v1.13.4 // indirect
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
@@ -26,6 +29,7 @@ require (
 	github.com/golang-collections/collections v0.0.0-20130729185459-604e922904d3 // indirect
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
+	github.com/holiman/uint256 v1.2.3 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/kr/pretty v0.3.1 // indirect

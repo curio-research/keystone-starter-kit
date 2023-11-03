@@ -11,7 +11,6 @@ import (
 
 // register tables to the world
 func RegisterTablesToWorld(w *state.GameWorld) {
-
 	var tableInterfacesToAdd []state.ITable
 	for _, accessor := range data.TableSchemasToAccessors {
 		tableInterfacesToAdd = append(tableInterfacesToAdd, accessor)
@@ -49,5 +48,5 @@ func InitWorld(ctx *server.EngineCtx) {
 		PlayerID: adminPlayerId,
 	}
 
-	server.QueueTxFromExternal(ctx, createPlayerRequest, "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(createPlayerRequest, nil), "")
 }

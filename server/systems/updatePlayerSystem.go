@@ -14,7 +14,7 @@ type UpdatePlayerRequest struct {
 
 var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[UpdatePlayerRequest]) {
 	w := ctx.W
-	req := ctx.Req
+	req := ctx.Req.Data
 
 	playerRes := data.Player.Filter(w,
 		data.PlayerSchema{
