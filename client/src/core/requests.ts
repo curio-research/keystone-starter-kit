@@ -23,7 +23,7 @@ export interface MoveRequest {
 // api requests
 
 export const CreatePlayer = async (request: CreatePlayerRequest) => {
-  return api.post('/player', NewKeystoneTx(request));
+  return api.post('/player', NewKeystoneTx(request, WithECDSAAuth(request)));
 };
 
 export const Fire = async (request: CreateProjectileRequest) => {
