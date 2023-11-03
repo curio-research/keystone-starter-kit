@@ -1,37 +1,16 @@
-import {ethers, Signature} from "ethers";
 import {Buffer} from "buffer";
 import {ECDSASignature, ecsign} from "ethereumjs-util";
-import {ECDSAPublicKeyAuthHeader} from "./requests";
-import any = jasmine.any;
-
-export const playerWallet = ethers.Wallet.createRandom();
-
-export interface KeystoneTx<T> {
-    Headers: Map<string, any>
-    Req: T
-}
+import {ECDSAPublicKeyAuthHeader} from "../requests";
+import {Signature} from "ethers";
+import {HeaderEntry, playerWallet} from "./middleware";
 
 interface ECDSAPublicKeyAuth {
     Base64Signature: string
-    Base64Hash:      string
+    Base64Hash: string
     Base64PublicKey: string
 }
 
-export function NewKeystoneTx<T>(request: T, headers: Map<string,any> | null): KeystoneTx<T> {
-    const headersMap = new Map<string, any>();
-    if (headers != null) {
-        headers.forEach((value, key) => {
-            headersMap.set(key, value)
-        })
-    }
-
-    return {
-        Headers: headersMap,
-        Req: request
-    }
-}
-
-function ECDSAAuthHeaders<T>(request: T) {
+export function WithECDSAAuth<T>(request: T): HeaderEntry {
     const hash = Buffer.from(JSON.stringify(request), "utf8");
     const base64Hash = bytesToBase64(hash);
 
@@ -47,7 +26,7 @@ function ECDSAAuthHeaders<T>(request: T) {
         Base64Signature: base64Sig,
         Base64PublicKey: base64PublicKey,
     }
-    return publicKeyAuth;
+    return [ECDSAPublicKeyAuthHeader, publicKeyAuth];
 }
 
 function ecdsaSignatureToBase64(e: ECDSASignature): string | null {
