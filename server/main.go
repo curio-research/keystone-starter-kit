@@ -1,54 +1,41 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"strconv"
-
 	"github.com/curio-research/keystone-starter-kit/constants"
-	"github.com/curio-research/keystone-starter-kit/server"
-	"github.com/fatih/color"
+	"github.com/curio-research/keystone-starter-kit/network"
+	"github.com/curio-research/keystone-starter-kit/startup"
+	ks "github.com/curio-research/keystone/server/startup"
 	"github.com/joho/godotenv"
-
-	log "github.com/sirupsen/logrus"
 )
 
 func main() {
+
 	godotenv.Load()
 
-	// get randomness seed (controls how random numbers are created)
-	randSeed := os.Getenv("RAND_SEED")
-	if randSeed == "" {
-		log.Info("missing RAND_SEED env variable, seeding randomness with local variable", randSeed)
-	}
+	// Initialize new game engine
+	ctx := ks.NewGameEngine()
 
-	// get listening port
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = strconv.Itoa(constants.DefaultListeningPort)
-		log.Infof("missing PORT env variable, using %s", port)
-	}
+	ctx.SetTickRate(constants.TickRate)
 
-	// get websocket port (for streaming updates)
-	wsPortStr := os.Getenv("WS_PORT")
-	if wsPortStr == "" {
-		wsPortStr = strconv.Itoa(constants.DefaultWSPort)
-		log.Infof("missing WS_PORT env variable, using %s", wsPortStr)
-	}
+	ctx.SetEmitErrorHandler(&network.ProtoBasedErrorHandler{})
+	ctx.SetEmitEventHandler(&network.ProtoBasedBroadcastHandler{})
 
-	wsPort, err := strconv.Atoi(wsPortStr)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// Add systems
+	startup.AddSystems(ctx)
 
-	s, err := server.MainServer(wsPort)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// Setup HTTP routes
+	startup.SetupRoutes(ctx)
 
-	color.HiWhite("Listening on port:    " + port)
-	color.HiWhite("WS port:    " + wsPortStr)
-	fmt.Println()
+	// TODO: kevin: make this cleaner imo
+	// Register tables schemas to world
+	startup.RegisterTablesToWorld(ctx.World)
 
-	log.Fatal(s.Run(":" + port))
+	// ctx.addTables
+
+	// Initialize game map
+	startup.InitWorld(ctx)
+
+	// Start game server!
+	ctx.Start()
+
 }
