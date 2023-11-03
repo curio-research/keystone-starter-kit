@@ -10,16 +10,18 @@ interface ECDSAPublicKeyAuth {
 
 export function WithECDSAAuth<T>(request: T): HeaderEntry {
     const jsonReq = JSON.stringify(request);
+
     const hashBits = sjcl.hash.sha256.hash(jsonReq);
     const hashHex = sjcl.codec.hex.fromBits(hashBits);
     const hashBase64 = sjcl.codec.base64.fromBits(hashBits);
 
-    const signatureHex = playerWallet.signMessageSync(hashHex);// Convert the hex signature to a bitArray
+    const signatureHex = playerWallet.signMessageSync(hashHex);
     const signatureBits = sjcl.codec.hex.toBits(signatureHex);
     const signatureBase64 = sjcl.codec.base64.fromBits(signatureBits);
 
-    const publicKey = sjcl.codec.hex.toBits(playerWallet.publicKey);
-    const publicKeyBase64 = sjcl.codec.base64.fromBits(publicKey);
+    const publicKey = playerWallet.publicKey;
+    const publicKeyBits = sjcl.codec.hex.toBits(publicKey);
+    const publicKeyBase64 = sjcl.codec.base64.fromBits(publicKeyBits);
 
     const publicKeyAuth: ECDSAPublicKeyAuth = {
         Base64Hash: hashBase64,
