@@ -1,6 +1,7 @@
 package data
 
 import (
+	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
 
@@ -77,11 +78,12 @@ var (
 )
 
 var TableSchemasToAccessors = map[interface{}]state.ITable{
-	&GameSchema{}:          Game,
-	&LocalRandSeedSchema{}: LocalRandomSeed,
-	&ProjectileSchema{}:    Projectile,
-	&TileSchema{}:          Tile,
-	&PlayerSchema{}:        Player,
-	&AnimalSchema{}:        Animal,
-	&ResourceSchema{}:      Resource,
+	&GameSchema{}:               Game,
+	&LocalRandSeedSchema{}:      LocalRandomSeed,
+	&ProjectileSchema{}:         Projectile,
+	&TileSchema{}:               Tile,
+	&PlayerSchema{}:             Player,
+	&AnimalSchema{}:             Animal,
+	&ResourceSchema{}:           Resource,
+	&server.TransactionSchema{}: server.TransactionTable,
 }

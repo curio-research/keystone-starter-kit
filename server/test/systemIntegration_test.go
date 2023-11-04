@@ -30,19 +30,21 @@ func TestPickUpGold(t *testing.T) {
 	require.True(t, found)
 	require.Equal(t, 0, player.Resources)
 
-	server.QueueTxFromExternal(ctx, systems.CreateProjectileRequest{
+	req := systems.CreateProjectileRequest{
 		Direction: helper.Right,
 		PlayerId:  playerID,
-	}, "")
+	}
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req)), "")
 	server.TickWorldForward(ctx, 50) // create projectile + queue projectile update jobs
 
 	assert.Len(t, data.Animal.Entities(w), 0)
 
 	for i := 0; i < 4; i++ {
-		server.QueueTxFromExternal(ctx, systems.UpdatePlayerRequest{
+		req := systems.UpdatePlayerRequest{
 			Direction: helper.Right,
 			PlayerId:  playerID,
-		}, "")
+		}
+		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req)), "")
 		server.TickWorldForward(ctx, 100)
 	}
 

@@ -37,7 +37,7 @@ func pushUpdateToQueue[T any](ctx *gin.Context, engine *server.EngineCtx) {
 	request := ctx.Request
 	writer := ctx.Writer
 
-	var t T
+	var t server.KeystoneTx[T]
 	b, err := io.ReadAll(request.Body)
 	if err != nil {
 		writer.Write([]byte("error reading request: " + err.Error()))

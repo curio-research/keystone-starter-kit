@@ -14,7 +14,7 @@ type UpdatePlayerRequest struct {
 
 var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[UpdatePlayerRequest]) {
 	w := ctx.W
-	req := ctx.Req
+	req := ctx.Req.Data
 
 	playerRes := data.Player.Filter(w,
 		data.PlayerSchema{
@@ -41,7 +41,7 @@ var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 
 		data.Player.Set(w, player.Id, player)
 	}
-})
+}, server.VerifyECDSAPublicKeyAuth[UpdatePlayerRequest]())
 
 func resourceAtPosition(w state.IWorld, position state.Pos) (data.ResourceSchema, bool) {
 	resource := data.Resource.Filter(w, data.ResourceSchema{

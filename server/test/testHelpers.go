@@ -1,7 +1,10 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/stretchr/testify/require"
 
 	"regexp"
 	"strconv"
@@ -108,4 +111,19 @@ func getPlayer(w *state.GameWorld, playerID int) (data.PlayerSchema, bool) {
 	}
 
 	return data.Player.Get(w, playerEntity[0]), true
+}
+
+func testECDSAAuthHeader[T any](t *testing.T, req T) map[server.HeaderField]json.RawMessage {
+	privateKey, err := crypto.GenerateKey()
+	require.Nil(t, err)
+
+	auth, err := server.NewECDSAPublicKeyAuth(privateKey, req)
+	require.Nil(t, err)
+
+	authBytes, err := json.Marshal(auth)
+	require.Nil(t, err)
+
+	return map[server.HeaderField]json.RawMessage{
+		server.ECDSAPublicKeyAuthHeader: authBytes,
+	}
 }

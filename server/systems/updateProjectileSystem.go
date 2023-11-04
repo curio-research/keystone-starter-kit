@@ -16,33 +16,32 @@ type UpdateProjectileRequest struct {
 
 var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[UpdateProjectileRequest]) {
 	w := ctx.W
+	req := ctx.Req.Data
 
 	// get projectile's position
-	projectile := data.Projectile.Get(w, ctx.Req.ProjectileID)
+	projectile := data.Projectile.Get(w, req.ProjectileID)
 
-	nextPosition := helper.TargetTile(projectile.Position, ctx.Req.Direction)
+	nextPosition := helper.TargetTile(projectile.Position, req.Direction)
 
 	// check collisions
 	collision := updateWorldForCollision(w, nextPosition)
 	if collision {
 		// if collided, remove the projectile
-		data.Projectile.RemoveEntity(w, ctx.Req.ProjectileID)
+		data.Projectile.RemoveEntity(w, req.ProjectileID)
 
 	} else {
 		// update the position of the projectile
 		projectile.Position = nextPosition
-		data.Projectile.Set(w, ctx.Req.ProjectileID, projectile)
+		data.Projectile.Set(w, req.ProjectileID, projectile)
 
 		// queue the next projectile update
 		tickNumber := ctx.GameCtx.GameTick.TickNumber + constants.BulletSpeed
 
-		server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
-
-			Direction:    ctx.Req.Direction,
-			ProjectileID: ctx.Req.ProjectileID,
-			PlayerID:     ctx.Req.PlayerID,
-		}, "")
-
+		server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, server.NewKeystoneTx(UpdateProjectileRequest{
+			Direction:    req.Direction,
+			ProjectileID: req.ProjectileID,
+			PlayerID:     req.PlayerID,
+		}, nil), "")
 	}
 
 })

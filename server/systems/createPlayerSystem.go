@@ -12,7 +12,7 @@ type CreatePlayerRequest struct {
 
 var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[CreatePlayerRequest]) {
 	w := ctx.W
-	req := ctx.Req
+	req := ctx.Req.Data
 
 	player := data.Player.Filter(w,
 		data.PlayerSchema{

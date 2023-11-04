@@ -13,17 +13,26 @@
     "@types/node": "^16.18.58",
     "@types/react": "^18.2.28",
     "@types/react-dom": "^18.2.13",
+    "@types/sjcl": "^1.0.32",
     "axios": "^1.5.1",
+    "buffer": "^6.0.3",
     "class-transformer": "^0.5.1",
+    "crypto": "^1.0.1",
+    "crypto-ts": "^1.0.2",
+    "ethereumjs-util": "^7.1.5",
+    "ethers": "^6.8.1",
     "framer-motion": "^10.16.4",
     "lodash": "^4.17.21",
     "mobx": "^6.10.2",
     "mobx-react": "^9.0.1",
+    "node-polyfill-webpack-plugin": "^2.0.1",
+    "patch-package": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
     "reflect-metadata": "^0.1.13",
+    "sjcl": "^1.0.8",
     "styled-components": "^6.1.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
@@ -32,7 +41,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "patch-package"
   },
   "eslintConfig": {
     "extends": [

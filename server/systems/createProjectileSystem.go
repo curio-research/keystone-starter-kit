@@ -14,7 +14,7 @@ type CreateProjectileRequest struct {
 }
 
 var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[CreateProjectileRequest]) {
-	req := ctx.Req
+	req := ctx.Req.Data
 	w := ctx.W
 
 	direction := req.Direction
@@ -29,13 +29,12 @@ var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 
 	tickNumber := ctx.GameCtx.GameTick.TickNumber + constants.BulletSpeed
 
-	server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, UpdateProjectileRequest{
+	server.QueueTxFromInternal[UpdateProjectileRequest](w, tickNumber, server.NewKeystoneTx(UpdateProjectileRequest{
 		Direction:    direction,
 		ProjectileID: projectileID,
 		PlayerID:     req.PlayerId,
-	}, "")
-
-})
+	}, nil), "")
+}, server.VerifyECDSAPublicKeyAuth[CreateProjectileRequest]())
 
 func locationOfPlayer(w state.IWorld, playerId int) (state.Pos, bool) {
 	playerEntity := data.Player.Filter(w, data.PlayerSchema{PlayerId: playerId}, []string{"PlayerId"})
