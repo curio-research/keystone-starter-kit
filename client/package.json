@@ -13,6 +13,7 @@
     "@types/node": "^16.18.58",
     "@types/react": "^18.2.28",
     "@types/react-dom": "^18.2.13",
+    "@types/sjcl": "^1.0.32",
     "axios": "^1.5.1",
     "buffer": "^6.0.3",
     "class-transformer": "^0.5.1",
@@ -60,8 +61,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/sjcl": "^1.0.32"
   }
 }
