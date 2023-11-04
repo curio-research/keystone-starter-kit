@@ -1,5 +1,3 @@
-import {ethers} from "ethers";
-
 export interface KeystoneTx<T> {
     Headers: { [p: string]: any }
     Data: T
