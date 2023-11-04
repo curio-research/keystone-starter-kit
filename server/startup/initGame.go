@@ -9,16 +9,7 @@ import (
 	"github.com/curio-research/keystone/state"
 )
 
-// register tables to the world
-func RegisterTablesToWorld(w *state.GameWorld) {
-	var tableInterfacesToAdd []state.ITable
-	for _, accessor := range data.TableSchemasToAccessors {
-		tableInterfacesToAdd = append(tableInterfacesToAdd, accessor)
-	}
-
-	w.AddTables(tableInterfacesToAdd...)
-}
-
+// Initialize world map and content
 func InitWorld(ctx *server.EngineCtx) {
 	data.Game.AddSpecific(ctx.World, constants.GameEntity, data.GameSchema{
 		Weather: data.Sunny,

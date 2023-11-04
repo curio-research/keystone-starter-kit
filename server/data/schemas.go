@@ -1,7 +1,6 @@
 package data
 
 import (
-	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
 
@@ -9,8 +8,8 @@ import (
 
 // randomness variable
 type LocalRandSeedSchema struct {
+	Id        int `gorm:"primaryKey;autoIncrement:false"`
 	RandValue int
-	Id        int `gorm:"primaryKey"`
 }
 
 type Weather int
@@ -21,7 +20,7 @@ const (
 )
 
 type GameSchema struct {
-	Id      int `gorm:"primaryKey"`
+	Id      int `gorm:"primaryKey;autoIncrement:false"`
 	Weather Weather
 }
 
@@ -33,30 +32,30 @@ const (
 )
 
 type TileSchema struct {
-	Id       int       `gorm:"primaryKey"`
+	Id       int       `gorm:"primaryKey;autoIncrement:false"`
 	Position state.Pos `gorm:"embedded"`
 	Terrain  Terrain
 }
 
 type PlayerSchema struct {
-	Id        int       `gorm:"primaryKey"`
+	Id        int       `gorm:"primaryKey;autoIncrement:false"`
 	Position  state.Pos `gorm:"embedded"`
 	Resources int
 	PlayerId  int
 }
 
 type ProjectileSchema struct {
-	Id       int       `gorm:"primaryKey"`
+	Id       int       `gorm:"primaryKey;autoIncrement:false"`
 	Position state.Pos `gorm:"embedded"`
 }
 
 type AnimalSchema struct {
-	Id       int       `gorm:"primaryKey"`
+	Id       int       `gorm:"primaryKey;autoIncrement:false"`
 	Position state.Pos `gorm:"embedded"`
 }
 
 type ResourceSchema struct {
-	Id       int       `gorm:"primaryKey"`
+	Id       int       `gorm:"primaryKey;autoIncrement:false"`
 	Position state.Pos `gorm:"embedded"`
 	Amount   int
 }
@@ -77,13 +76,12 @@ var (
 	Resource        = state.NewTableAccessor[ResourceSchema]()
 )
 
-var TableSchemasToAccessors = map[interface{}]state.ITable{
-	&GameSchema{}:               Game,
-	&LocalRandSeedSchema{}:      LocalRandomSeed,
-	&ProjectileSchema{}:         Projectile,
-	&TileSchema{}:               Tile,
-	&PlayerSchema{}:             Player,
-	&AnimalSchema{}:             Animal,
-	&ResourceSchema{}:           Resource,
-	&server.TransactionSchema{}: server.TransactionTable,
+var TableSchemasToAccessors = map[interface{}]*state.TableBaseAccessor[any]{
+	&GameSchema{}:          (*state.TableBaseAccessor[any])(Game),
+	&LocalRandSeedSchema{}: (*state.TableBaseAccessor[any])(LocalRandomSeed),
+	&ProjectileSchema{}:    (*state.TableBaseAccessor[any])(Projectile),
+	&TileSchema{}:          (*state.TableBaseAccessor[any])(Tile),
+	&PlayerSchema{}:        (*state.TableBaseAccessor[any])(Player),
+	&AnimalSchema{}:        (*state.TableBaseAccessor[any])(Animal),
+	&ResourceSchema{}:      (*state.TableBaseAccessor[any])(Resource),
 }
