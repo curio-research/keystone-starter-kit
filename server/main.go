@@ -37,6 +37,8 @@ func main() {
 		panic("failed to create sqlite save handlers: " + err.Error())
 	}
 
+	startKeystone.RegisterRewindEndpoint(ctx)
+
 	ctx.SetSaveStateHandler(SQLiteSaveStateHandler, 0)
 	ctx.SetSaveTxHandler(SQLiteSaveTxHandler, 0)
 
