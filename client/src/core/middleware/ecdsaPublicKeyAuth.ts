@@ -1,6 +1,9 @@
 import {ECDSAPublicKeyAuthHeader} from "../requests";
-import {HeaderEntry, playerWallet} from "./middleware";
+import {HeaderEntry} from "./middleware";
 import sjcl from "sjcl";
+import {ethers} from "ethers";
+
+const playerWallet = ethers.Wallet.createRandom();
 
 interface ECDSAPublicKeyAuth {
     Base64Signature: string
