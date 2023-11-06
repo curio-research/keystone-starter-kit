@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { AnimalTable } from '../core/schemas';
 import { worldState } from '..';
 import Duck from 'assets/Duck.png';
-import { PositionWrapper } from 'components/Other';
+import { ActivePositionWrapper, PositionWrapper } from 'components/Other';
 
 const Animals = observer(() => {
   const animals = AnimalTable.getAll(worldState.tableState);
@@ -11,9 +11,9 @@ const Animals = observer(() => {
     <div>
       {animals.map((animal) => {
         return (
-          <PositionWrapper position={animal.Position} key={animal.Id}>
+          <ActivePositionWrapper position={animal.Position} key={animal.Id}>
             <img src={Duck} style={{ padding: '10px' }} />
-          </PositionWrapper>
+          </ActivePositionWrapper>
         );
       })}
     </div>

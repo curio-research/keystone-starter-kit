@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { AllTableAccessors } from '../core/schemas';
 import { TableOperationType, TableUpdate, IWorld, GetStateResponse } from './types';
 import { TableAccessor } from 'keystone/tableAccessor';
-import { KeystoneWebsocketUrl } from 'core/config';
+import { KeystoneWebsocketUrl } from 'core/keystoneConfig';
 import { KeystoneAPI } from 'index';
 
 // keystone's table state store

@@ -5,7 +5,7 @@ import { WorldState } from './keystone/stateStore';
 import { UIState } from './core/uiStore';
 import { makeAutoObservable } from 'mobx';
 import { KeystoneAPIBase } from 'keystone/util';
-import { KeystoneServerUrl, KeystoneWebsocketUrl } from 'core/config';
+import { KeystoneServerUrl, KeystoneWebsocketUrl } from 'core/keystoneConfig';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 

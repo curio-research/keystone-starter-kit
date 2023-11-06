@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { PlayerTable } from 'core/schemas';
 import { worldState } from '..';
 import Caribou from 'assets/Caribou.png';
-import { PositionWrapper } from 'components/Other';
+import { ActivePositionWrapper, PositionWrapper } from 'components/Other';
 
 const Players = observer(() => {
   const players = PlayerTable.getAll(worldState.tableState);
@@ -11,9 +11,9 @@ const Players = observer(() => {
     <>
       {players.map((player) => {
         return (
-          <PositionWrapper position={player.Position} key={player.Id}>
+          <ActivePositionWrapper position={player.Position} key={player.Id}>
             <img src={Caribou} />
-          </PositionWrapper>
+          </ActivePositionWrapper>
         );
       })}
     </>
