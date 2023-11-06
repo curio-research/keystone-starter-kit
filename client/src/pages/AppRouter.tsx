@@ -2,12 +2,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import TableExplorer from '../components/TableExplorer';
 import Game from './Game';
 import { Box, Text } from '@chakra-ui/react';
-import { GetStateResponse, TableOperationType, TableUpdate } from '../store/types';
+import { GetStateResponse, TableOperationType, TableUpdate } from '../keystone/types';
 import { worldState } from '..';
 import { useEffect } from 'react';
 import { KeystoneWebsocketUrl, api } from 'core/config';
 
 export const AppRouter = () => {
+  // TODO: abstract this away into package
   const startup = async () => {
     const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
 

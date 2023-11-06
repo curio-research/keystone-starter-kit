@@ -1,4 +1,4 @@
-// ui store
+// Stores helper UI states
 export class UIState {
   public selectedTableToDisplay: string;
   public lastMovedDirection: string;

@@ -1,34 +1,37 @@
-// api requests types
-
 import { api } from 'core/config';
-import {NewKeystoneTx} from "./middleware/middleware";
-import {WithEthereumWalletAuth} from "./middleware/ethereumWalletAuth";
+import { NewKeystoneTx } from '../keystone/middleware';
+import { WithEthereumWalletAuth } from './middleware/ethereumWalletAuth';
 
-export const ECDSAPublicKeyAuthHeader = "ecdsaPublicKeyAuth"
+export const ECDSAPublicKeyAuthHeader = 'ecdsaPublicKeyAuth';
 
+// ----------------------------------------
+// API requests to Keystone server
+// ----------------------------------------
+
+// create player
 export interface CreatePlayerRequest {
   PlayerId: number;
 }
-
-export interface CreateProjectileRequest {
-  Direction: string;
-  PlayerId: number;
-}
-
-export interface MoveRequest {
-  Direction: string;
-  PlayerId: number;
-}
-
-// api requests
 
 export const CreatePlayer = async (request: CreatePlayerRequest) => {
   return api.post('/player', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
 };
 
-export const Fire = async (request: CreateProjectileRequest) => {
+// fire projectile
+export interface FireRequest {
+  Direction: string;
+  PlayerId: number;
+}
+
+export const Fire = async (request: FireRequest) => {
   return api.post('/fire', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
 };
+
+// move player
+export interface MoveRequest {
+  Direction: string;
+  PlayerId: number;
+}
 
 export const Move = async (request: MoveRequest) => {
   return api.post('/move', NewKeystoneTx(request, WithEthereumWalletAuth(request)));

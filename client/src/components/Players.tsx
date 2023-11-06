@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import { PlayerTable } from 'core/schemas';
 import { worldState } from '..';
-import { PositionWrapper } from './TerrainTiles';
 import Caribou from 'assets/Caribou.png';
+import { PositionWrapper } from 'components/Other';
 
 const Players = observer(() => {
   const players = PlayerTable.getAll(worldState.tableState);

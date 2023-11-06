@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { AllTableAccessors } from '../core/schemas';
 import { TableOperationType, TableUpdate, IWorld } from './types';
-import { TableAccessor } from 'core/tableAccessor';
+import { TableAccessor } from 'keystone/tableAccessor';
 
 // keystone's table state store
 export class WorldState {

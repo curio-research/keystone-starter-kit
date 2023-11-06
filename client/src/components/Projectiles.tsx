@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import { ProjectileTable } from '../core/schemas';
 import { worldState } from '..';
-import { PositionWrapper } from './TerrainTiles';
 import Fire from 'assets/Fire.png';
+import { PositionWrapper } from 'components/Other';
 
 const Projectiles = observer(() => {
   const projectile = ProjectileTable.getAll(worldState.tableState);
