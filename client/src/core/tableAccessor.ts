@@ -1,4 +1,7 @@
 import { ITable, IWorld } from 'store/types';
+import {PlayerSchema, PlayerTable} from "./schemas";
+import {worldState} from "../index";
+import {playerIDKey, privateKey} from "../pages/Game";
 
 // typed table accessor
 export class TableAccessor<T extends { Id: number }> {
@@ -13,38 +16,68 @@ export class TableAccessor<T extends { Id: number }> {
   }
 
   // get struct from entity
-  get(table: ITable<T>, entity: number): T | undefined {
+  get(world: IWorld, entity: number): T | undefined {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return undefined;
+    }
+
     return table.get(entity);
   }
 
   // get all entities
   getAll(world: IWorld): Array<T> {
     const table = world.get(this.tableName);
-
     if (!table) {
       return [];
     }
+
     return Array.from<T>(table.values());
   }
 
-  getAny(table: ITable<T>): T | undefined {
+  getAny(world: IWorld): T | undefined {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return undefined;
+    }
+
     const { value } = table.values().next();
     return value;
   }
 
-  set(table: ITable<T>, id: number, val: T) {
+  set(world: IWorld, id: number, val: T) {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return [];
+    }
+
     table.set(id, val);
   }
 
-  remove(table: ITable<T>, id: number) {
+  remove(world: IWorld, id: number) {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return [];
+    }
+
     table.delete(id);
   }
 
-  filter(table: ITable<T>): FilterArgs<T> {
+  filter(world: IWorld): FilterArgs<T> | undefined {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return undefined;
+    }
+
     return new FilterArgs(table);
   }
 
-  allEntities(table: ITable<T>): Array<number> {
+  allEntities(world: IWorld): Array<number> {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return [];
+    }
+
     return Array.from<number>(table.keys());
   }
 }
@@ -82,4 +115,14 @@ class FilterArgs<T> {
 
     return matchingValues;
   }
+}
+
+export function getPlayer(): PlayerSchema {
+  const playerIDStr = localStorage.getItem(playerIDKey)!;
+  const playerID = parseInt(playerIDStr, 10)
+  return PlayerTable.get(worldState.tableState, playerID)!
+}
+
+export function getPrivateKey(): string {
+  return localStorage.getItem(privateKey)!;
 }

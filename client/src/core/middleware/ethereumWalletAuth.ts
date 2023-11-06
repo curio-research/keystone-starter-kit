@@ -2,8 +2,10 @@ import {ECDSAPublicKeyAuthHeader} from "../requests";
 import {HeaderEntry} from "./middleware";
 import sjcl from "sjcl";
 import {ethers} from "ethers";
-
-const playerWallet = ethers.Wallet.createRandom();
+import {PlayerTable} from "../schemas";
+import {worldState} from "../../index";
+import {playerIDKey} from "../../pages/Game";
+import {getPlayer, getPrivateKey} from "../tableAccessor";
 
 interface EthereumWalletAuth {
     Base64Signature: string
@@ -17,11 +19,14 @@ export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalle
 
     // Compute a SHA256 hash of the JSON request
     const hashBits = sjcl.hash.sha256.hash(jsonReq);
-    const hashHex = sjcl.codec.hex.fromBits(hashBits);
+    const hashHex = "0x" + sjcl.codec.hex.fromBits(hashBits);
     const hashBase64 = sjcl.codec.base64.fromBits(hashBits);
 
     // Sign the hash with the wallet's private key
-    const signature = playerWallet.signingKey.sign("0x" + hashHex).serialized;
+    const privateKey = getPrivateKey();
+    const playerWallet = new ethers.Wallet(privateKey)
+
+    const signature = playerWallet.signingKey.sign(hashHex).serialized;
     const signatureBits = sjcl.codec.hex.toBits(signature);
     const signatureBase64 = sjcl.codec.base64.fromBits(signatureBits);
 

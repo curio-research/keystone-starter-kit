@@ -43,9 +43,9 @@ export class WorldState {
 
     const id = update.entity;
     if (op === TableOperationType.Update) {
-      accessor.set(table, id, update.value);
+      accessor.set(this.tableState, id, update.value);
     } else if (op === TableOperationType.Remove) {
-      accessor.remove(table, id);
+      accessor.remove(this.tableState, id);
     }
   }
 

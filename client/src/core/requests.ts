@@ -7,6 +7,7 @@ import {WithEthereumWalletAuth} from "./middleware/ethereumWalletAuth";
 export const ECDSAPublicKeyAuthHeader = "ecdsaPublicKeyAuth"
 
 export interface CreatePlayerRequest {
+  PublicKey: string;
   PlayerId: number;
 }
 
