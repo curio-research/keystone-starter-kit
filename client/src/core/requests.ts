@@ -2,7 +2,7 @@
 
 import { api } from 'core/config';
 import {NewKeystoneTx} from "./middleware/middleware";
-import {WithECDSAAuth} from "./middleware/ecdsaPublicKeyAuth";
+import {WithEthereumWalletAuth} from "./middleware/ethereumWalletAuth";
 
 export const ECDSAPublicKeyAuthHeader = "ecdsaPublicKeyAuth"
 
@@ -23,13 +23,13 @@ export interface MoveRequest {
 // api requests
 
 export const CreatePlayer = async (request: CreatePlayerRequest) => {
-  return api.post('/player', NewKeystoneTx(request, WithECDSAAuth(request)));
+  return api.post('/player', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
 };
 
 export const Fire = async (request: CreateProjectileRequest) => {
-  return api.post('/fire', NewKeystoneTx(request, WithECDSAAuth(request)));
+  return api.post('/fire', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
 };
 
 export const Move = async (request: MoveRequest) => {
-  return api.post('/move', NewKeystoneTx(request, WithECDSAAuth(request)));
+  return api.post('/move', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
 };

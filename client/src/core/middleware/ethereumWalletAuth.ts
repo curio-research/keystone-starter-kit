@@ -5,13 +5,13 @@ import {ethers} from "ethers";
 
 const playerWallet = ethers.Wallet.createRandom();
 
-interface ECDSAPublicKeyAuth {
+interface EthereumWalletAuth {
     Base64Signature: string
     Base64Hash: string
     Base64PublicKey: string
 }
 
-export function WithECDSAAuth<T>(request: T): HeaderEntry<ECDSAPublicKeyAuth> {
+export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalletAuth> {
     // Serialize the request to a JSON string
     const jsonReq = JSON.stringify(request);
 
@@ -29,7 +29,7 @@ export function WithECDSAAuth<T>(request: T): HeaderEntry<ECDSAPublicKeyAuth> {
     const publicKeyBits = sjcl.codec.hex.toBits(playerWallet.signingKey.publicKey);
     const publicKeyBase64 = sjcl.codec.base64.fromBits(publicKeyBits);
 
-    const publicKeyAuth: ECDSAPublicKeyAuth = {
+    const publicKeyAuth: EthereumWalletAuth = {
         Base64Hash: hashBase64,
         Base64Signature: signatureBase64,
         Base64PublicKey: publicKeyBase64,
