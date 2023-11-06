@@ -1,4 +1,4 @@
-import { api } from 'core/config';
+import { KeystoneAPI } from 'index';
 import { NewKeystoneTx } from '../keystone/middleware';
 import { WithEthereumWalletAuth } from './middleware/ethereumWalletAuth';
 
@@ -14,7 +14,7 @@ export interface CreatePlayerRequest {
 }
 
 export const CreatePlayer = async (request: CreatePlayerRequest) => {
-  return api.post('/player', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
+  return KeystoneAPI.getAPI().post('/player', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
 };
 
 // fire projectile
@@ -24,7 +24,7 @@ export interface FireRequest {
 }
 
 export const Fire = async (request: FireRequest) => {
-  return api.post('/fire', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
+  return KeystoneAPI.getAPI().post('/fire', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
 };
 
 // move player
@@ -34,5 +34,5 @@ export interface MoveRequest {
 }
 
 export const Move = async (request: MoveRequest) => {
-  return api.post('/move', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
+  return KeystoneAPI.getAPI().post('/move', NewKeystoneTx(request, WithEthereumWalletAuth(request)));
 };
