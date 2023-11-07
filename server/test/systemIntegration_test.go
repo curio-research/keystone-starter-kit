@@ -42,6 +42,8 @@ func TestPickUpGold(t *testing.T) {
 	require.True(t, found)
 	assert.Equal(t, 0, player.Resources)
 
+	assert.NotEqual(t, player.Position, player2.Position)
+
 	player2PublicKey := base64PublicKey(t, addedPlayerID)
 	assert.Equal(t, player2PublicKey, player2.Base64PublicKey)
 
