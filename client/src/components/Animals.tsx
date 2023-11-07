@@ -11,7 +11,7 @@ const Animals = observer(() => {
     <div>
       {animals.map((animal) => {
         return (
-          <ActivePositionWrapper position={animal.Position} key={animal.Id}>
+          <ActivePositionWrapper entity={animal.Id} position={animal.Position} key={animal.Id}>
             <img src={Duck} style={{ padding: '10px' }} />
           </ActivePositionWrapper>
         );

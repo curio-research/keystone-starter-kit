@@ -6,7 +6,7 @@ package constants
 
 var (
 	// game tick rate (milliseconds)
-	TickRate int = 20
+	TickRate int = 10
 
 	// animials
 	AnimalCreationRate     = 500

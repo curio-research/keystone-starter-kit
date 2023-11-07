@@ -6,8 +6,11 @@ import { UIState } from './core/uiStore';
 import { makeAutoObservable } from 'mobx';
 import { KeystoneAPIBase } from 'keystone/util';
 import { KeystoneServerUrl, KeystoneWebsocketUrl } from 'core/keystoneConfig';
+import { PositionWrapperManager } from 'core/positionWrapperManager';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
+export const positionWrapperState = makeAutoObservable(new PositionWrapperManager());
 
 // Initialize Keystone API object
 export const KeystoneAPI = new KeystoneAPIBase(KeystoneServerUrl, KeystoneWebsocketUrl);

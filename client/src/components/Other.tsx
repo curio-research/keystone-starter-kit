@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import { Position } from 'core/schemas';
+import { positionWrapperState } from 'index';
 import { observer } from 'mobx-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export const tileSideWidth = 70;
 
@@ -24,42 +25,22 @@ export const PositionWrapper = styled.div<PositionWrapperProps>`
 interface ActivePositionWrapperProps {
   children: React.ReactNode;
   position: Position;
+  entity: number;
 }
 
 // Interpolates position values to make the movement smoother
 export const ActivePositionWrapper = observer((props: ActivePositionWrapperProps) => {
-  const { children, position } = props;
-  const [localPos, setLocalPos] = useState<Position>(position);
-  const [targetPosition, setTargetPosition] = useState<Position>(position);
+  const { children, position, entity } = props;
 
   useEffect(() => {
-    // console.log(toJS(position));
-    setTargetPosition(position);
-  }, [props]);
+    positionWrapperState.setTargetPosition(entity, position);
+  }, [position]);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      // Check if localPos is close enough to targetPosition and stop the loop
-      if (Math.abs(targetPosition.x - localPos.x) < 0.1 && Math.abs(targetPosition.y - localPos.y) < 0.1) {
-        clearInterval(intervalId);
-        return;
-      }
+  const localPosition = positionWrapperState.getLocalPosition(entity);
 
-      // Calculate new localPos values to get closer to targetPosition
-      const newX = localPos.x + (targetPosition.x - localPos.x) / 6;
-      const newY = localPos.y + (targetPosition.y - localPos.y) / 6;
-
-      // Update localPos
-      setLocalPos({ x: newX, y: newY });
-    }, 10);
-
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, [targetPosition, localPos]);
-
-  if (!localPos || !targetPosition) {
+  if (!localPosition) {
     return null;
   }
 
-  return <PositionWrapper position={localPos}>{children}</PositionWrapper>;
+  return <PositionWrapper position={localPosition}>{children}</PositionWrapper>;
 });
