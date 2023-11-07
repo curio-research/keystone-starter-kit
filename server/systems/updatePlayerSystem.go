@@ -3,7 +3,6 @@ package systems
 import (
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
-	"github.com/curio-research/keystone-starter-kit/systems/middleware"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
@@ -42,7 +41,7 @@ var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 
 		data.Player.Set(w, player.Id, player)
 	}
-}, middleware.VerifyIdentity[UpdatePlayerRequest]())
+}, VerifyIdentity[UpdatePlayerRequest]())
 
 func resourceAtPosition(w state.IWorld, position state.Pos) (data.ResourceSchema, bool) {
 	resource := data.Resource.Filter(w, data.ResourceSchema{

@@ -16,21 +16,23 @@ func Test_Projectile(t *testing.T) {
 ............
 ............
 ....2.......
-`, systems.CreateProjectileSystem, systems.UpdateProjectileSystem)
+`, systems.CreatePlayerSystem, systems.CreateProjectileSystem, systems.UpdateProjectileSystem)
 
 	w := ctx.World
+	attackingPlayer := 1
+	victimPlayer := 2
 	req := systems.CreateProjectileRequest{
 		Direction: helper.Down,
-		PlayerId:  1,
+		PlayerId:  attackingPlayer,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req, attackingPlayer)), "")
 	server.TickWorldForward(ctx, 10)
 
-	_, found := getPlayer(w, 2)
+	_, found := systems.PlayerWithID(w, victimPlayer)
 	assert.True(t, found)
 
 	server.TickWorldForward(ctx, 10)
-	_, found = getPlayer(w, 2)
+	_, found = systems.PlayerWithID(w, victimPlayer)
 	assert.False(t, found)
 }
 
@@ -44,13 +46,15 @@ func Test_Projectile_SavedByObstacle(t *testing.T) {
 `, systems.CreateProjectileSystem, systems.UpdateProjectileSystem)
 
 	w := ctx.World
+	attackingPlayer := 1
+	victimPlayer := 2
 	req := systems.CreateProjectileRequest{
 		Direction: helper.Down,
 		PlayerId:  1,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req, attackingPlayer)), "")
 	server.TickWorldForward(ctx, 40)
 
-	_, found := getPlayer(w, 2)
+	_, found := systems.PlayerWithID(w, victimPlayer)
 	assert.True(t, found)
 }

@@ -27,12 +27,12 @@ func TestMovement(t *testing.T) {
 	for _, direction := range []helper.Direction{helper.Up, helper.Right, helper.Left} {
 		req := systems.UpdatePlayerRequest{
 			Direction: direction,
-			PlayerId:  1,
+			PlayerId:  playerID,
 		}
-		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req)), "")
+		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req, playerID)), "")
 		server.TickWorldForward(ctx, 100)
 
-		player, found := getPlayer(w, playerID)
+		player, found := systems.PlayerWithID(w, playerID)
 		require.True(t, found)
 		assert.Equal(t, state.Pos{X: 4, Y: 3}, player.Position)
 	}
@@ -40,24 +40,24 @@ func TestMovement(t *testing.T) {
 	// move down
 	req := systems.UpdatePlayerRequest{
 		Direction: helper.Down,
-		PlayerId:  1,
+		PlayerId:  playerID,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req, playerID)), "")
 	server.TickWorldForward(ctx, 100)
 
-	player, found := getPlayer(w, playerID)
+	player, found := systems.PlayerWithID(w, playerID)
 	require.True(t, found)
 	assert.Equal(t, state.Pos{X: 4, Y: 2}, player.Position)
 
 	// move right
 	req = systems.UpdatePlayerRequest{
 		Direction: helper.Right,
-		PlayerId:  1,
+		PlayerId:  playerID,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req, playerID)), "")
 	server.TickWorldForward(ctx, 100)
 
-	player, found = getPlayer(w, playerID)
+	player, found = systems.PlayerWithID(w, playerID)
 	require.True(t, found)
 	assert.Equal(t, state.Pos{X: 5, Y: 2}, player.Position)
 
@@ -66,10 +66,10 @@ func TestMovement(t *testing.T) {
 		Direction: helper.Up,
 		PlayerId:  1,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req, playerID)), "")
 	server.TickWorldForward(ctx, 100)
 
-	player, found = getPlayer(w, playerID)
+	player, found = systems.PlayerWithID(w, playerID)
 	require.True(t, found)
 	assert.Equal(t, state.Pos{X: 5, Y: 2}, player.Position)
 }

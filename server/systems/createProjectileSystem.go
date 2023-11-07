@@ -4,7 +4,6 @@ import (
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
-	"github.com/curio-research/keystone-starter-kit/systems/middleware"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
@@ -35,7 +34,7 @@ var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 		ProjectileID: projectileID,
 		PlayerID:     req.PlayerId,
 	}, nil), "")
-}, middleware.VerifyIdentity[CreateProjectileRequest]())
+}, VerifyIdentity[CreateProjectileRequest]())
 
 func locationOfPlayer(w state.IWorld, playerId int) (state.Pos, bool) {
 	playerEntity := data.Player.Filter(w, data.PlayerSchema{PlayerId: playerId}, []string{"PlayerId"})

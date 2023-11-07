@@ -1,8 +1,10 @@
 package test
 
 import (
+	"crypto/ecdsa"
 	"encoding/json"
 	"fmt"
+	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/stretchr/testify/require"
 
@@ -23,10 +25,19 @@ var terrainKind = map[rune]data.Terrain{
 	'X': data.Obstacle,
 }
 
+var keyPair1, _ = crypto.GenerateKey()
+var keyPair2, _ = crypto.GenerateKey()
+var keyPair3, _ = crypto.GenerateKey()
+
+var playerIDToPrivateKey = map[int]*ecdsa.PrivateKey{
+	1: keyPair1,
+	2: keyPair2,
+	3: keyPair3,
+}
+
 var playerRegex, _ = regexp.Compile("[0-9]")
 
-func newTestEngine(gameWorld *state.GameWorld, systems ...server.TickSystemFunction) *server.EngineCtx {
-
+func newTestEngine(systems ...server.TickSystemFunction) *server.EngineCtx {
 	ctx := ks.NewGameEngine()
 	for _, system := range systems {
 		ctx.AddSystem(constants.TickRate, system)
@@ -36,9 +47,7 @@ func newTestEngine(gameWorld *state.GameWorld, systems ...server.TickSystemFunct
 }
 
 func worldWithPath(t *testing.T, input string, systems ...server.TickSystemFunction) *server.EngineCtx {
-	w := state.NewWorld()
-
-	ctx := newTestEngine(w, systems...)
+	ctx := newTestEngine(systems...)
 
 	// Register tables
 	server.RegisterDefaultTables(ctx.World)
@@ -76,8 +85,9 @@ func parseIntoWorld(t *testing.T, w *state.GameWorld, input string) {
 				} else if playerRegex.Match([]byte(symbol)) {
 					p, _ := strconv.Atoi(symbol)
 					data.Player.Add(w, data.PlayerSchema{
-						Position: pos,
-						PlayerId: p,
+						Position:        pos,
+						PlayerId:        p,
+						Base64PublicKey: base64PublicKey(t, p),
 					})
 				} else {
 					t.Fatal(fmt.Sprintf("character %s does not match any known symbol", symbol))
@@ -87,21 +97,9 @@ func parseIntoWorld(t *testing.T, w *state.GameWorld, input string) {
 	}
 }
 
-func getPlayer(w *state.GameWorld, playerID int) (data.PlayerSchema, bool) {
-	playerEntity := data.Player.Filter(w, data.PlayerSchema{
-		PlayerId: playerID,
-	}, []string{"PlayerId"})
-
-	if len(playerEntity) == 0 {
-		return data.PlayerSchema{}, false
-	}
-
-	return data.Player.Get(w, playerEntity[0]), true
-}
-
-func testECDSAAuthHeader[T any](t *testing.T, req T) map[server.HeaderField]json.RawMessage {
-	privateKey, err := crypto.GenerateKey()
-	require.Nil(t, err)
+func testECDSAAuthHeader[T any](t *testing.T, req T, playerID int) map[server.HeaderField]json.RawMessage {
+	privateKey, ok := playerIDToPrivateKey[playerID]
+	require.Truef(t, ok, "playerID must be in `playerIDToPrivateKey` map")
 
 	auth, err := server.NewECDSAPublicKeyAuth(privateKey, req)
 	require.Nil(t, err)
@@ -111,5 +109,16 @@ func testECDSAAuthHeader[T any](t *testing.T, req T) map[server.HeaderField]json
 
 	return map[server.HeaderField]json.RawMessage{
 		server.ECDSAPublicKeyAuthHeader: authBytes,
+		systems.PlayerIDHeader:          json.RawMessage(strconv.Itoa(playerID)),
 	}
+}
+
+func base64PublicKey(t *testing.T, playerID int) string {
+	privateKey, ok := playerIDToPrivateKey[playerID]
+	require.Truef(t, ok, "playerID must be in `playerIDToPrivateKey` map")
+
+	auth, err := server.NewECDSAPublicKeyAuth(privateKey, struct{}{})
+	require.Nil(t, err)
+
+	return auth.Base64PublicKey
 }

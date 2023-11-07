@@ -14,3 +14,13 @@ func PlayerWithID(w state.IWorld, playerId int) (data.PlayerSchema, bool) {
 	player := data.Player.Get(w, playerEntity[0])
 	return player, true
 }
+
+func PlayerWithPublicKey(w state.IWorld, publicKey string) (data.PlayerSchema, bool) {
+	playerEntity := data.Player.Filter(w, data.PlayerSchema{Base64PublicKey: publicKey}, []string{"Base64PublicKey"})
+	if len(playerEntity) == 0 {
+		return data.PlayerSchema{}, false
+	}
+
+	player := data.Player.Get(w, playerEntity[0])
+	return player, true
+}
