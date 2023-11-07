@@ -8,12 +8,12 @@ import (
 	"github.com/curio-research/keystone/state"
 )
 
-type CreateProjectileRequest struct {
+type FireProjectileRequest struct {
 	Direction helper.Direction `json:"direction"`
 	PlayerId  int              `json:"playerId"`
 }
 
-var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[CreateProjectileRequest]) {
+var FireProjectionSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[FireProjectileRequest]) {
 	req := ctx.Req.Data
 	w := ctx.W
 
@@ -34,7 +34,7 @@ var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 		ProjectileID: projectileID,
 		PlayerID:     req.PlayerId,
 	}, nil), "")
-}, server.VerifyECDSAPublicKeyAuth[CreateProjectileRequest]())
+}, server.VerifyECDSAPublicKeyAuth[FireProjectileRequest]())
 
 func locationOfPlayer(w state.IWorld, playerId int) (state.Pos, bool) {
 	playerEntity := data.Player.Filter(w, data.PlayerSchema{PlayerId: playerId}, []string{"PlayerId"})

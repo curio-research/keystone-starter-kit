@@ -20,7 +20,7 @@ func TestPickUpGold(t *testing.T) {
 ....3...A...
 ............
 ............
-`, systems.UpdatePlayerSystem, systems.CreateProjectileSystem, systems.UpdateProjectileSystem)
+`, systems.MovePlayerSystem, systems.FireProjectionSystem, systems.UpdateProjectileSystem)
 	w := ctx.World
 	playerID := 3
 
@@ -30,7 +30,7 @@ func TestPickUpGold(t *testing.T) {
 	require.True(t, found)
 	require.Equal(t, 0, player.Resources)
 
-	req := systems.CreateProjectileRequest{
+	req := systems.FireProjectileRequest{
 		Direction: helper.Right,
 		PlayerId:  playerID,
 	}
@@ -40,7 +40,7 @@ func TestPickUpGold(t *testing.T) {
 	assert.Len(t, data.Animal.Entities(w), 0)
 
 	for i := 0; i < 4; i++ {
-		req := systems.UpdatePlayerRequest{
+		req := systems.MovePlayerRequest{
 			Direction: helper.Right,
 			PlayerId:  playerID,
 		}

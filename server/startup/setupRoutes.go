@@ -24,10 +24,10 @@ func SetupRoutes(ctx *server.EngineCtx) {
 		pushUpdateToQueue[systems.CreatePlayerRequest](ginCtx, ctx)
 	})
 	ctx.GinHttpEngine.POST("/move", func(ginCtx *gin.Context) {
-		pushUpdateToQueue[systems.UpdatePlayerRequest](ginCtx, ctx)
+		pushUpdateToQueue[systems.MovePlayerRequest](ginCtx, ctx)
 	})
 	ctx.GinHttpEngine.POST("/fire", func(ginCtx *gin.Context) {
-		pushUpdateToQueue[systems.CreateProjectileRequest](ginCtx, ctx)
+		pushUpdateToQueue[systems.FireProjectileRequest](ginCtx, ctx)
 	})
 
 	// get game state
