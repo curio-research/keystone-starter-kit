@@ -28,10 +28,11 @@ export class PositionWrapperManager {
       const localPos = this.entitiesToLocalPositions.get(entity);
 
       if (!localPos) {
-        this.entitiesToLocalPositions.set(entity, targetPosition);
+        this.setLocalPosition(entity, targetPosition);
       } else {
         if (targetPosition) {
           if (Math.abs(targetPosition.x - localPos.x) < 0.1 && Math.abs(targetPosition.y - localPos.y) < 0.1) {
+            this.setLocalPosition(entity, targetPosition);
             return;
           }
 
