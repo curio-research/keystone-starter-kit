@@ -21,6 +21,7 @@ const (
 
 type GameSchema struct {
 	Id      int `gorm:"primaryKey;autoIncrement:false"`
+	GameId  string
 	Weather Weather
 }
 

@@ -7,3 +7,15 @@ export const KeystoneServerUrl = 'http://localhost:9000';
 export const api = axios.create({
   baseURL: KeystoneServerUrl, // Replace with your API's base URL
 });
+
+// constants
+export const gameConst = 200;
+export const testPlayerId = -100;
+
+const playerIDTag = "existingPlayerID";
+
+export const privateTag = "privateKey"
+
+export function playerIdTag(gameID: string): string {
+  return playerIDTag + "_" + gameID
+}

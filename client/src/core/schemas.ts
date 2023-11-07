@@ -15,9 +15,10 @@ export enum Weather {
   Windy = 2,
 }
 
-interface GameSchema {
+export interface GameSchema {
   Id: number;
   Weather: Weather;
+  GameId: string;
 }
 
 export interface TileSchema {

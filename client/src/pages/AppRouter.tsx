@@ -7,6 +7,8 @@ import { worldState } from '..';
 import { useEffect } from 'react';
 import { KeystoneWebsocketUrl, api } from 'core/config';
 
+import {createPlayer} from "../core/utils";
+
 export const AppRouter = () => {
   const startup = async () => {
     const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
@@ -16,15 +18,19 @@ export const AppRouter = () => {
     };
 
     ws.onmessage = (event: MessageEvent) => {
-      const jsonObj: any = JSON.parse(event.data);
-      const updates = jsonObj as TableUpdate[];
+      try {
+        const jsonObj: any = JSON.parse(event.data);
+        const updates = jsonObj as TableUpdate[];
 
-      for (const update of updates) {
-        if (worldState.isFetchingState) {
-          worldState.addTableUpdateToPendingUpdates(update);
-        } else {
-          worldState.addUpdate(update);
+        for (const update of updates) {
+          if (worldState.isFetchingState) {
+            worldState.addTableUpdateToPendingUpdates(update);
+          } else {
+            worldState.addUpdate(update);
+          }
         }
+      } catch (e) {
+        console.log(e);
       }
     };
 
@@ -59,6 +65,8 @@ export const AppRouter = () => {
 
     worldState.applyAllPendingUpdates();
     worldState.setIsFetchingState(false);
+
+    createPlayer();
   };
 
   useEffect(() => {

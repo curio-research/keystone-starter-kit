@@ -1,7 +1,4 @@
-import { ITable, IWorld } from 'store/types';
-import {PlayerSchema, PlayerTable} from "./schemas";
-import {worldState} from "../index";
-import {playerIDTag, privateTag} from "../pages/Game";
+import {IWorld} from 'store/types';
 
 // typed table accessor
 export class TableAccessor<T extends { Id: number }> {
@@ -63,12 +60,8 @@ export class TableAccessor<T extends { Id: number }> {
     table.delete(id);
   }
 
-  filter(world: IWorld): FilterArgs<T> | undefined {
-    const table = world.get(this.tableName);
-    if (!table) {
-      return undefined;
-    }
-
+  filter(world: IWorld): FilterArgs<T> {
+    const table = world.get(this.tableName)!;
     return new FilterArgs(table);
   }
 
@@ -117,12 +110,3 @@ class FilterArgs<T> {
   }
 }
 
-export function getPlayer(): PlayerSchema {
-  const playerIDStr = localStorage.getItem(playerIDTag)!;
-  const playerID = parseInt(playerIDStr, 10)
-  return PlayerTable.get(worldState.tableState, playerID)!
-}
-
-export function getPrivateKey(): string {
-  return localStorage.getItem(privateTag)!;
-}

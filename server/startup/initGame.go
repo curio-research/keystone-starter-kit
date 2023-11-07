@@ -13,6 +13,7 @@ import (
 func InitWorld(ctx *server.EngineCtx) {
 	data.Game.AddSpecific(ctx.World, constants.GameEntity, data.GameSchema{
 		Weather: data.Sunny,
+		GameId:  ctx.GameId,
 	})
 
 	largeTileId := 1

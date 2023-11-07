@@ -1,14 +1,16 @@
-import {ECDSAPublicKeyAuthHeader} from "../requests";
 import {HeaderEntry} from "./middleware";
 import sjcl from "sjcl";
 import {ethers} from "ethers";
-import {getPrivateKey} from "../tableAccessor";
+
+import {getPrivateKey} from "../utils";
 
 interface EthereumWalletAuth {
     Base64Signature: string
     Base64Hash: string
     Base64PublicKey: string
 }
+
+export const ECDSAPublicKeyAuthHeader = "ecdsaPublicKeyAuth"
 
 export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalletAuth> {
     // Serialize the request to a JSON string

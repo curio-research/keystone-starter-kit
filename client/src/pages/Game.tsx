@@ -1,16 +1,16 @@
-import {Box, Text, createStandaloneToast, position} from '@chakra-ui/react';
+import {Box, Text, createStandaloneToast} from '@chakra-ui/react';
 import { observer } from 'mobx-react';
 import TerrainTile from '../components/TerrainTiles';
 import Animals from '../components/Animals';
 import Players from 'components/Players';
 import { useEffect } from 'react';
-import {CreatePlayer, Fire, Move} from 'core/requests';
+import {Fire, Move} from 'core/requests';
 import { useNavigate } from 'react-router-dom';
 import Projectiles from 'components/Projectiles';
 import {uiState} from 'index';
 import Resources from 'components/Resources';
-import {ethers} from "ethers/lib.esm";
-import {getPlayer} from "../core/tableAccessor";
+
+import {getPlayer} from "../core/utils";
 
 export const toast = createStandaloneToast();
 
@@ -19,17 +19,19 @@ const playerId = -100;
 // TODO we need to find a way to get a new player ID for each player
 
 // game page
-export const playerIDTag = "existingPlayerID";
-
-export const privateTag = "privateKey"
-
 const Game = observer(() => {
   const navigate = useNavigate();
 
   // TODO put this in useEffect
 
   const handleKeyPress = (event: KeyboardEvent) => {
-    const playerId = getPlayer().PlayerId;
+    const player = getPlayer()
+    console.log("player", player)
+    if (player === undefined) {
+      return
+    }
+    const playerId = player.PlayerId;
+
     switch (event.key) {
       case 'a':
         uiState.lastMovedDirection = 'left';
@@ -52,7 +54,7 @@ const Game = observer(() => {
         break;
 
       case ' ':
-        const lastPressedDirection = uiState.lastMovedDirection;
+        const lastPressedDirection = uiState.lastMovedDirection; // TODO so you need to move before firing?
         Fire({ Direction: lastPressedDirection, PlayerId: playerId });
         break;
 
@@ -63,9 +65,9 @@ const Game = observer(() => {
 
 
   useEffect(() => {
-    createPlayer();
-
+    console.log("Before handle")
     window.addEventListener('keydown', handleKeyPress);
+    console.log("After handle")
 
     toast.toast({
       title: 'Welcome to the game!',
@@ -111,19 +113,5 @@ const Game = observer(() => {
   );
 });
 
-function createPlayer() {
-  const existingPlayerID = localStorage.getItem(playerIDTag);
-  if (existingPlayerID === "") {
-    // TODO Do we assume that this is the authentication they want to use?
-    const playerWallet = ethers.Wallet.createRandom();
-    const newPlayerID = playerId; // TODO get this differently, either random or have endpoint that returns a playerID
-
-    // TODO benefit of awaiting response is that we can make sure we only handle key press after player is set AND we can get a playerID
-    CreatePlayer({PublicKey: playerWallet.publicKey, PlayerId: playerId})
-
-    localStorage.setItem(playerIDTag, newPlayerID.toString());
-    localStorage.setItem(privateTag, playerWallet.privateKey);
-  }
-}
 
 export default Game;

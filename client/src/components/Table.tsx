@@ -31,7 +31,7 @@ export default TableDisplay;
 const DisplayTable = observer(<T extends WithID>(props: TableProps<T>) => {
   const { table, accessor } = props;
 
-  const anyVal = accessor.getAny(table);
+  const anyVal = accessor.getAny(worldState.tableState);
   if (anyVal === undefined) {
     return null;
   }
@@ -41,7 +41,7 @@ const DisplayTable = observer(<T extends WithID>(props: TableProps<T>) => {
     columnNames.push(field);
   }
 
-  const allEntities = accessor.allEntities(table);
+  const allEntities = accessor.allEntities(worldState.tableState);
 
   return (
     <Table>
@@ -54,7 +54,7 @@ const DisplayTable = observer(<T extends WithID>(props: TableProps<T>) => {
       </Tbody>
 
       {allEntities.map((entity) => {
-        const obj = accessor.get(table, entity)! as any;
+        const obj = accessor.get(worldState.tableState, entity)! as any;
         return (
           <Tbody key={entity}>
             <Tr key={entity}>
