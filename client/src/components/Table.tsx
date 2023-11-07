@@ -55,8 +55,8 @@ const DisplayTable = observer(<T extends WithID>(props: TableProps<T>) => {
       {allEntities.map((entity) => {
         const obj = accessor.get(table, entity)! as any;
         return (
-          <Tbody key={entity}>
-            <Tr key={entity}>
+          <Tbody key={`tbody-${entity}`}>
+            <Tr key={`tr-${entity}`}>
               {columnNames.map((columnName, index) => {
                 return (
                   <Td key={index} style={{ padding: '10px' }}>

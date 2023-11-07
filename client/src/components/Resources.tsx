@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { ResourceTable } from '../core/schemas';
 import { worldState } from '..';
 import Meat from 'assets/Meat.png';
-import { PositionWrapper } from 'components/Other';
+import { PositionWrapper } from 'components/PositionWrapper';
 
 const Resources = observer(() => {
   const resources = ResourceTable.getAll(worldState.tableState);

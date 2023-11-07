@@ -42,5 +42,9 @@ export const ActivePositionWrapper = observer((props: ActivePositionWrapperProps
     return null;
   }
 
-  return <PositionWrapper position={localPosition}>{children}</PositionWrapper>;
+  return (
+    <PositionWrapper position={localPosition} key={`inner-position-wrapper-${entity}`}>
+      {children}
+    </PositionWrapper>
+  );
 });

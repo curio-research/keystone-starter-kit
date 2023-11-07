@@ -4,6 +4,7 @@ import { TableOperationType, TableUpdate, IWorld, GetStateResponse } from './typ
 import { TableAccessor } from 'keystone/tableAccessor';
 import { KeystoneWebsocketUrl } from 'core/keystoneConfig';
 import { KeystoneAPI } from 'index';
+import { toast } from 'pages/Game';
 
 // keystone's table state store
 export class WorldState {
@@ -28,11 +29,10 @@ export class WorldState {
 
   private async connectToKeystone() {
     // initialize the websocket connection
-
     const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
 
     ws.onopen = () => {
-      console.log('connection to keystone websocket ✅');
+      console.log('Connected to keystone websocket ✅');
     };
 
     ws.onmessage = (event: MessageEvent) => {
@@ -49,6 +49,13 @@ export class WorldState {
     };
 
     ws.onerror = (event: Event) => {
+      toast.toast({
+        description: 'Error connecting to Keystone websocket',
+        status: 'error',
+        duration: 10_000,
+        isClosable: true,
+      });
+
       console.log(event);
     };
 
