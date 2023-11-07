@@ -1,10 +1,10 @@
 import 'reflect-metadata';
-import { TableAccessor } from './tableAccessor';
+import { TableAccessor } from '../keystone/tableAccessor';
 
 // ------------------------
-// game schemas
-// TODO: add automatic code-generation for this step
+// Game world schemas
 // ------------------------
+
 interface LocalRandSeedSchema {
   RandValue: number;
   Id: number;

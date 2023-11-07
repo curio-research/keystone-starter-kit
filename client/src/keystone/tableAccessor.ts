@@ -1,4 +1,4 @@
-import { ITable, IWorld } from 'store/types';
+import { ITable, IWorld } from 'keystone/types';
 
 // typed table accessor
 export class TableAccessor<T extends { Id: number }> {

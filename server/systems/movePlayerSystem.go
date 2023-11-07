@@ -7,12 +7,12 @@ import (
 	"github.com/curio-research/keystone/state"
 )
 
-type UpdatePlayerRequest struct {
+type MovePlayerRequest struct {
 	Direction helper.Direction `json:"direction"`
 	PlayerId  int              `json:"playerId"`
 }
 
-var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[UpdatePlayerRequest]) {
+var MovePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[MovePlayerRequest]) {
 	w := ctx.W
 	req := ctx.Req.Data
 
@@ -41,7 +41,7 @@ var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 
 		data.Player.Set(w, player.Id, player)
 	}
-}, server.VerifyECDSAPublicKeyAuth[UpdatePlayerRequest]())
+}, server.VerifyECDSAPublicKeyAuth[MovePlayerRequest]())
 
 func resourceAtPosition(w state.IWorld, position state.Pos) (data.ResourceSchema, bool) {
 	resource := data.Resource.Filter(w, data.ResourceSchema{

@@ -76,7 +76,7 @@ var (
 	Resource        = state.NewTableAccessor[ResourceSchema]()
 )
 
-var TableSchemasToAccessors = map[interface{}]*state.TableBaseAccessor[any]{
+var SchemaMapping = map[interface{}]*state.TableBaseAccessor[any]{
 	&GameSchema{}:          (*state.TableBaseAccessor[any])(Game),
 	&LocalRandSeedSchema{}: (*state.TableBaseAccessor[any])(LocalRandomSeed),
 	&ProjectileSchema{}:    (*state.TableBaseAccessor[any])(Projectile),

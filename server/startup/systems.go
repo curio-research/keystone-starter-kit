@@ -16,8 +16,8 @@ func AddSystems(ctx *server.EngineCtx) {
 	// External Systems - require external transactions to trigger
 	// ---------------------
 	ctx.AddSystem(constants.TickRate, systems.CreatePlayerSystem)
-	ctx.AddSystem(constants.TickRate, systems.UpdatePlayerSystem)
-	ctx.AddSystem(constants.TickRate, systems.CreateProjectileSystem)
+	ctx.AddSystem(constants.TickRate, systems.MovePlayerSystem)
+	ctx.AddSystem(constants.TickRate, systems.FireProjectionSystem)
 
 	// ---------------------
 	// Internal Systems - run by themselves (like a cron job)
