@@ -32,7 +32,7 @@ export class WorldState {
     const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
 
     ws.onopen = () => {
-      console.log('Connected to keystone websocket ✅');
+      console.log('✅ Connected to keystone websocket ');
     };
 
     ws.onmessage = (event: MessageEvent) => {
@@ -62,7 +62,11 @@ export class WorldState {
     this.setIsFetchingState(true);
 
     // call api
+    const startTime = Date.now();
+
     const res = await KeystoneAPI.getAPI().post('/getState', {});
+
+    console.log(`✅ Fetched initial state in ${Date.now() - startTime}ms`);
 
     const data = res.data as GetStateResponse;
 
@@ -82,7 +86,7 @@ export class WorldState {
       }
     }
 
-    console.log('initial state synced ✅');
+    console.log('✅ Initial state synced ');
 
     this.applyAllPendingUpdates();
     this.setIsFetchingState(false);

@@ -22,6 +22,7 @@ export class PositionWrapperManager {
     return this.entitiesToLocalPositions.get(entity);
   }
 
+  // update all positions in the world
   private updateAll() {
     this.entitiesToTargetPositions.forEach((targetPosition, entity) => {
       const localPos = this.entitiesToLocalPositions.get(entity);
@@ -35,8 +36,8 @@ export class PositionWrapperManager {
           }
 
           // Calculate new localPos values to get closer to targetPosition
-          const newX = localPos.x + (targetPosition.x - localPos.x) / 6;
-          const newY = localPos.y + (targetPosition.y - localPos.y) / 6;
+          const newX = localPos.x + (targetPosition.x - localPos.x) / 7;
+          const newY = localPos.y + (targetPosition.y - localPos.y) / 7;
 
           // Update localPos
           this.setLocalPosition(entity, { x: newX, y: newY });
