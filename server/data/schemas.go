@@ -61,9 +61,7 @@ type ResourceSchema struct {
 }
 
 // ----------------------------
-//
 //	table accessors
-//
 // ----------------------------
 
 var (
