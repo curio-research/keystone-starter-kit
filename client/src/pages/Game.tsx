@@ -1,25 +1,48 @@
-import { Box, Text, createStandaloneToast } from '@chakra-ui/react';
+import {Box, Text, createStandaloneToast, position} from '@chakra-ui/react';
 import { observer } from 'mobx-react';
 import TerrainTile from '../components/TerrainTiles';
 import Animals from '../components/Animals';
 import Players from 'components/Players';
 import { useEffect } from 'react';
-import { Fire, Move } from 'core/requests';
+import {CreatePlayer, Fire, Move} from 'core/requests';
 import { useNavigate } from 'react-router-dom';
 import Projectiles from 'components/Projectiles';
-import { uiState } from 'index';
+import {uiState, worldState} from 'index';
 import Resources from 'components/Resources';
+import {ethers} from "ethers/lib.esm";
 
 export const toast = createStandaloneToast();
 
 // hard coded playerID. See InitGame.go
 const playerId = -100;
+// TODO we need to find a way to get a new player ID for each player
 
 // game page
+export const playerIDKey = "existingPlayerID";
+
+export const privateKey = "privateKey"
+
 const Game = observer(() => {
   const navigate = useNavigate();
 
+  // TODO put this in useEffect
+  const existingPlayerID = localStorage.getItem(playerIDKey);
+  if (existingPlayerID === "") {
+    // TODO Do we assume that this is the authentication they want to use?
+    const playerWallet = ethers.Wallet.createRandom();
+    const newPlayerID = playerId; // TODO get this differently, either random or have endpoint that returns a playerID
+
+    // TODO benefit of awaiting response is that we can make sure we only handle key press after player is set AND we can get a playerID
+    CreatePlayer({PublicKey: playerWallet.publicKey, PlayerId: playerId})
+
+    localStorage.setItem(playerIDKey, newPlayerID.toString());
+    localStorage.setItem(privateKey, playerWallet.privateKey);
+    // hope that table update will come quickly enough... But I guess it's the same regardless
+  }
+
+
   const handleKeyPress = (event: KeyboardEvent) => {
+    const playerId = parseInt(localStorage.getItem(playerIDKey)!, 10);
     switch (event.key) {
       case 'a':
         uiState.lastMovedDirection = 'left';
