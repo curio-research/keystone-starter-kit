@@ -2,6 +2,7 @@ package test
 
 import (
 	"crypto/ecdsa"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/curio-research/keystone-starter-kit/systems"
@@ -117,8 +118,6 @@ func base64PublicKey(t *testing.T, playerID int) string {
 	privateKey, ok := playerIDToPrivateKey[playerID]
 	require.Truef(t, ok, "playerID must be in `playerIDToPrivateKey` map")
 
-	auth, err := server.NewECDSAPublicKeyAuth(privateKey, struct{}{})
-	require.Nil(t, err)
-
-	return auth.Base64PublicKey
+	pubKeyBytes := crypto.FromECDSAPub(&privateKey.PublicKey)
+	return base64.StdEncoding.EncodeToString(pubKeyBytes)
 }
