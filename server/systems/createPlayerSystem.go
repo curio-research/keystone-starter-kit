@@ -3,11 +3,13 @@ package systems
 import (
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
+	"github.com/curio-research/keystone-starter-kit/systems/middleware"
 	"github.com/curio-research/keystone/server"
 )
 
 type CreatePlayerRequest struct {
-	PlayerID int `json:"playerId"`
+	PlayerID  int    `json:"playerId"`
+	PublicKey string `json:"publicKey"`
 }
 
 var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[CreatePlayerRequest]) {
@@ -30,7 +32,8 @@ var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 	}
 
 	data.Player.Add(w, data.PlayerSchema{
-		Position: availablePos,
-		PlayerId: req.PlayerID,
+		Position:        availablePos,
+		PlayerId:        req.PlayerID,
+		Base64PublicKey: req.PublicKey,
 	})
-})
+}, middleware.VerifyIdentity[CreatePlayerRequest]())

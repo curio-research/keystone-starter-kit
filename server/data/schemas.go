@@ -38,10 +38,11 @@ type TileSchema struct {
 }
 
 type PlayerSchema struct {
-	Id        int       `gorm:"primaryKey;autoIncrement:false"`
-	Position  state.Pos `gorm:"embedded"`
-	Resources int
-	PlayerId  int
+	Id              int       `gorm:"primaryKey;autoIncrement:false"`
+	Position        state.Pos `gorm:"embedded"`
+	Resources       int
+	PlayerId        int
+	Base64PublicKey string
 }
 
 type ProjectileSchema struct {

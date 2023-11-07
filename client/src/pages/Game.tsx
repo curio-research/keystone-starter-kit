@@ -25,6 +25,7 @@ export const privateKey = "privateKey"
 const Game = observer(() => {
   const navigate = useNavigate();
 
+  // TODO put this in useEffect
   const existingPlayerID = localStorage.getItem(playerIDKey);
   if (existingPlayerID === "") {
     // TODO Do we assume that this is the authentication they want to use?
@@ -34,7 +35,7 @@ const Game = observer(() => {
     // TODO benefit of awaiting response is that we can make sure we only handle key press after player is set AND we can get a playerID
     CreatePlayer({PublicKey: playerWallet.publicKey, PlayerId: playerId})
 
-    localStorage.setItem(playerIDKey, newPlayerID.toString())
+    localStorage.setItem(playerIDKey, newPlayerID.toString());
     localStorage.setItem(privateKey, playerWallet.privateKey);
     // hope that table update will come quickly enough... But I guess it's the same regardless
   }
