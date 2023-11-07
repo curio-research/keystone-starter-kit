@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { AnimalTable } from '../core/schemas';
 import { worldState } from '..';
 import Duck from 'assets/Duck.png';
-import { ActivePositionWrapper, PositionWrapper } from 'components/Other';
+import { ActivePositionWrapper } from 'components/Other';
 
 const Animals = observer(() => {
   const animals = AnimalTable.getAll(worldState.tableState);

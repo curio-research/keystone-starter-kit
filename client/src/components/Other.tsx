@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { Position } from 'core/schemas';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
 
@@ -40,10 +39,6 @@ export const ActivePositionWrapper = observer((props: ActivePositionWrapperProps
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      // if (!targetPosition || !localPos) {
-      //   return;
-      // }
-
       // Check if localPos is close enough to targetPosition and stop the loop
       if (Math.abs(targetPosition.x - localPos.x) < 0.1 && Math.abs(targetPosition.y - localPos.y) < 0.1) {
         clearInterval(intervalId);
