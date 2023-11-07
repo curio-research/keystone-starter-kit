@@ -7,9 +7,10 @@ import { useEffect } from 'react';
 import {CreatePlayer, Fire, Move} from 'core/requests';
 import { useNavigate } from 'react-router-dom';
 import Projectiles from 'components/Projectiles';
-import {uiState, worldState} from 'index';
+import {uiState} from 'index';
 import Resources from 'components/Resources';
 import {ethers} from "ethers/lib.esm";
+import {getPlayer} from "../core/tableAccessor";
 
 export const toast = createStandaloneToast();
 
@@ -18,31 +19,17 @@ const playerId = -100;
 // TODO we need to find a way to get a new player ID for each player
 
 // game page
-export const playerIDKey = "existingPlayerID";
+export const playerIDTag = "existingPlayerID";
 
-export const privateKey = "privateKey"
+export const privateTag = "privateKey"
 
 const Game = observer(() => {
   const navigate = useNavigate();
 
   // TODO put this in useEffect
-  const existingPlayerID = localStorage.getItem(playerIDKey);
-  if (existingPlayerID === "") {
-    // TODO Do we assume that this is the authentication they want to use?
-    const playerWallet = ethers.Wallet.createRandom();
-    const newPlayerID = playerId; // TODO get this differently, either random or have endpoint that returns a playerID
-
-    // TODO benefit of awaiting response is that we can make sure we only handle key press after player is set AND we can get a playerID
-    CreatePlayer({PublicKey: playerWallet.publicKey, PlayerId: playerId})
-
-    localStorage.setItem(playerIDKey, newPlayerID.toString());
-    localStorage.setItem(privateKey, playerWallet.privateKey);
-    // hope that table update will come quickly enough... But I guess it's the same regardless
-  }
-
 
   const handleKeyPress = (event: KeyboardEvent) => {
-    const playerId = parseInt(localStorage.getItem(playerIDKey)!, 10);
+    const playerId = getPlayer().PlayerId;
     switch (event.key) {
       case 'a':
         uiState.lastMovedDirection = 'left';
@@ -74,7 +61,10 @@ const Game = observer(() => {
     }
   };
 
+
   useEffect(() => {
+    createPlayer();
+
     window.addEventListener('keydown', handleKeyPress);
 
     toast.toast({
@@ -120,5 +110,20 @@ const Game = observer(() => {
     </Box>
   );
 });
+
+function createPlayer() {
+  const existingPlayerID = localStorage.getItem(playerIDTag);
+  if (existingPlayerID === "") {
+    // TODO Do we assume that this is the authentication they want to use?
+    const playerWallet = ethers.Wallet.createRandom();
+    const newPlayerID = playerId; // TODO get this differently, either random or have endpoint that returns a playerID
+
+    // TODO benefit of awaiting response is that we can make sure we only handle key press after player is set AND we can get a playerID
+    CreatePlayer({PublicKey: playerWallet.publicKey, PlayerId: playerId})
+
+    localStorage.setItem(playerIDTag, newPlayerID.toString());
+    localStorage.setItem(privateTag, playerWallet.privateKey);
+  }
+}
 
 export default Game;

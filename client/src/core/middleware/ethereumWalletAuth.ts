@@ -2,10 +2,7 @@ import {ECDSAPublicKeyAuthHeader} from "../requests";
 import {HeaderEntry} from "./middleware";
 import sjcl from "sjcl";
 import {ethers} from "ethers";
-import {PlayerTable} from "../schemas";
-import {worldState} from "../../index";
-import {playerIDKey} from "../../pages/Game";
-import {getPlayer, getPrivateKey} from "../tableAccessor";
+import {getPrivateKey} from "../tableAccessor";
 
 interface EthereumWalletAuth {
     Base64Signature: string

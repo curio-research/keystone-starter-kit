@@ -1,7 +1,7 @@
 import { ITable, IWorld } from 'store/types';
 import {PlayerSchema, PlayerTable} from "./schemas";
 import {worldState} from "../index";
-import {playerIDKey, privateKey} from "../pages/Game";
+import {playerIDTag, privateTag} from "../pages/Game";
 
 // typed table accessor
 export class TableAccessor<T extends { Id: number }> {
@@ -118,11 +118,11 @@ class FilterArgs<T> {
 }
 
 export function getPlayer(): PlayerSchema {
-  const playerIDStr = localStorage.getItem(playerIDKey)!;
+  const playerIDStr = localStorage.getItem(playerIDTag)!;
   const playerID = parseInt(playerIDStr, 10)
   return PlayerTable.get(worldState.tableState, playerID)!
 }
 
 export function getPrivateKey(): string {
-  return localStorage.getItem(privateKey)!;
+  return localStorage.getItem(privateTag)!;
 }
