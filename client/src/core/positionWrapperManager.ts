@@ -32,7 +32,6 @@ export class PositionWrapperManager {
       } else {
         if (targetPosition) {
           if (Math.abs(targetPosition.x - localPos.x) < 0.1 && Math.abs(targetPosition.y - localPos.y) < 0.1) {
-            this.setLocalPosition(entity, targetPosition);
             return;
           }
 
