@@ -19,20 +19,20 @@ export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalle
   // Serialize the request to a JSON string
   const jsonReq = JSON.stringify(request);
 
-    // Compute a SHA256 hash of the JSON request
-    const hashBits = sjcl.hash.sha256.hash(jsonReq);
-    const hashHex = "0x" + sjcl.codec.hex.fromBits(hashBits);
-    const hashBase64 = sjcl.codec.base64.fromBits(hashBits);
+  // Compute a SHA256 hash of the JSON request
+  const hashBits = sjcl.hash.sha256.hash(jsonReq);
+  const hashHex = "0x" + sjcl.codec.hex.fromBits(hashBits);
+  const hashBase64 = sjcl.codec.base64.fromBits(hashBits);
 
-    // Sign the hash with the wallet's private key
-    const privateKey = getPrivateKey();
-    const playerWallet = new ethers.Wallet(privateKey)
+  // Sign the hash with the wallet's private key
+  const privateKey = getPrivateKey();
+  const playerWallet = new ethers.Wallet(privateKey)
 
-    const signature = playerWallet.signingKey.sign(hashHex).serialized;
-    const signatureBase64 = hexToBase64(signature);
+  const signature = playerWallet.signingKey.sign(hashHex).serialized;
+  const signatureBase64 = hexToBase64(signature);
 
-    // Extract and encode the public key to base64
-    const publicKeyBase64 = getPublicKeyBase64();
+  // Extract and encode the public key to base64
+  const publicKeyBase64 = getPublicKeyBase64();
 
   const publicKeyAuth: EthereumWalletAuth = {
     Base64Hash: hashBase64,
