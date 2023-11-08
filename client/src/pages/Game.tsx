@@ -1,16 +1,16 @@
-import {Box, Text, createStandaloneToast} from '@chakra-ui/react';
+import { Box, Text, createStandaloneToast } from '@chakra-ui/react';
 import { observer } from 'mobx-react';
 import TerrainTile from '../components/TerrainTiles';
 import Animals from '../components/Animals';
 import Players from 'components/Players';
 import { useEffect } from 'react';
-import {Fire, Move} from 'core/requests';
+import { Fire, Move } from 'core/requests';
 import { useNavigate } from 'react-router-dom';
 import Projectiles from 'components/Projectiles';
-import {uiState} from 'index';
+import { uiState } from 'index';
 import Resources from 'components/Resources';
 
-import {getPlayerID} from "../core/utils";
+import { createPlayer, getPlayerID } from '../core/utils';
 
 export const toast = createStandaloneToast();
 
@@ -19,9 +19,9 @@ const Game = observer(() => {
   const navigate = useNavigate();
 
   const handleKeyPress = (event: KeyboardEvent) => {
-    const playerId = getPlayerID()
+    const playerId = getPlayerID();
     if (playerId === undefined) {
-      return
+      return;
     }
 
     switch (event.key) {
@@ -55,21 +55,24 @@ const Game = observer(() => {
     }
   };
 
-
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
+    const startup = async () => {
+      window.addEventListener('keydown', handleKeyPress);
 
-    toast.toast({
-      title: 'Welcome to the game!',
-      description: 'Use WASD to move and space to shoot.',
-      status: 'info',
-      duration: 10_000,
-      isClosable: true,
-    });
+      toast.toast({
+        title: 'Welcome to the game!',
+        description: 'Use WASD to move and space to shoot.',
+        status: 'info',
+        duration: 10_000,
+        isClosable: true,
+      });
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      return () => {
+        window.removeEventListener('keydown', handleKeyPress);
+      };
     };
+
+    startup();
   }, []);
 
   return (
@@ -102,6 +105,5 @@ const Game = observer(() => {
     </Box>
   );
 });
-
 
 export default Game;

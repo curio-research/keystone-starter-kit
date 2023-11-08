@@ -5,7 +5,6 @@ import { TableAccessor } from 'keystone/tableAccessor';
 import { KeystoneWebsocketUrl } from 'core/keystoneConfig';
 import { KeystoneAPI } from 'index';
 import { toast } from 'pages/Game';
-import {createPlayer} from "../core/utils";
 
 // keystone's table state store
 export class WorldState {
@@ -24,11 +23,9 @@ export class WorldState {
     AllTableAccessors.forEach((accessor) => {
       this.tableAccessors.set(accessor.name(), accessor);
     });
-
-    this.connectToKeystone();
   }
 
-  private async connectToKeystone() {
+  public async connectToKeystone() {
     // initialize the websocket connection
     const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
 
@@ -91,7 +88,6 @@ export class WorldState {
 
     this.applyAllPendingUpdates();
     this.setIsFetchingState(false);
-    createPlayer();
   }
 
   // add update
