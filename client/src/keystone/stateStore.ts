@@ -34,7 +34,6 @@ export class WorldState {
     };
 
     ws.onmessage = (event: MessageEvent) => {
-      // console.log(event.data);
       const jsonObj: any = JSON.parse(event.data);
       const updates = jsonObj as TableUpdate[];
 
