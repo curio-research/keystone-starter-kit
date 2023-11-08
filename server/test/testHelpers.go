@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+
 	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/stretchr/testify/require"
@@ -102,14 +103,14 @@ func testEthWalletAuthHeader[T any](t *testing.T, req T, playerID int) map[serve
 	privateKey, ok := playerIDToPrivateKey[playerID]
 	require.Truef(t, ok, "playerID must be in `playerIDToPrivateKey` map")
 
-	auth, err := server.NewECDSAPublicKeyAuth(privateKey, req)
+	auth, err := server.NewEthereumWalletAuth(privateKey, req)
 	require.Nil(t, err)
 
 	authBytes, err := json.Marshal(auth)
 	require.Nil(t, err)
 
 	return map[server.HeaderField]json.RawMessage{
-		server.ECDSAPublicKeyAuthHeader: authBytes,
+		server.EthereumWalletAuthHeader: authBytes,
 		systems.PlayerIDHeader:          json.RawMessage(strconv.Itoa(playerID)),
 	}
 }

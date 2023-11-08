@@ -56,4 +56,4 @@ require (
 	gorm.io/driver/mysql v1.5.2 // indirect
 )
 
-// replace github.com/curio-research/keystone => ../../keystone
+replace github.com/curio-research/keystone => ../../keystone
