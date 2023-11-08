@@ -3,14 +3,14 @@ import {worldState} from "../index";
 import {ethers} from "ethers";
 import {CreatePlayer} from "./requests";
 import sjcl from "sjcl";
-import {base64PublicKeyTag, gameEntity, playerIdTag, privateKeyTag, testPlayerId} from "./keystoneConfig";
+import {base64PublicKeyTag, gameEntity, playerIdTag, privateKeyTag, playerId} from "./keystoneConfig";
 
 
 export function createPlayer() {
     const playerID = getPlayerID()
     if (playerID === undefined) {
         const playerWallet = ethers.Wallet.createRandom();
-        const newPlayerID = testPlayerId; // TODO do random
+        const newPlayerID = playerId; // TODO do random
         const base64PublicKey = hexToBase64(playerWallet.publicKey);
 
         CreatePlayer({Base64PublicKey: base64PublicKey, PlayerId: newPlayerID});

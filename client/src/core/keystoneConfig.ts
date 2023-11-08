@@ -4,7 +4,9 @@ export const KeystoneServerUrl = 'http://localhost:9000';
 
 // constants
 export const gameEntity = 200;
-export const testPlayerId = -100;
+
+// hard coded playerID. See InitGame.go TODO use random # generator
+export const playerId = -100;
 
 const playerIDTag = "existingPlayerID";
 export const base64PublicKeyTag = "base64PublicKey"

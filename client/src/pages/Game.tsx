@@ -14,9 +14,6 @@ import {getPlayerID} from "../core/utils";
 
 export const toast = createStandaloneToast();
 
-// hard coded playerID. See InitGame.go TODO use random # generator
-const playerId = -100;
-
 // game page
 const Game = observer(() => {
   const navigate = useNavigate();
