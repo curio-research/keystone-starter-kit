@@ -3,7 +3,7 @@ module github.com/curio-research/keystone-starter-kit
 go 1.20
 
 require (
-	github.com/curio-research/keystone v0.1.13
+	github.com/curio-research/keystone v0.1.14
 	github.com/ethereum/go-ethereum v1.13.4
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/assert/v2 v2.2.0
@@ -56,4 +56,4 @@ require (
 	gorm.io/driver/mysql v1.5.2 // indirect
 )
 
-replace github.com/curio-research/keystone => ../../keystone
+// replace github.com/curio-research/keystone => ../../keystone
