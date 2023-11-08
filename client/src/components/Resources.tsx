@@ -12,7 +12,7 @@ const Resources = observer(() => {
       {resources.map((resource) => {
         return (
           <PositionWrapper position={resource.Position} key={resource.Id}>
-            <img src={Meat} />
+            <img src={Meat} key={`meat-img-${resource.Id}`} />
           </PositionWrapper>
         );
       })}

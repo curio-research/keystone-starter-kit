@@ -11,8 +11,8 @@ const Projectiles = observer(() => {
     <>
       {projectile.map((projectile) => {
         return (
-          <ActivePositionWrapper entity={projectile.Id} position={projectile.Position} key={projectile.Id}>
-            <img src={Fire} />
+          <ActivePositionWrapper entity={projectile.Id} position={projectile.Position} key={`projectile-position-${projectile.Id}`}>
+            <img src={Fire} key={`fire-img-${projectile.Id}`} />
           </ActivePositionWrapper>
         );
       })}
