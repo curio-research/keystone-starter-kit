@@ -22,18 +22,7 @@ export function createPlayer() {
 }
 
 export function getPlayer(): PlayerSchema | undefined {
-    const game = getGame()
-    if (game === undefined) {
-        return undefined
-    }
-
-    const playerTag = playerIdTag(game.GameId)
-    const playerIDStr = localStorage.getItem(playerTag);
-    if (playerIDStr === null) {
-        return undefined
-    }
-
-    const playerID = parseInt(playerIDStr, 10)
+    const playerID = getPlayerID()
     const player = PlayerTable.filter(worldState.tableState)
         .WithCondition(p => p.PlayerId === playerID)
         .Execute();
