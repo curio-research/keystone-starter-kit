@@ -10,24 +10,22 @@ import Projectiles from 'components/Projectiles';
 import {uiState} from 'index';
 import Resources from 'components/Resources';
 
-import {getPlayer} from "../core/utils";
+import {getPlayerID} from "../core/utils";
 
 export const toast = createStandaloneToast();
 
-// hard coded playerID. See InitGame.go
+// hard coded playerID. See InitGame.go TODO use random # generator
 const playerId = -100;
-// TODO we need to find a way to get a new player ID for each player
 
 // game page
 const Game = observer(() => {
   const navigate = useNavigate();
 
   const handleKeyPress = (event: KeyboardEvent) => {
-    const player = getPlayer()
-    if (player === undefined) {
+    const playerId = getPlayerID()
+    if (playerId === undefined) {
       return
     }
-    const playerId = player.PlayerId;
 
     switch (event.key) {
       case 'a':

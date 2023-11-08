@@ -10,7 +10,7 @@ const PlayerIDHeader = "playerIDHeader"
 const PlayerIDTag = "playerID"
 const PublicKeyTag = "publicKey"
 
-func VerifyIdentity[T any]() server.IMiddleware[T] {
+func VerifyWalletAndIdentity[T any]() server.IMiddleware[T] {
 	return func(ctx *server.TransactionCtx[T]) bool {
 		req := ctx.Req
 		headers := req.Headers
