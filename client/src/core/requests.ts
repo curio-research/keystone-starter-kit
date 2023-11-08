@@ -15,7 +15,7 @@ function WithCustomEthereumWalletAuth<T>(req: T): HeaderEntry<any>[] {
 
 // create player
 export interface CreatePlayerRequest {
-  Base64PublicKey: string;
+  EthBase64PublicKey: string;
   PlayerId: number;
 }
 

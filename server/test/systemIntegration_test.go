@@ -51,7 +51,7 @@ func TestPickUpGold(t *testing.T) {
 		Direction: helper.Right,
 		PlayerId:  initialPlayerID,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testVerifyIdentityAuthHeader(t, req, initialPlayerID)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testEthWalletAuthHeader(t, req, initialPlayerID)), "")
 	server.TickWorldForward(ctx, 50) // create projectile + queue projectile update jobs
 
 	assert.Len(t, data.Animal.Entities(w), 0)
@@ -61,7 +61,7 @@ func TestPickUpGold(t *testing.T) {
 			Direction: helper.Right,
 			PlayerId:  initialPlayerID,
 		}
-		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testVerifyIdentityAuthHeader(t, req, initialPlayerID)), "")
+		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testEthWalletAuthHeader(t, req, initialPlayerID)), "")
 		server.TickWorldForward(ctx, 100)
 	}
 

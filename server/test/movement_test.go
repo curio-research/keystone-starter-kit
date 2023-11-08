@@ -29,7 +29,7 @@ func TestMovement(t *testing.T) {
 			Direction: direction,
 			PlayerId:  playerID,
 		}
-		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testVerifyIdentityAuthHeader(t, req, playerID)), "")
+		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testEthWalletAuthHeader(t, req, playerID)), "")
 		server.TickWorldForward(ctx, 100)
 
 		player, found := systems.PlayerWithID(w, playerID)
@@ -42,7 +42,7 @@ func TestMovement(t *testing.T) {
 		Direction: helper.Down,
 		PlayerId:  playerID,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testVerifyIdentityAuthHeader(t, req, playerID)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testEthWalletAuthHeader(t, req, playerID)), "")
 	server.TickWorldForward(ctx, 100)
 
 	player, found := systems.PlayerWithID(w, playerID)
@@ -54,7 +54,7 @@ func TestMovement(t *testing.T) {
 		Direction: helper.Right,
 		PlayerId:  playerID,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testVerifyIdentityAuthHeader(t, req, playerID)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testEthWalletAuthHeader(t, req, playerID)), "")
 	server.TickWorldForward(ctx, 100)
 
 	player, found = systems.PlayerWithID(w, playerID)
@@ -66,7 +66,7 @@ func TestMovement(t *testing.T) {
 		Direction: helper.Up,
 		PlayerId:  1,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testVerifyIdentityAuthHeader(t, req, playerID)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testEthWalletAuthHeader(t, req, playerID)), "")
 	server.TickWorldForward(ctx, 100)
 
 	player, found = systems.PlayerWithID(w, playerID)

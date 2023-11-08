@@ -25,7 +25,7 @@ func Test_Projectile(t *testing.T) {
 		Direction: helper.Down,
 		PlayerId:  attackingPlayer,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testVerifyIdentityAuthHeader(t, req, attackingPlayer)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testEthWalletAuthHeader(t, req, attackingPlayer)), "")
 	server.TickWorldForward(ctx, 10)
 
 	_, found := systems.PlayerWithID(w, victimPlayer)
@@ -52,7 +52,7 @@ func Test_Projectile_SavedByObstacle(t *testing.T) {
 		Direction: helper.Down,
 		PlayerId:  1,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testVerifyIdentityAuthHeader(t, req, attackingPlayer)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testEthWalletAuthHeader(t, req, attackingPlayer)), "")
 	server.TickWorldForward(ctx, 40)
 
 	_, found := systems.PlayerWithID(w, victimPlayer)

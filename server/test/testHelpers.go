@@ -98,7 +98,7 @@ func parseIntoWorld(t *testing.T, w *state.GameWorld, input string) {
 	}
 }
 
-func testVerifyIdentityAuthHeader[T any](t *testing.T, req T, playerID int) map[server.HeaderField]json.RawMessage {
+func testEthWalletAuthHeader[T any](t *testing.T, req T, playerID int) map[server.HeaderField]json.RawMessage {
 	privateKey, ok := playerIDToPrivateKey[playerID]
 	require.Truef(t, ok, "playerID must be in `playerIDToPrivateKey` map")
 
