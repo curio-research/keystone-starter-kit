@@ -16,7 +16,7 @@ func PlayerWithID(w state.IWorld, playerId int) (data.PlayerSchema, bool) {
 }
 
 func PlayerWithPublicKey(w state.IWorld, publicKey string) (data.PlayerSchema, bool) {
-	playerEntity := data.Player.Filter(w, data.PlayerSchema{Base64PublicKey: publicKey}, []string{"Base64PublicKey"})
+	playerEntity := data.Player.Filter(w, data.PlayerSchema{EthBase64PublicKey: publicKey}, []string{"EthBase64PublicKey"})
 	if len(playerEntity) == 0 {
 		return data.PlayerSchema{}, false
 	}

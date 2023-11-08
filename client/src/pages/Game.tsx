@@ -46,7 +46,7 @@ const Game = observer(() => {
         break;
 
       case ' ':
-        const lastPressedDirection = uiState.lastMovedDirection; // TODO so you need to move before firing?
+        const lastPressedDirection = uiState.lastMovedDirection;
         Fire({ Direction: lastPressedDirection, PlayerId: playerId });
         break;
 

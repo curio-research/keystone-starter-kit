@@ -13,7 +13,7 @@ interface EthereumWalletAuth {
 // Middleware function to validate
 // Data payload is signed with an ethereum wallet
 
-export const ECDSAPublicKeyAuthHeader = "ecdsaPublicKeyAuth"
+export const ethPublicKeyAuth = "ethPublicKeyAuth"
 
 export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalletAuth> {
   // Serialize the request to a JSON string
@@ -40,5 +40,5 @@ export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalle
     Base64PublicKey: publicKeyBase64,
   };
 
-  return [ECDSAPublicKeyAuthHeader, publicKeyAuth];
+  return [ethPublicKeyAuth, publicKeyAuth];
 }

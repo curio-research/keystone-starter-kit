@@ -61,7 +61,7 @@ func matchPublicKey[T any](ctx *server.TransactionCtx[T], e server.ECDSAPublicKe
 		return false
 	}
 
-	if player.Base64PublicKey != e.Base64PublicKey {
+	if player.EthBase64PublicKey != e.Base64PublicKey {
 		return false
 	}
 	return true

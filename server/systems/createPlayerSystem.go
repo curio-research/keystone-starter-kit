@@ -8,8 +8,8 @@ import (
 )
 
 type CreatePlayerRequest struct {
-	PlayerID        int    `json:"playerId"`
-	Base64PublicKey string `json:"base64PublicKey"`
+	PlayerID           int    `json:"playerId"`
+	EthBase64PublicKey string `json:"ethBase64PublicKey"`
 }
 
 var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[CreatePlayerRequest]) {
@@ -23,7 +23,7 @@ var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 		return
 	}
 
-	publicKey := req.Base64PublicKey
+	publicKey := req.EthBase64PublicKey
 	_, found = PlayerWithPublicKey(w, publicKey)
 	if found {
 		ctx.EmitError(fmt.Sprintf("already created a player with public key %s", publicKey), []int{playerID})
@@ -37,8 +37,8 @@ var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.
 	}
 
 	data.Player.Add(w, data.PlayerSchema{
-		Position:        availablePos,
-		PlayerId:        playerID,
-		Base64PublicKey: req.Base64PublicKey,
+		Position:           availablePos,
+		PlayerId:           playerID,
+		EthBase64PublicKey: req.EthBase64PublicKey,
 	})
 })

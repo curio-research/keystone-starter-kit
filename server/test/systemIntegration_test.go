@@ -26,8 +26,8 @@ func TestPickUpGold(t *testing.T) {
 	addedPlayerID := 2
 
 	createPlayer := systems.CreatePlayerRequest{
-		PlayerID:        addedPlayerID,
-		Base64PublicKey: base64PublicKey(t, addedPlayerID),
+		PlayerID:           addedPlayerID,
+		EthBase64PublicKey: base64PublicKey(t, addedPlayerID),
 	}
 	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(createPlayer, nil), "")
 	server.TickWorldForward(ctx, 100)
@@ -45,13 +45,13 @@ func TestPickUpGold(t *testing.T) {
 	assert.NotEqual(t, player.Position, player2.Position)
 
 	player2PublicKey := base64PublicKey(t, addedPlayerID)
-	assert.Equal(t, player2PublicKey, player2.Base64PublicKey)
+	assert.Equal(t, player2PublicKey, player2.EthBase64PublicKey)
 
 	req := systems.FireProjectileRequest{
 		Direction: helper.Right,
 		PlayerId:  initialPlayerID,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req, initialPlayerID)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testVerifyIdentityAuthHeader(t, req, initialPlayerID)), "")
 	server.TickWorldForward(ctx, 50) // create projectile + queue projectile update jobs
 
 	assert.Len(t, data.Animal.Entities(w), 0)
@@ -61,7 +61,7 @@ func TestPickUpGold(t *testing.T) {
 			Direction: helper.Right,
 			PlayerId:  initialPlayerID,
 		}
-		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req, initialPlayerID)), "")
+		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testVerifyIdentityAuthHeader(t, req, initialPlayerID)), "")
 		server.TickWorldForward(ctx, 100)
 	}
 

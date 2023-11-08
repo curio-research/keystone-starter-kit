@@ -86,9 +86,9 @@ func parseIntoWorld(t *testing.T, w *state.GameWorld, input string) {
 				} else if playerRegex.Match([]byte(symbol)) {
 					p, _ := strconv.Atoi(symbol)
 					data.Player.Add(w, data.PlayerSchema{
-						Position:        pos,
-						PlayerId:        p,
-						Base64PublicKey: base64PublicKey(t, p),
+						Position:           pos,
+						PlayerId:           p,
+						EthBase64PublicKey: base64PublicKey(t, p),
 					})
 				} else {
 					t.Fatal(fmt.Sprintf("character %s does not match any known symbol", symbol))
@@ -98,7 +98,7 @@ func parseIntoWorld(t *testing.T, w *state.GameWorld, input string) {
 	}
 }
 
-func testECDSAAuthHeader[T any](t *testing.T, req T, playerID int) map[server.HeaderField]json.RawMessage {
+func testVerifyIdentityAuthHeader[T any](t *testing.T, req T, playerID int) map[server.HeaderField]json.RawMessage {
 	privateKey, ok := playerIDToPrivateKey[playerID]
 	require.Truef(t, ok, "playerID must be in `playerIDToPrivateKey` map")
 
