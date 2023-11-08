@@ -22,11 +22,8 @@ const playerId = -100;
 const Game = observer(() => {
   const navigate = useNavigate();
 
-  // TODO put this in useEffect
-
   const handleKeyPress = (event: KeyboardEvent) => {
     const player = getPlayer()
-    console.log("player", player)
     if (player === undefined) {
       return
     }
@@ -65,9 +62,7 @@ const Game = observer(() => {
 
 
   useEffect(() => {
-    console.log("Before handle")
     window.addEventListener('keydown', handleKeyPress);
-    console.log("After handle")
 
     toast.toast({
       title: 'Welcome to the game!',
