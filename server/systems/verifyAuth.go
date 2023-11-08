@@ -2,6 +2,7 @@ package systems
 
 import (
 	"encoding/json"
+
 	"github.com/curio-research/keystone/server"
 )
 
@@ -19,11 +20,11 @@ func VerifyWalletAndIdentity[T any]() server.IMiddleware[T] {
 			return false
 		}
 
-		publicKeyAuth := headers[server.ECDSAPublicKeyAuthHeader]
+		publicKeyAuth := headers[server.EthereumWalletAuthHeader]
 		if publicKeyAuth == nil {
 			return false
 		}
-		var e server.ECDSAPublicKeyAuth
+		var e server.EthereumWalletAuth
 		err := json.Unmarshal(publicKeyAuth, &e)
 		if err != nil {
 			return false
@@ -55,7 +56,7 @@ func VerifyWalletAndIdentity[T any]() server.IMiddleware[T] {
 	}
 }
 
-func matchPublicKey[T any](ctx *server.TransactionCtx[T], e server.ECDSAPublicKeyAuth, playerID int) bool {
+func matchPublicKey[T any](ctx *server.TransactionCtx[T], e server.EthereumWalletAuth, playerID int) bool {
 	player, found := PlayerWithID(ctx.W, playerID)
 	if !found {
 		return false

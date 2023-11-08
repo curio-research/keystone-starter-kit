@@ -1,8 +1,8 @@
-import sjcl from "sjcl";
-import {ethers} from "ethers";
+import sjcl from 'sjcl';
+import { ethers } from 'ethers';
 
-import {getPrivateKey, getPublicKeyBase64, hexToBase64} from "../utils";
-import {HeaderEntry} from "../../keystone/middleware";
+import { getPrivateKey, getPublicKeyBase64, hexToBase64 } from '../utils';
+import { HeaderEntry } from '../../keystone/middleware';
 
 interface EthereumWalletAuth {
   Base64Signature: string;
@@ -13,7 +13,7 @@ interface EthereumWalletAuth {
 // Middleware function to validate
 // Data payload is signed with an ethereum wallet
 
-export const ethPublicKeyAuth = "ecdsaPublicKeyAuth"
+export const ethPublicKeyAuth = 'ethereumWalletAuth';
 
 export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalletAuth> {
   // Serialize the request to a JSON string
@@ -21,12 +21,12 @@ export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalle
 
   // Compute a SHA256 hash of the JSON request
   const hashBits = sjcl.hash.sha256.hash(jsonReq);
-  const hashHex = "0x" + sjcl.codec.hex.fromBits(hashBits);
+  const hashHex = '0x' + sjcl.codec.hex.fromBits(hashBits);
   const hashBase64 = sjcl.codec.base64.fromBits(hashBits);
 
   // Sign the hash with the wallet's private key
   const privateKey = getPrivateKey();
-  const playerWallet = new ethers.Wallet(privateKey)
+  const playerWallet = new ethers.Wallet(privateKey);
 
   const signature = playerWallet.signingKey.sign(hashHex).serialized;
   const signatureBase64 = hexToBase64(signature);
