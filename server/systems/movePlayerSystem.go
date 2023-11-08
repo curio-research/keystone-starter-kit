@@ -41,7 +41,7 @@ var MovePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.Tr
 
 		data.Player.Set(w, player.Id, player)
 	}
-}, VerifyIdentity[UpdatePlayerRequest]())
+}, VerifyIdentity[MovePlayerRequest]())
 
 func resourceAtPosition(w state.IWorld, position state.Pos) (data.ResourceSchema, bool) {
 	resource := data.Resource.Filter(w, data.ResourceSchema{

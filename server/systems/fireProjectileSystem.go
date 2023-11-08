@@ -13,7 +13,7 @@ type FireProjectileRequest struct {
 	PlayerId  int              `json:"playerId"`
 }
 
-var FireProjectionSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[FireProjectileRequest]) {
+var FireProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[FireProjectileRequest]) {
 	req := ctx.Req.Data
 	w := ctx.W
 
@@ -34,7 +34,7 @@ var FireProjectionSystem = server.CreateSystemFromRequestHandler(func(ctx *serve
 		ProjectileID: projectileID,
 		PlayerID:     req.PlayerId,
 	}, nil), "")
-}, VerifyIdentity[CreateProjectileRequest]())
+}, VerifyIdentity[FireProjectileRequest]())
 
 func locationOfPlayer(w state.IWorld, playerId int) (state.Pos, bool) {
 	playerEntity := data.Player.Filter(w, data.PlayerSchema{PlayerId: playerId}, []string{"PlayerId"})
