@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/curio-research/keystone-starter-kit/constants"
-	"github.com/curio-research/keystone-starter-kit/data"
-	"github.com/curio-research/keystone-starter-kit/startup"
+	"github.com/curio-research/keystone-starter-kit/server/constants"
+	"github.com/curio-research/keystone-starter-kit/server/data"
+	"github.com/curio-research/keystone-starter-kit/server/startup"
 	gamedb "github.com/curio-research/keystone/db"
 	startKeystone "github.com/curio-research/keystone/server/startup"
 	"gorm.io/driver/sqlite"
@@ -50,8 +50,8 @@ func main() {
 	// Initialize game map
 	startup.InitWorld(ctx)
 
-	w := data.Game.Get(ctx.World, constants.GameEntity).Weather
-	fmt.Println("result:", w)
+
+
 
 	// Start game server!
 	ctx.Start()

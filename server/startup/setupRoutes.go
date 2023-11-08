@@ -6,7 +6,7 @@ import (
 	"io"
 	"reflect"
 
-	"github.com/curio-research/keystone-starter-kit/systems"
+	"github.com/curio-research/keystone-starter-kit/server/systems"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/server/routes"
 	"github.com/gin-gonic/gin"

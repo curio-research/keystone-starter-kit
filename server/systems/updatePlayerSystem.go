@@ -1,8 +1,8 @@
 package systems
 
 import (
-	"github.com/curio-research/keystone-starter-kit/data"
-	"github.com/curio-research/keystone-starter-kit/helper"
+	"github.com/curio-research/keystone-starter-kit/server/data"
+	"github.com/curio-research/keystone-starter-kit/server/helper"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )

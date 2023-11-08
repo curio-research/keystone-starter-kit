@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/curio-research/keystone-starter-kit/constants"
-	"github.com/curio-research/keystone-starter-kit/data"
+	"github.com/curio-research/keystone-starter-kit/server/constants"
+	"github.com/curio-research/keystone-starter-kit/server/data"
 	"github.com/curio-research/keystone/server"
 	ks "github.com/curio-research/keystone/server/startup"
 	"github.com/curio-research/keystone/state"

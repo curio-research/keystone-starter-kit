@@ -3,8 +3,8 @@ package test
 import (
 	"testing"
 
-	"github.com/curio-research/keystone-starter-kit/helper"
-	"github.com/curio-research/keystone-starter-kit/systems"
+	"github.com/curio-research/keystone-starter-kit/server/helper"
+	"github.com/curio-research/keystone-starter-kit/server/systems"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 	"github.com/go-playground/assert/v2"

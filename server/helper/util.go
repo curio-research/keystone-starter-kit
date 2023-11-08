@@ -3,8 +3,8 @@ package helper
 import (
 	"math/rand"
 
-	"github.com/curio-research/keystone-starter-kit/constants"
-	"github.com/curio-research/keystone-starter-kit/data"
+	"github.com/curio-research/keystone-starter-kit/server/constants"
+	"github.com/curio-research/keystone-starter-kit/server/data"
 	"github.com/curio-research/keystone/state"
 )
 
