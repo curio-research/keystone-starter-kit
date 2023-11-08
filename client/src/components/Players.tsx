@@ -12,7 +12,7 @@ const Players = observer(() => {
       {players.map((player) => {
         return (
           <ActivePositionWrapper entity={player.Id} position={player.Position} key={player.Id}>
-            <img src={Caribou} />
+            <img src={Caribou} key={`caribou-img-${player.Id}`} />
           </ActivePositionWrapper>
         );
       })}

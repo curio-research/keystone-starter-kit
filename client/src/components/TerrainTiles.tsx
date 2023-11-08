@@ -14,17 +14,17 @@ const TerrainTile = observer(() => {
       {tiles.map((tile) => {
         return (
           <>
-            <PositionWrapper position={tile.Position}>
-              <img src={Marsh} />
+            <PositionWrapper position={tile.Position} key={`marsh-tile-${tile.Id}`}>
+              <img src={Marsh} key={`marsh-tile-img-${tile.Id}`} />
             </PositionWrapper>
 
             {tile.Terrain === false ? (
-              <PositionWrapper position={tile.Position}>
-                <img src={Bush} />
+              <PositionWrapper position={tile.Position} key={`bush-tile-${tile.Id}`}>
+                <img src={Bush} key={`marsh-bush-img-${tile.Id}`} />
               </PositionWrapper>
             ) : (
-              <PositionWrapper position={tile.Position}>
-                <img src={Grass} style={{ opacity: 0.3 }} />
+              <PositionWrapper position={tile.Position} key={`grass-tile-${tile.Id}`}>
+                <img src={Grass} key={`marsh-grass-img-${tile.Id}`} style={{ opacity: 0.3 }} />
               </PositionWrapper>
             )}
           </>

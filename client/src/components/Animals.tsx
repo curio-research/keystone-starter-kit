@@ -11,8 +11,8 @@ const Animals = observer(() => {
     <>
       {animals.map((animal) => {
         return (
-          <ActivePositionWrapper entity={animal.Id} position={animal.Position} key={animal.Id}>
-            <img src={Duck} style={{ padding: '10px' }} />
+          <ActivePositionWrapper entity={animal.Id} position={animal.Position} key={`animal-position-${animal.Id}`}>
+            <img src={Duck} style={{ padding: '10px' }} key={`animal-img-${animal.Id}`} />
           </ActivePositionWrapper>
         );
       })}

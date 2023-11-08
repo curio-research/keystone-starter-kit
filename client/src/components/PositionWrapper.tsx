@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Position } from 'core/schemas';
 import { positionWrapperState } from 'index';
 import { observer } from 'mobx-react';
-import { useEffect } from 'react';
+import { Key, useEffect } from 'react';
 
 export const tileSideWidth = 70;
 
@@ -26,11 +26,12 @@ interface ActivePositionWrapperProps {
   children: React.ReactNode;
   position: Position;
   entity: number;
+  key: Key;
 }
 
 // Interpolates position values to make the movement smoother
 export const ActivePositionWrapper = observer((props: ActivePositionWrapperProps) => {
-  const { children, position, entity } = props;
+  const { children, position, entity, key } = props;
 
   useEffect(() => {
     positionWrapperState.setTargetPosition(entity, position);
@@ -43,8 +44,21 @@ export const ActivePositionWrapper = observer((props: ActivePositionWrapperProps
   }
 
   return (
-    <PositionWrapper position={localPosition} key={`inner-position-wrapper-${entity}`}>
+    <div
+      style={{
+        position: 'absolute',
+        left: `${localPosition.x * tileSideWidth}px`,
+        bottom: `${localPosition.y * tileSideWidth}px`,
+        width: `${tileSideWidth}px`,
+        height: `${tileSideWidth}px`,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      key={`position-wrapper-outer-${key}`}
+    >
       {children}
-    </PositionWrapper>
+    </div>
   );
 });
