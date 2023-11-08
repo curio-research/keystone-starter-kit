@@ -13,8 +13,8 @@ export const gameConst = 200;
 export const testPlayerId = -100;
 
 const playerIDTag = "existingPlayerID";
-
-export const privateTag = "privateKey"
+export const base64PublicKeyTag = "base64PublicKey"
+export const privateKeyTag = "privateKey"
 
 export function playerIdTag(gameID: string): string {
   return playerIDTag + "_" + gameID

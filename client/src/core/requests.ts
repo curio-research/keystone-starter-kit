@@ -24,16 +24,16 @@ export interface MoveRequest {
 
 const playerIDHeader = "playerIDHeader";
 function WithCustomEthereumWalletAuth<T>(req: T): HeaderEntry<any>[] {
-  const playerIDTag = getPlayerID()!
+  const playerID = getPlayerID()!
 
   return [
-      [playerIDHeader, playerIDTag],
+      [playerIDHeader, playerID],
       WithEthereumWalletAuth(req)
   ]
 }
 
 export const CreatePlayer = async (request: CreatePlayerRequest) => {
-  return api.post('/player', NewKeystoneTx(request, ...WithCustomEthereumWalletAuth(request)));
+  return api.post('/createPlayer', NewKeystoneTx(request));
 };
 
 export const Fire = async (request: CreateProjectileRequest) => {

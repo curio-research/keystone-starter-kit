@@ -4,7 +4,6 @@ import (
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
-	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
@@ -34,11 +33,11 @@ func InitWorld(ctx *server.EngineCtx) {
 		}
 	}
 
-	// add admin player
-	adminPlayerId := -100
-	createPlayerRequest := systems.CreatePlayerRequest{
-		PlayerID: adminPlayerId,
-	}
+	//// add admin player
+	//adminPlayerId := -100
+	//createPlayerRequest := systems.CreatePlayerRequest{
+	//	PlayerID: adminPlayerId,
+	//}
 
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(createPlayerRequest, nil), "")
+	//server.QueueTxFromExternal(ctx, server.NewKeystoneTx(createPlayerRequest, nil), "")
 }

@@ -1,18 +1,22 @@
 import {GameSchema, GameTable, PlayerSchema, PlayerTable} from "./schemas";
 import {worldState} from "../index";
-import {gameConst, playerIdTag, privateTag, testPlayerId} from "./config";
-import {ethers} from "ethers/lib.esm";
+import {gameConst, playerIdTag, privateKeyTag, base64PublicKeyTag, testPlayerId} from "./config";
+import {ethers, HDNodeWallet} from "ethers";
 import {CreatePlayer} from "./requests";
+import sjcl from "sjcl";
 
 
 export function createPlayer() {
     const playerID = getPlayerID()
-    if (playerID === null) {
+    if (playerID === undefined) {
         const playerWallet = ethers.Wallet.createRandom();
         const newPlayerID = testPlayerId; // TODO do random
-        CreatePlayer({PublicKey: playerWallet.publicKey, PlayerId: newPlayerID})
+        const base64PublicKey = hexToBase64(playerWallet.publicKey);
+
+        CreatePlayer({PublicKey: base64PublicKey, PlayerId: newPlayerID}); // TODO call it base64PublicKey?
 
         setPlayerID(newPlayerID.toString())
+        setBase64PublicKey(hexToBase64(playerWallet.publicKey))
         setPrivateKey(playerWallet.privateKey)
     }
 }
@@ -42,20 +46,32 @@ export function getPlayer(): PlayerSchema | undefined {
     return player[0]
 }
 
-export function getPrivateKey(): string {
-    return localStorage.getItem(privateTag)!;
+export function getPublicKeyBase64(): string {
+    return localStorage.getItem(base64PublicKeyTag)!;
 }
 
-export function getPlayerID(): string | undefined {
+function setBase64PublicKey(base64PublicKey: string) {
+    localStorage.setItem(base64PublicKeyTag, base64PublicKey)
+}
+
+export function getPrivateKey(): string {
+    return localStorage.getItem(privateKeyTag)!;
+}
+
+function setPrivateKey(privateKey: string) {
+    localStorage.setItem(privateKeyTag, privateKey)
+}
+
+export function getPlayerID(): number | undefined {
     const game = getGame()
     if (game === undefined) {
         return undefined
     }
-
     const playerTag = playerIdTag(game.GameId);
+
     const playerID = localStorage.getItem(playerTag);
     if (playerID) {
-        return playerID!;
+        return parseInt(playerID, 10);
     }
 
     return undefined;
@@ -66,13 +82,13 @@ function setPlayerID(id: string) {
     if (game === undefined) {
         return undefined
     }
-
     const playerTag = playerIdTag(game.GameId);
+
     localStorage.setItem(playerTag, id);
 }
-
-function setPrivateKey(privateKey: string) {
-    localStorage.setItem(privateTag, privateKey);
+export function hexToBase64(hex: string) {
+    const bits = sjcl.codec.hex.toBits(hex);
+    return sjcl.codec.base64.fromBits(bits);
 }
 
 function getGame(): GameSchema | undefined {

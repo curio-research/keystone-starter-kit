@@ -2,7 +2,7 @@ import {HeaderEntry} from "./middleware";
 import sjcl from "sjcl";
 import {ethers} from "ethers";
 
-import {getPrivateKey} from "../utils";
+import {getPrivateKey, getPublicKeyBase64, hexToBase64} from "../utils";
 
 interface EthereumWalletAuth {
     Base64Signature: string
@@ -26,12 +26,10 @@ export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalle
     const playerWallet = new ethers.Wallet(privateKey)
 
     const signature = playerWallet.signingKey.sign(hashHex).serialized;
-    const signatureBits = sjcl.codec.hex.toBits(signature);
-    const signatureBase64 = sjcl.codec.base64.fromBits(signatureBits);
+    const signatureBase64 = hexToBase64(signature);
 
     // Extract and encode the public key to base64
-    const publicKeyBits = sjcl.codec.hex.toBits(playerWallet.signingKey.publicKey);
-    const publicKeyBase64 = sjcl.codec.base64.fromBits(publicKeyBits);
+    const publicKeyBase64 = hexToBase64(playerWallet.signingKey.publicKey);
 
     const publicKeyAuth: EthereumWalletAuth = {
         Base64Hash: hashBase64,
