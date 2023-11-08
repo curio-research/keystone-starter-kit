@@ -1,4 +1,4 @@
-module github.com/curio-research/keystone-starter-kit
+module github.com/curio-research/keystone-starter-kit/server
 
 go 1.20
 
