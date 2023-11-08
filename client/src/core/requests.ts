@@ -15,12 +15,12 @@ function WithCustomEthereumWalletAuth<T>(req: T): HeaderEntry<any>[] {
 
 // create player
 export interface CreatePlayerRequest {
-  PublicKey: string;
+  Base64PublicKey: string;
   PlayerId: number;
 }
 
 export const CreatePlayer = async (request: CreatePlayerRequest) => {
-  return KeystoneAPI.getAPI().post('/player', NewKeystoneTx(request, ...WithCustomEthereumWalletAuth(request)));
+  return KeystoneAPI.getAPI().post('/createPlayer', NewKeystoneTx(request, ...WithCustomEthereumWalletAuth(request)));
 };
 
 // fire projectile

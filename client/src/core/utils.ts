@@ -13,7 +13,7 @@ export function createPlayer() {
         const newPlayerID = testPlayerId; // TODO do random
         const base64PublicKey = hexToBase64(playerWallet.publicKey);
 
-        CreatePlayer({PublicKey: base64PublicKey, PlayerId: newPlayerID}); // TODO call it base64PublicKey?
+        CreatePlayer({Base64PublicKey: base64PublicKey, PlayerId: newPlayerID});
 
         setPlayerID(newPlayerID.toString())
         setBase64PublicKey(hexToBase64(playerWallet.publicKey))

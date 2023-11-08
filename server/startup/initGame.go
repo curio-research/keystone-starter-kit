@@ -32,12 +32,4 @@ func InitWorld(ctx *server.EngineCtx) {
 			largeTileId++
 		}
 	}
-
-	//// add admin player
-	//adminPlayerId := -100
-	//createPlayerRequest := systems.CreatePlayerRequest{
-	//	PlayerID: adminPlayerId,
-	//}
-
-	//server.QueueTxFromExternal(ctx, server.NewKeystoneTx(createPlayerRequest, nil), "")
 }

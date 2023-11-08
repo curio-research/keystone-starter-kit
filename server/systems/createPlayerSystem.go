@@ -8,8 +8,8 @@ import (
 )
 
 type CreatePlayerRequest struct {
-	PlayerID        int    `json:"playerID"`
-	Base64PublicKey string `json:"publicKey"`
+	PlayerID        int    `json:"playerId"`
+	Base64PublicKey string `json:"base64PublicKey"`
 }
 
 var CreatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[CreatePlayerRequest]) {
