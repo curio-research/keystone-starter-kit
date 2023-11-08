@@ -20,21 +20,38 @@ func TestPickUpGold(t *testing.T) {
 ....3...A...
 ............
 ............
-`, systems.MovePlayerSystem, systems.FireProjectionSystem, systems.UpdateProjectileSystem)
+`, systems.CreatePlayerSystem, systems.MovePlayerSystem, systems.FireProjectileSystem, systems.UpdateProjectileSystem)
 	w := ctx.World
-	playerID := 3
+	initialPlayerID := 3
+	addedPlayerID := 2
+
+	createPlayer := systems.CreatePlayerRequest{
+		PlayerID:           addedPlayerID,
+		EthBase64PublicKey: base64PublicKey(t, addedPlayerID),
+	}
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(createPlayer, nil), "")
+	server.TickWorldForward(ctx, 100)
 
 	assert.Len(t, data.Animal.Entities(w), 1)
 
-	player, found := getPlayer(w, 3)
+	player, found := systems.PlayerWithID(w, initialPlayerID)
 	require.True(t, found)
-	require.Equal(t, 0, player.Resources)
+	assert.Equal(t, 0, player.Resources)
+
+	player2, found := systems.PlayerWithID(w, addedPlayerID)
+	require.True(t, found)
+	assert.Equal(t, 0, player.Resources)
+
+	assert.NotEqual(t, player.Position, player2.Position)
+
+	player2PublicKey := base64PublicKey(t, addedPlayerID)
+	assert.Equal(t, player2PublicKey, player2.EthBase64PublicKey)
 
 	req := systems.FireProjectileRequest{
 		Direction: helper.Right,
-		PlayerId:  playerID,
+		PlayerId:  initialPlayerID,
 	}
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req)), "")
+	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testEthWalletAuthHeader(t, req, initialPlayerID)), "")
 	server.TickWorldForward(ctx, 50) // create projectile + queue projectile update jobs
 
 	assert.Len(t, data.Animal.Entities(w), 0)
@@ -42,13 +59,13 @@ func TestPickUpGold(t *testing.T) {
 	for i := 0; i < 4; i++ {
 		req := systems.MovePlayerRequest{
 			Direction: helper.Right,
-			PlayerId:  playerID,
+			PlayerId:  initialPlayerID,
 		}
-		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testECDSAAuthHeader(t, req)), "")
+		server.QueueTxFromExternal(ctx, server.NewKeystoneTx(req, testEthWalletAuthHeader(t, req, initialPlayerID)), "")
 		server.TickWorldForward(ctx, 100)
 	}
 
-	player, found = getPlayer(w, 3)
+	player, found = systems.PlayerWithID(w, initialPlayerID)
 	require.True(t, found)
 	assert.Equal(t, constants.AnimalGold, player.Resources)
 

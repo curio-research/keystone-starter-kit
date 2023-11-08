@@ -15,35 +15,37 @@ export enum Weather {
   Windy = 2,
 }
 
-interface GameSchema {
+export interface GameSchema {
   Id: number;
   Weather: Weather;
+  GameId: string;
 }
 
-interface TileSchema {
+export interface TileSchema {
   Id: number;
   Position: Position;
   Terrain: boolean; // true: ground, false: obstacle
 }
 
-interface PlayerSchema {
+export interface PlayerSchema {
   Id: number;
   Position: Position;
   Resources: number;
   PlayerId: number;
+  PublicKey: string;
 }
 
-interface ProjectileSchema {
+export interface ProjectileSchema {
   Id: number;
   Position: Position;
 }
 
-interface AnimalSchema {
+export interface AnimalSchema {
   Id: number;
   Position: Position;
 }
 
-interface ResourceSchema {
+export interface ResourceSchema {
   Id: number;
   Position: Position;
   Amount: number;

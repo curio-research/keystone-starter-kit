@@ -1,6 +1,7 @@
-import { ITable, IWorld } from 'keystone/types';
 
 // typed table accessor
+import {IWorld} from "./types";
+
 export class TableAccessor<T extends { Id: number }> {
   private tableName: string;
   constructor(tableName: string) {
@@ -13,38 +14,64 @@ export class TableAccessor<T extends { Id: number }> {
   }
 
   // get struct from entity
-  get(table: ITable<T>, entity: number): T | undefined {
+  get(world: IWorld, entity: number): T | undefined {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return undefined;
+    }
+
     return table.get(entity);
   }
 
   // get all entities
   getAll(world: IWorld): Array<T> {
     const table = world.get(this.tableName);
-
     if (!table) {
       return [];
     }
+
     return Array.from<T>(table.values());
   }
 
-  getAny(table: ITable<T>): T | undefined {
+  getAny(world: IWorld): T | undefined {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return undefined;
+    }
+
     const { value } = table.values().next();
     return value;
   }
 
-  set(table: ITable<T>, id: number, val: T) {
+  set(world: IWorld, id: number, val: T) {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return [];
+    }
+
     table.set(id, val);
   }
 
-  remove(table: ITable<T>, id: number) {
+  remove(world: IWorld, id: number) {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return [];
+    }
+
     table.delete(id);
   }
 
-  filter(table: ITable<T>): FilterArgs<T> {
+  filter(world: IWorld): FilterArgs<T> {
+    const table = world.get(this.tableName)!;
     return new FilterArgs(table);
   }
 
-  allEntities(table: ITable<T>): Array<number> {
+  allEntities(world: IWorld): Array<number> {
+    const table = world.get(this.tableName);
+    if (!table) {
+      return [];
+    }
+
     return Array.from<number>(table.keys());
   }
 }
@@ -83,3 +110,4 @@ class FilterArgs<T> {
     return matchingValues;
   }
 }
+

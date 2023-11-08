@@ -1,9 +1,8 @@
-import { ethers } from 'ethers';
-import sjcl from 'sjcl';
-import { ECDSAPublicKeyAuthHeader } from '../requests';
-import { HeaderEntry } from 'keystone/middleware';
+import sjcl from "sjcl";
+import {ethers} from "ethers";
 
-const playerWallet = ethers.Wallet.createRandom();
+import {getPrivateKey, getPublicKeyBase64, hexToBase64} from "../utils";
+import {HeaderEntry} from "../../keystone/middleware";
 
 interface EthereumWalletAuth {
   Base64Signature: string;
@@ -13,23 +12,27 @@ interface EthereumWalletAuth {
 
 // Middleware function to validate
 // Data payload is signed with an ethereum wallet
+
+export const ethPublicKeyAuth = "ecdsaPublicKeyAuth"
+
 export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalletAuth> {
   // Serialize the request to a JSON string
   const jsonReq = JSON.stringify(request);
 
   // Compute a SHA256 hash of the JSON request
   const hashBits = sjcl.hash.sha256.hash(jsonReq);
-  const hashHex = sjcl.codec.hex.fromBits(hashBits);
+  const hashHex = "0x" + sjcl.codec.hex.fromBits(hashBits);
   const hashBase64 = sjcl.codec.base64.fromBits(hashBits);
 
   // Sign the hash with the wallet's private key
-  const signature = playerWallet.signingKey.sign('0x' + hashHex).serialized;
-  const signatureBits = sjcl.codec.hex.toBits(signature);
-  const signatureBase64 = sjcl.codec.base64.fromBits(signatureBits);
+  const privateKey = getPrivateKey();
+  const playerWallet = new ethers.Wallet(privateKey)
+
+  const signature = playerWallet.signingKey.sign(hashHex).serialized;
+  const signatureBase64 = hexToBase64(signature);
 
   // Extract and encode the public key to base64
-  const publicKeyBits = sjcl.codec.hex.toBits(playerWallet.signingKey.publicKey);
-  const publicKeyBase64 = sjcl.codec.base64.fromBits(publicKeyBits);
+  const publicKeyBase64 = getPublicKeyBase64();
 
   const publicKeyAuth: EthereumWalletAuth = {
     Base64Hash: hashBase64,
@@ -37,5 +40,5 @@ export function WithEthereumWalletAuth<T>(request: T): HeaderEntry<EthereumWalle
     Base64PublicKey: publicKeyBase64,
   };
 
-  return [ECDSAPublicKeyAuthHeader, publicKeyAuth];
+  return [ethPublicKeyAuth, publicKeyAuth];
 }

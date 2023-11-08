@@ -71,10 +71,18 @@ func updateWorldForCollision(w state.IWorld, position state.Pos) (collision bool
 		for _, animal := range animals {
 			data.Animal.RemoveEntity(w, animal)
 		}
-		data.Resource.Add(w, data.ResourceSchema{
-			Position: position,
-			Amount:   constants.AnimalGold,
-		})
+
+		resources := resourcesAtLocation(w, position)
+		if len(resources) != 0 {
+			resource := data.Resource.Get(w, resources[0])
+			resource.Amount += constants.AnimalGold
+			data.Resource.Set(w, resources[0], resource)
+		} else {
+			data.Resource.Add(w, data.ResourceSchema{
+				Position: position,
+				Amount:   constants.AnimalGold,
+			})
+		}
 	}
 
 	if helper.IsObstacleTile(w, position) {
@@ -93,6 +101,12 @@ func playersAtLocation(w state.IWorld, pos state.Pos) []int {
 
 func animalsAtLocation(w state.IWorld, pos state.Pos) []int {
 	return data.Animal.Filter(w, data.AnimalSchema{
+		Position: pos,
+	}, []string{"Position"})
+}
+
+func resourcesAtLocation(w state.IWorld, pos state.Pos) []int {
+	return data.Resource.Filter(w, data.ResourceSchema{
 		Position: pos,
 	}, []string{"Position"})
 }

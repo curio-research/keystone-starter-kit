@@ -23,11 +23,9 @@ export class WorldState {
     AllTableAccessors.forEach((accessor) => {
       this.tableAccessors.set(accessor.name(), accessor);
     });
-
-    this.connectToKeystone();
   }
 
-  private async connectToKeystone() {
+  public async connectToKeystone() {
     // initialize the websocket connection
     const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
 
@@ -109,13 +107,11 @@ export class WorldState {
       this.tableState.set(tableName, new Map<number, any>());
     }
 
-    const table = this.tableState.get(tableName)!;
-
     const id = update.entity;
     if (op === TableOperationType.Update) {
-      accessor.set(table, id, update.value);
+      accessor.set(this.tableState, id, update.value);
     } else if (op === TableOperationType.Remove) {
-      accessor.remove(table, id);
+      accessor.remove(this.tableState, id);
     }
   }
 
@@ -132,7 +128,6 @@ export class WorldState {
 
   // apply all pending updates
   public applyAllPendingUpdates() {
-    console.log('pending table updates to apply: ', this.pendingTableUpdatesToInsert.length);
     this.pendingTableUpdatesToInsert.forEach((update) => {
       this.addUpdate(update);
     });

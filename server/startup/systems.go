@@ -17,7 +17,7 @@ func AddSystems(ctx *server.EngineCtx) {
 	// ---------------------
 	ctx.AddSystem(constants.TickRate, systems.CreatePlayerSystem)
 	ctx.AddSystem(constants.TickRate, systems.MovePlayerSystem)
-	ctx.AddSystem(constants.TickRate, systems.FireProjectionSystem)
+	ctx.AddSystem(constants.TickRate, systems.FireProjectileSystem)
 
 	// ---------------------
 	// Internal Systems - run by themselves (like a cron job)

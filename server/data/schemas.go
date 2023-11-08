@@ -21,6 +21,7 @@ const (
 
 type GameSchema struct {
 	Id      int `gorm:"primaryKey;autoIncrement:false"`
+	GameId  string
 	Weather Weather
 }
 
@@ -38,10 +39,11 @@ type TileSchema struct {
 }
 
 type PlayerSchema struct {
-	Id        int       `gorm:"primaryKey;autoIncrement:false"`
-	Position  state.Pos `gorm:"embedded"`
-	Resources int
-	PlayerId  int
+	Id                 int       `gorm:"primaryKey;autoIncrement:false"`
+	Position           state.Pos `gorm:"embedded"`
+	Resources          int
+	PlayerId           int
+	EthBase64PublicKey string
 }
 
 type ProjectileSchema struct {

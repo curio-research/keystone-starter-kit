@@ -82,7 +82,7 @@ func RandomAvailablePosition(w state.IWorld) (state.Pos, bool) {
 	}, []string{"Terrain"})
 
 	availablePositions := []state.Pos{}
-	for entity := range entities {
+	for _, entity := range entities {
 		groundTile := data.Tile.Get(w, entity)
 		if p := data.Player.Filter(w, data.PlayerSchema{Position: groundTile.Position}, []string{"Position"}); len(p) != 0 {
 			continue

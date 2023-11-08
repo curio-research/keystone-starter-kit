@@ -10,16 +10,20 @@ import Projectiles from 'components/Projectiles';
 import { uiState } from 'index';
 import Resources from 'components/Resources';
 
-export const toast = createStandaloneToast();
+import { createPlayer, getPlayerID } from '../core/utils';
 
-// hard coded playerID. See InitGame.go
-const playerId = -100;
+export const toast = createStandaloneToast();
 
 // game page
 const Game = observer(() => {
   const navigate = useNavigate();
 
   const handleKeyPress = (event: KeyboardEvent) => {
+    const playerId = getPlayerID();
+    if (playerId === undefined) {
+      return;
+    }
+
     switch (event.key) {
       case 'a':
         uiState.lastMovedDirection = 'left';
@@ -52,19 +56,23 @@ const Game = observer(() => {
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
+    const startup = async () => {
+      window.addEventListener('keydown', handleKeyPress);
 
-    toast.toast({
-      title: 'Welcome to the game!',
-      description: 'Use WASD to move and space to shoot.',
-      status: 'info',
-      duration: 10_000,
-      isClosable: true,
-    });
+      toast.toast({
+        title: 'Welcome to the game!',
+        description: 'Use WASD to move and space to shoot.',
+        status: 'info',
+        duration: 10_000,
+        isClosable: true,
+      });
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      return () => {
+        window.removeEventListener('keydown', handleKeyPress);
+      };
     };
+
+    startup();
   }, []);
 
   return (

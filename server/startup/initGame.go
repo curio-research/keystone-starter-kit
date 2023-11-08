@@ -4,7 +4,6 @@ import (
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
-	"github.com/curio-research/keystone-starter-kit/systems"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
@@ -13,6 +12,7 @@ import (
 func InitWorld(ctx *server.EngineCtx) {
 	data.Game.AddSpecific(ctx.World, constants.GameEntity, data.GameSchema{
 		Weather: data.Sunny,
+		GameId:  ctx.GameId,
 	})
 
 	largeTileId := 1
@@ -32,12 +32,4 @@ func InitWorld(ctx *server.EngineCtx) {
 			largeTileId++
 		}
 	}
-
-	// add admin player
-	adminPlayerId := -100
-	createPlayerRequest := systems.CreatePlayerRequest{
-		PlayerID: adminPlayerId,
-	}
-
-	server.QueueTxFromExternal(ctx, server.NewKeystoneTx(createPlayerRequest, nil), "")
 }
