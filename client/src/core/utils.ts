@@ -33,8 +33,6 @@ export function getPlayer(): PlayerSchema | undefined {
         return undefined
     }
 
-    console.log("Player ID", playerIDStr);
-
     const playerID = parseInt(playerIDStr, 10)
     const player = PlayerTable.filter(worldState.tableState)
         .WithCondition(p => p.PlayerId === playerID)
