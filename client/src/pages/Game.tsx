@@ -10,7 +10,7 @@ import Projectiles from 'components/Projectiles';
 import { uiState } from 'index';
 import Resources from 'components/Resources';
 
-import { createPlayer, getPlayerID } from '../core/utils';
+import { getPlayerID } from '../core/utils';
 
 export const toast = createStandaloneToast();
 

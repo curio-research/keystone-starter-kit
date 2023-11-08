@@ -16,6 +16,7 @@ func main() {
 	ctx := startKeystone.NewGameEngine()
 
 	ctx.SetTickRate(constants.TickRate)
+	ctx.SetStreamRate(50)
 
 	// Add systems
 	startup.AddSystems(ctx)
