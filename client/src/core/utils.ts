@@ -1,9 +1,9 @@
 import {GameSchema, GameTable, PlayerSchema, PlayerTable} from "./schemas";
 import {worldState} from "../index";
-import {gameConst, playerIdTag, privateKeyTag, base64PublicKeyTag, testPlayerId} from "./config";
-import {ethers, HDNodeWallet} from "ethers";
+import {ethers} from "ethers";
 import {CreatePlayer} from "./requests";
 import sjcl from "sjcl";
+import {base64PublicKeyTag, gameEntity, playerIdTag, privateKeyTag, testPlayerId} from "./keystoneConfig";
 
 
 export function createPlayer() {
@@ -90,5 +90,5 @@ export function hexToBase64(hex: string) {
 }
 
 function getGame(): GameSchema | undefined {
-    return GameTable.get(worldState.tableState, gameConst)
+    return GameTable.get(worldState.tableState, gameEntity)
 }

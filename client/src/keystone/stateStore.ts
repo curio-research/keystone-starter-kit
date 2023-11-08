@@ -5,6 +5,7 @@ import { TableAccessor } from 'keystone/tableAccessor';
 import { KeystoneWebsocketUrl } from 'core/keystoneConfig';
 import { KeystoneAPI } from 'index';
 import { toast } from 'pages/Game';
+import {createPlayer} from "../core/utils";
 
 // keystone's table state store
 export class WorldState {
@@ -90,6 +91,7 @@ export class WorldState {
 
     this.applyAllPendingUpdates();
     this.setIsFetchingState(false);
+    createPlayer();
   }
 
   // add update
@@ -108,8 +110,6 @@ export class WorldState {
     if (!this.tableState.has(tableName)) {
       this.tableState.set(tableName, new Map<number, any>());
     }
-
-    const table = this.tableState.get(tableName)!;
 
     const id = update.entity;
     if (op === TableOperationType.Update) {

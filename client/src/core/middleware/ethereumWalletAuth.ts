@@ -1,8 +1,8 @@
-import {HeaderEntry} from "./middleware";
 import sjcl from "sjcl";
 import {ethers} from "ethers";
 
 import {getPrivateKey, getPublicKeyBase64, hexToBase64} from "../utils";
+import {HeaderEntry} from "../../keystone/middleware";
 
 interface EthereumWalletAuth {
   Base64Signature: string;

@@ -1,6 +1,7 @@
-import {IWorld} from 'store/types';
 
 // typed table accessor
+import {IWorld} from "./types";
+
 export class TableAccessor<T extends { Id: number }> {
   private tableName: string;
   constructor(tableName: string) {
