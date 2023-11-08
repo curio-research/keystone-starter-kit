@@ -20,7 +20,7 @@ func TestPickUpGold(t *testing.T) {
 ....3...A...
 ............
 ............
-`, systems.CreatePlayerSystem, systems.UpdatePlayerSystem, systems.CreateProjectileSystem, systems.UpdateProjectileSystem)
+`, systems.CreatePlayerSystem, systems.MovePlayerSystem, systems.FireProjectileSystem, systems.UpdateProjectileSystem)
 	w := ctx.World
 	initialPlayerID := 3
 	addedPlayerID := 2
@@ -47,7 +47,7 @@ func TestPickUpGold(t *testing.T) {
 	player2PublicKey := base64PublicKey(t, addedPlayerID)
 	assert.Equal(t, player2PublicKey, player2.Base64PublicKey)
 
-	req := systems.CreateProjectileRequest{
+	req := systems.FireProjectileRequest{
 		Direction: helper.Right,
 		PlayerId:  initialPlayerID,
 	}
@@ -57,7 +57,7 @@ func TestPickUpGold(t *testing.T) {
 	assert.Len(t, data.Animal.Entities(w), 0)
 
 	for i := 0; i < 4; i++ {
-		req := systems.UpdatePlayerRequest{
+		req := systems.MovePlayerRequest{
 			Direction: helper.Right,
 			PlayerId:  initialPlayerID,
 		}

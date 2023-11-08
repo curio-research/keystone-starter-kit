@@ -8,12 +8,12 @@ import (
 	"github.com/curio-research/keystone/state"
 )
 
-type CreateProjectileRequest struct {
+type FireProjectileRequest struct {
 	Direction helper.Direction `json:"direction"`
 	PlayerId  int              `json:"playerId"`
 }
 
-var CreateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[CreateProjectileRequest]) {
+var FireProjectionSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[FireProjectileRequest]) {
 	req := ctx.Req.Data
 	w := ctx.W
 

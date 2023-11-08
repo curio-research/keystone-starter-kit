@@ -24,7 +24,7 @@ func main() {
 	startup.SetupRoutes(ctx)
 
 	// Register tables schemas to world
-	ctx.AddTables(data.TableSchemasToAccessors)
+	ctx.AddTables(data.SchemaMapping)
 
 	// Provision local SQLite
 	gormDB, err := gorm.Open(sqlite.Open("local.db"))
@@ -32,7 +32,7 @@ func main() {
 		panic("failed to connect database: " + err.Error())
 	}
 
-	SQLiteSaveStateHandler, SQLiteSaveTxHandler, err := gamedb.SQLHandlersFromDialector(gormDB.Dialector, ctx.GameId, data.TableSchemasToAccessors)
+	SQLiteSaveStateHandler, SQLiteSaveTxHandler, err := gamedb.SQLHandlersFromDialector(gormDB.Dialector, ctx.GameId, data.SchemaMapping)
 	if err != nil {
 		panic("failed to create sqlite save handlers: " + err.Error())
 	}

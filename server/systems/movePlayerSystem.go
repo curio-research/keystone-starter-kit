@@ -7,12 +7,12 @@ import (
 	"github.com/curio-research/keystone/state"
 )
 
-type UpdatePlayerRequest struct {
+type MovePlayerRequest struct {
 	Direction helper.Direction `json:"direction"`
 	PlayerId  int              `json:"playerId"`
 }
 
-var UpdatePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[UpdatePlayerRequest]) {
+var MovePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.TransactionCtx[MovePlayerRequest]) {
 	w := ctx.W
 	req := ctx.Req.Data
 

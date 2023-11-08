@@ -16,12 +16,12 @@ func Test_Projectile(t *testing.T) {
 ............
 ............
 ....2.......
-`, systems.CreatePlayerSystem, systems.CreateProjectileSystem, systems.UpdateProjectileSystem)
+`, systems.CreatePlayerSystem, systems.FireProjectionSystem, systems.UpdateProjectileSystem)
 
 	w := ctx.World
 	attackingPlayer := 1
 	victimPlayer := 2
-	req := systems.CreateProjectileRequest{
+	req := systems.FireProjectileRequest{
 		Direction: helper.Down,
 		PlayerId:  attackingPlayer,
 	}
@@ -43,12 +43,12 @@ func Test_Projectile_SavedByObstacle(t *testing.T) {
 ............
 ....X.......
 ....2.......
-`, systems.CreateProjectileSystem, systems.UpdateProjectileSystem)
+`, systems.FireProjectionSystem, systems.UpdateProjectileSystem)
 
 	w := ctx.World
 	attackingPlayer := 1
 	victimPlayer := 2
-	req := systems.CreateProjectileRequest{
+	req := systems.FireProjectileRequest{
 		Direction: helper.Down,
 		PlayerId:  1,
 	}

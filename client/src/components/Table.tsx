@@ -1,6 +1,6 @@
-import { TableAccessor } from '../core/tableAccessor';
+import { TableAccessor } from '../keystone/tableAccessor';
 import { Table, Tbody, Tr, Th, Td, Text } from '@chakra-ui/react';
-import { ITable } from '../store/types';
+import { ITable } from '../keystone/types';
 import { worldState } from '..';
 import { observer } from 'mobx-react';
 
@@ -9,7 +9,6 @@ interface TableProps<T extends WithID> {
   accessor: TableAccessor<T>;
 }
 
-// <T extends WithID>(props: { accessor: TableAccessor<T> }) => {
 export const TableDisplay = observer(<T extends WithID>(props: { accessor: TableAccessor<T> }) => {
   const { accessor } = props;
 
@@ -56,8 +55,8 @@ const DisplayTable = observer(<T extends WithID>(props: TableProps<T>) => {
       {allEntities.map((entity) => {
         const obj = accessor.get(worldState.tableState, entity)! as any;
         return (
-          <Tbody key={entity}>
-            <Tr key={entity}>
+          <Tbody key={`tbody-${entity}`}>
+            <Tr key={`tr-${entity}`}>
               {columnNames.map((columnName, index) => {
                 return (
                   <Td key={index} style={{ padding: '10px' }}>

@@ -52,7 +52,7 @@ func worldWithPath(t *testing.T, input string, systems ...server.TickSystemFunct
 
 	// Register tables
 	server.RegisterDefaultTables(ctx.World)
-	ctx.AddTables(data.TableSchemasToAccessors)
+	ctx.AddTables(data.SchemaMapping)
 
 	parseIntoWorld(t, ctx.World, input)
 
