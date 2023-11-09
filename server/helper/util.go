@@ -5,6 +5,7 @@ import (
 
 	"github.com/curio-research/keystone-starter-kit/server/constants"
 	"github.com/curio-research/keystone-starter-kit/server/data"
+	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
 
@@ -123,9 +124,9 @@ func IsObstacleTile(w state.IWorld, pos state.Pos) bool {
 	return len(ids) != 0
 }
 
-func GetWeather(w state.IWorld) int {
+func GetWeather(ec *server.EngineCtx) int {
 	// w := data.Game.Get(ctx.World, constants.GameEntity).Weather
-	gs, _ := w.Get(constants.GameEntity, "GameSchema")
+	gs, _ := ec.World.Get(constants.GameEntity, "GameSchema")
 	game, ok := gs.(data.GameSchema)
 	if ok {
 		return int(game.Weather)
