@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/curio-research/keystone-starter-kit/server/constants"
 	"github.com/curio-research/keystone-starter-kit/server/data"
 	"github.com/curio-research/keystone-starter-kit/server/startup"
@@ -10,6 +8,10 @@ import (
 	startKeystone "github.com/curio-research/keystone/server/startup"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+
+	// GEVM
+	gevm "github.com/daweth/gevm/core"
+	vm "github.com/daweth/gevm/vm"
 )
 
 func main() {
@@ -50,8 +52,8 @@ func main() {
 	// Initialize game map
 	startup.InitWorld(ctx)
 
-
-
+	evm := gevm.Default()
+	vm.InitializeEngine(ctx)
 
 	// Start game server!
 	ctx.Start()
