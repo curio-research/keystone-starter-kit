@@ -34,7 +34,7 @@ var FireProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *serve
 		ProjectileID: projectileID,
 		PlayerID:     req.PlayerId,
 	}, nil), "")
-}, VerifyWalletAndIdentity[FireProjectileRequest]())
+})
 
 func locationOfPlayer(w state.IWorld, playerId int) (state.Pos, bool) {
 	playerEntity := data.Player.Filter(w, data.PlayerSchema{PlayerId: playerId}, []string{"PlayerId"})

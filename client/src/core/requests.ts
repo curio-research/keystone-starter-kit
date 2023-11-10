@@ -1,16 +1,13 @@
 import { KeystoneAPI } from 'index';
-import {getPlayerID} from "./utils";
-import {HeaderEntry, NewKeystoneTx} from "../keystone/middleware";
-import {WithEthereumWalletAuth} from "./middleware/ethereumWalletAuth";
+import { getPlayerID } from './utils';
+import { HeaderEntry, NewKeystoneTx } from '../keystone/middleware';
+import { WithEthereumWalletAuth } from './middleware/ethereumWalletAuth';
 
-const playerIDHeader = "playerIDHeader";
+const playerIDHeader = 'playerIDHeader';
 function WithCustomEthereumWalletAuth<T>(req: T): HeaderEntry<any>[] {
-    const playerID = getPlayerID()!
+  const playerID = getPlayerID()!;
 
-    return [
-        [playerIDHeader, playerID],
-        WithEthereumWalletAuth(req)
-    ]
+  return [[playerIDHeader, playerID], WithEthereumWalletAuth(req)];
 }
 
 // create player
@@ -20,7 +17,7 @@ export interface CreatePlayerRequest {
 }
 
 export const CreatePlayer = async (request: CreatePlayerRequest) => {
-  return KeystoneAPI.getAPI().post('/createPlayer', NewKeystoneTx(request, ...WithCustomEthereumWalletAuth(request)));
+  return KeystoneAPI.getAPI().post('/createPlayer', NewKeystoneTx(request));
 };
 
 // fire projectile
