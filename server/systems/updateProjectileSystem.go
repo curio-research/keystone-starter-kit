@@ -20,11 +20,10 @@ var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 
 	// get projectile's position
 	projectile := data.Projectile.Get(w, req.ProjectileID)
-
 	nextPosition := helper.TargetTile(projectile.Position, req.Direction)
 
 	// check collisions
-	collision := updateWorldForCollision(w, nextPosition)
+	collision := updateWorldForCollision(w, nextPosition, req.PlayerID)
 	if collision {
 		// if collided, remove the projectile
 		data.Projectile.RemoveEntity(w, req.ProjectileID)
@@ -46,8 +45,7 @@ var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 
 })
 
-func updateWorldForCollision(w state.IWorld, position state.Pos) (collision bool) {
-
+func updateWorldForCollision(w state.IWorld, position state.Pos, playerID int) (collision bool) {
 	// check if position is within world
 	if !helper.WithinBoardBoundary(position) {
 		return true
@@ -57,7 +55,9 @@ func updateWorldForCollision(w state.IWorld, position state.Pos) (collision bool
 	if len(players) != 0 {
 		collision = true
 		for _, player := range players {
-			data.Player.RemoveEntity(w, player)
+			if playerSchema := data.Player.Get(w, player); playerSchema.PlayerId != playerID {
+				data.Player.RemoveEntity(w, player)
+			}
 		}
 		data.Resource.Add(w, data.ResourceSchema{
 			Position: position,
