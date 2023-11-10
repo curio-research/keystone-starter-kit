@@ -20,7 +20,7 @@ export interface CreatePlayerRequest {
 }
 
 export const CreatePlayer = async (request: CreatePlayerRequest) => {
-  return KeystoneAPI.getAPI().post('/createPlayer', NewKeystoneTx(request, ...WithCustomEthereumWalletAuth(request)));
+  return KeystoneAPI.getAPI().post('/createPlayer', NewKeystoneTx(request));
 };
 
 // fire projectile
