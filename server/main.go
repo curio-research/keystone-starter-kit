@@ -11,6 +11,7 @@ import (
 
 	// GEVM
 	gevm "github.com/daweth/gevm/core"
+	"github.com/daweth/gevm/examples"
 	vm "github.com/daweth/gevm/vm"
 )
 
@@ -52,9 +53,10 @@ func main() {
 	// Initialize game map
 	startup.InitWorld(ctx)
 
-	evm := gevm.Default()
+	node := gevm.Default()
 	vm.InitializeEngine(ctx)
 
+	examples.RunPrecompile(&node)
 	// Start game server!
 	ctx.Start()
 

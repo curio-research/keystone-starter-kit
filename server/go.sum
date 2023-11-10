@@ -121,6 +121,12 @@ github.com/daweth/gevm v0.0.0-20231108224950-1f62904e65bf h1:BkCSGaTy+DtK6CWVoDl
 github.com/daweth/gevm v0.0.0-20231108224950-1f62904e65bf/go.mod h1:fokUIWUk9FssseAcxPQPP5vJPRK5EMGy66gn9iQRc1U=
 github.com/daweth/gevm v0.0.0-20231109003313-70820a8cb1db h1:fnjXkJTRXiQWGNYevDAYumldcsVJMKHH9cY1j1x7EsA=
 github.com/daweth/gevm v0.0.0-20231109003313-70820a8cb1db/go.mod h1:qjahS4lLJcfn5CUmWDxwgjlc/W2vIsdAFY9NwTEcUgU=
+github.com/daweth/gevm v0.0.0-20231109011318-12eea8bd3797 h1:FQ613eOZYnFQRTaejBxUlETnnwb2DL4GkBcBiT4+hCM=
+github.com/daweth/gevm v0.0.0-20231109011318-12eea8bd3797/go.mod h1:qjahS4lLJcfn5CUmWDxwgjlc/W2vIsdAFY9NwTEcUgU=
+github.com/daweth/gevm v0.0.0-20231109011504-9d8e9bd7bb39 h1:Gg4Ne7ghFfFYAWo49wV5spfIiWmnRX3qC0oG50Y0aLE=
+github.com/daweth/gevm v0.0.0-20231109011504-9d8e9bd7bb39/go.mod h1:qjahS4lLJcfn5CUmWDxwgjlc/W2vIsdAFY9NwTEcUgU=
+github.com/daweth/gevm v0.0.0-20231109011805-2d4e81e1a87c h1:JFCMfl6peWs3CxDzLhYq7w1xq2ZS79FLmi5SMtPCxGk=
+github.com/daweth/gevm v0.0.0-20231109011805-2d4e81e1a87c/go.mod h1:qjahS4lLJcfn5CUmWDxwgjlc/W2vIsdAFY9NwTEcUgU=
 github.com/deckarep/golang-set/v2 v2.1.0 h1:g47V4Or+DUdzbs8FxCCmgb6VYd+ptPAngjM6dtGktsI=
 github.com/deckarep/golang-set/v2 v2.1.0/go.mod h1:VAky9rY/yGXJOLEDv3OMci+7wtDpOF4IN+y82NBOac4=
 github.com/decred/dcrd/crypto/blake256 v1.0.0 h1:/8DMNYp9SGi5f0w7uCm6d6M4OU2rGFK09Y2A4Xv7EE0=
