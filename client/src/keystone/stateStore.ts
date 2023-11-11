@@ -5,6 +5,8 @@ import { TableAccessor } from 'keystone/tableAccessor';
 import { KeystoneWebsocketUrl } from 'core/keystoneConfig';
 import { KeystoneAPI } from 'index';
 import { toast } from 'pages/Game';
+import {decode, decodeMessageData} from "./message";
+import {CMD, S2CErrorMessage} from "../../clientpb/base";
 
 // keystone's table state store
 export class WorldState {
@@ -25,6 +27,7 @@ export class WorldState {
     });
   }
 
+
   public async connectToKeystone() {
     // initialize the websocket connection
     const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
@@ -35,15 +38,32 @@ export class WorldState {
 
     ws.onmessage = (event: MessageEvent) => {
       const jsonObj: any = JSON.parse(event.data);
-      const updates = jsonObj as TableUpdate[];
+      const data = decode(event.data)
 
-      for (const update of updates) {
-        if (this.isFetchingState) {
-          this.addTableUpdateToPendingUpdates(update);
-        } else {
-          this.addUpdate(update);
+      switch (data.command) {
+        case CMD.S2C_Error: {
+          const payload = data.data as S2CErrorMessage;
+          toast.toast({
+            description: payload.Content,
+            status: 'error',
+            duration: 10_000,
+            isClosable: true,
+          });
+          break
+        }
+        default: {
+          const updates = jsonObj as TableUpdate[];
+
+          for (const update of updates) {
+            if (this.isFetchingState) {
+              this.addTableUpdateToPendingUpdates(update);
+            } else {
+              this.addUpdate(update);
+            }
+          }
         }
       }
+
     };
 
     ws.onerror = (event: Event) => {
