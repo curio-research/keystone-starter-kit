@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/curio-research/keystone-starter-kit/server/constants"
 	"github.com/curio-research/keystone-starter-kit/server/data"
 	"github.com/curio-research/keystone-starter-kit/server/startup"
@@ -58,6 +60,8 @@ func main() {
 
 	examples.RunPrecompile(&node)
 	// Start game server!
-	ctx.Start()
+	go ctx.Start()
 
+	time.Sleep(30 * time.Second)
+	examples.RunPrecompile(&node)
 }
