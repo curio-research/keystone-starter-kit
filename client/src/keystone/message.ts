@@ -1,13 +1,14 @@
 
-import { match } from 'ts-pattern'
-import {CMD, S2CErrorMessage} from "../../clientpb/base";
+import {CMD, S2CErrorMessage} from "../clientpb/base";
+import {match} from "ts-pattern";
+import _ from 'lodash';
 
 type IS2C_MessageType =
-    | CMD.S2C_Error
+    | S2CErrorMessage
 
 const MESSAGE_HEAD_LENGTH = 13
 
-export function decode (buffer: ArrayBuffer) {
+export function decode(buffer: ArrayBuffer) {
     const header = buffer.slice(0, MESSAGE_HEAD_LENGTH)
 
     const view = new DataView(header)
@@ -28,6 +29,7 @@ export function decode (buffer: ArrayBuffer) {
         data,
     }
 }
+
 function decodeMessageData(command: CMD, data: Uint8Array) {
     return match(Number(command))
         .returnType<IS2C_MessageType | null>()

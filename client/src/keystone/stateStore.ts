@@ -5,8 +5,8 @@ import { TableAccessor } from 'keystone/tableAccessor';
 import { KeystoneWebsocketUrl } from 'core/keystoneConfig';
 import { KeystoneAPI } from 'index';
 import { toast } from 'pages/Game';
-import {decode, decodeMessageData} from "./message";
-import {CMD, S2CErrorMessage} from "../../clientpb/base";
+import {decode} from "./message";
+import {CMD, S2CErrorMessage} from "../clientpb/base";
 
 // keystone's table state store
 export class WorldState {
@@ -37,7 +37,6 @@ export class WorldState {
     };
 
     ws.onmessage = (event: MessageEvent) => {
-      const jsonObj: any = JSON.parse(event.data);
       const data = decode(event.data)
 
       switch (data.command) {
@@ -52,6 +51,7 @@ export class WorldState {
           break
         }
         default: {
+          const jsonObj: any = JSON.parse(event.data);
           const updates = jsonObj as TableUpdate[];
 
           for (const update of updates) {
