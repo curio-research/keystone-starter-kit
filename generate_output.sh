@@ -5,11 +5,9 @@ GO_OUTPUT_ROOT="./server/serverpb" # relative go proto path
 echo "🧪 Generating Go bindings..."
 
 rm -rf $GO_OUTPUT_ROOT/*
-mkdir -p $GO_OUTPUT_ROOT/output
+mkdir -p $GO_OUTPUT_ROOT
 
 ./proto/protoc --proto_path=$PROTO_ROOT --go_out=paths=source_relative:$GO_OUTPUT_ROOT $PROTO_ROOT/*.proto
-
-rm -r server/serverpb/output
 
 # Generate Typescript bindings ---------------------------------
 TS_OUTPUT_ROOT="./client/clientpb"
