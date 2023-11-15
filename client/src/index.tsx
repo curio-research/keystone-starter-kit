@@ -4,7 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { WorldState } from './keystone/stateStore';
 import { UIState } from './core/uiStore';
 import { makeAutoObservable } from 'mobx';
-import { KeystoneAPIBase } from 'keystone/util';
+import { KeystoneAPIBase } from './keystone/api';
 import { KeystoneServerUrl, KeystoneWebsocketUrl } from 'core/keystoneConfig';
 import { PositionWrapperManager } from 'core/positionWrapperManager';
 
