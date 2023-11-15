@@ -3,8 +3,10 @@ import { AllTableAccessors } from '../core/schemas';
 import { TableOperationType, TableUpdate, IWorld, GetStateResponse } from './types';
 import { TableAccessor } from 'keystone/tableAccessor';
 import { KeystoneWebsocketUrl } from 'core/keystoneConfig';
-import { KeystoneAPI } from 'index';
+import { KeystoneAPI } from 'index'
 import { toast } from 'pages/Game';
+import {decode} from "./message";
+import {CMD, S2CErrorMessage} from "../clientpb/base";
 
 // keystone's table state store
 export class WorldState {
@@ -25,6 +27,7 @@ export class WorldState {
     });
   }
 
+
   public async connectToKeystone() {
     // initialize the websocket connection
     const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
@@ -33,15 +36,35 @@ export class WorldState {
       console.log('✅ Connected to keystone websocket ');
     };
 
-    ws.onmessage = (event: MessageEvent) => {
-      const jsonObj: any = JSON.parse(event.data);
-      const updates = jsonObj as TableUpdate[];
+    ws.onmessage = async (event: MessageEvent) => {
+      if (event.data instanceof Blob) {
+        const response = await decode(event.data);
+        if (response === undefined) {
+          return
+        }
 
-      for (const update of updates) {
-        if (this.isFetchingState) {
-          this.addTableUpdateToPendingUpdates(update);
-        } else {
-          this.addUpdate(update);
+        switch (response.command) {
+          case CMD.S2C_Error: {
+            const payload = response.data as S2CErrorMessage;
+            toast.toast({
+              description: payload.Content,
+              status: 'error',
+              duration: 500,
+              isClosable: true,
+            });
+            break
+          }
+        }
+      } else {
+        const jsonObj: any = JSON.parse(event.data);
+        const updates = jsonObj as TableUpdate[];
+
+        for (const update of updates) {
+          if (this.isFetchingState) {
+            this.addTableUpdateToPendingUpdates(update);
+          } else {
+            this.addUpdate(update);
+          }
         }
       }
     };
