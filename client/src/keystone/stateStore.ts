@@ -6,7 +6,7 @@ import { KeystoneWebsocketUrl } from 'core/keystoneConfig';
 import { KeystoneAPI } from 'index';
 import { toast } from 'pages/Game';
 import { decode } from './message';
-import { CMD, S2CErrorMessage, S2CTestevent } from '../clientpb/proto/schemas/base';
+import { CMD, S2CErrorMessage, S2CTestevent } from '../clientpb/schemas/main';
 
 // keystone's table state store
 export class WorldState {

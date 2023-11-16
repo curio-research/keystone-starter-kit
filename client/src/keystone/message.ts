@@ -1,4 +1,4 @@
-import { CMD, S2CErrorMessage, S2CTestevent } from '../clientpb/proto/schemas/base';
+import { CMD, S2CErrorMessage, S2CTestevent } from '../clientpb/schemas/main';
 import { match } from 'ts-pattern';
 import { Simulate } from 'react-dom/test-utils';
 
