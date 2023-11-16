@@ -3,7 +3,6 @@ package systems
 import (
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
-	pb_main "github.com/curio-research/keystone-starter-kit/serverpb"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
@@ -25,10 +24,6 @@ var MovePlayerSystem = server.CreateSystemFromRequestHandler(func(ctx *server.Tr
 		ctx.EmitError("you have not created a player yet", []int{req.PlayerId})
 		return
 	}
-
-	ctx.EmitEvent(server.CMD(pb_main.CMD_S2C_TestEvent), &pb_main.S2C_Testevent{
-		Message: "hello world",
-	}, nil, false)
 
 	player := data.Player.Get(w, playerRes[0])
 	targetPos := helper.TargetTile(player.Position, req.Direction)

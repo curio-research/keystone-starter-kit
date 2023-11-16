@@ -1,10 +1,10 @@
-import { CMD, S2CErrorMessage, S2CTestevent } from '../clientpb/schemas/main';
+import { CMD, S2CErrorMessage, S2CKillEnemyMessage } from '../clientpb/schemas/main';
 import { match } from 'ts-pattern';
 import { Simulate } from 'react-dom/test-utils';
 
 import { blobToArrayBuffer } from './utils';
 
-type IS2C_MessageType = S2CErrorMessage | S2CTestevent;
+type IS2C_MessageType = S2CErrorMessage | S2CKillEnemyMessage;
 
 interface ProtoUnmarshalResponse {
   flag: number;
@@ -46,7 +46,7 @@ function decodeMessageData(command: CMD, data: Uint8Array) {
   return match(Number(command))
     .returnType<IS2C_MessageType | null>()
     .with(CMD.S2C_Error, () => S2CErrorMessage.decode(data))
-    .with(CMD.S2C_TestEvent, () => S2CTestevent.decode(data))
+    .with(CMD.S2C_KillEnemy, () => S2CKillEnemyMessage.decode(data))
     .otherwise(() => {
       return null;
     });

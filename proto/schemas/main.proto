@@ -6,10 +6,10 @@ option go_package = "pb.main";
 
 enum CMD {
     S2C_Error = 0;
-    S2C_TestEvent = 1;
+    S2C_KillEnemy = 1;
 }
 
-message S2C_Testevent {
+message S2C_KillEnemyMessage {
     string Message = 1;
 }
 

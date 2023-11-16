@@ -4,6 +4,7 @@ import (
 	"github.com/curio-research/keystone-starter-kit/constants"
 	"github.com/curio-research/keystone-starter-kit/data"
 	"github.com/curio-research/keystone-starter-kit/helper"
+	pb_main "github.com/curio-research/keystone-starter-kit/serverpb"
 	"github.com/curio-research/keystone/server"
 	"github.com/curio-research/keystone/state"
 )
@@ -23,10 +24,16 @@ var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 	nextPosition := helper.TargetTile(projectile.Position, req.Direction)
 
 	// check collisions
-	collision := updateWorldForCollision(w, nextPosition, req.PlayerID)
+	collision, isAnimalHit := updateWorldForCollision(w, nextPosition, req.PlayerID)
 	if collision {
 		// if collided, remove the projectile
 		data.Projectile.RemoveEntity(w, req.ProjectileID)
+
+		if isAnimalHit {
+			ctx.EmitEvent(server.CMD(pb_main.CMD_S2C_KillEnemy), &pb_main.S2C_KillEnemyMessage{
+				Message: "Enemy killed",
+			}, nil, false)
+		}
 
 	} else {
 		// update the position of the projectile
@@ -45,10 +52,11 @@ var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 
 })
 
-func updateWorldForCollision(w state.IWorld, position state.Pos, playerID int) (collision bool) {
+func updateWorldForCollision(w state.IWorld, position state.Pos, playerID int) (collision bool, isAnimalHit bool) {
+
 	// check if position is within world
 	if !helper.WithinBoardBoundary(position) {
-		return true
+		return true, false
 	}
 
 	players := playersAtLocation(w, position)
@@ -68,6 +76,8 @@ func updateWorldForCollision(w state.IWorld, position state.Pos, playerID int) (
 	animals := animalsAtLocation(w, position)
 	if len(animals) != 0 {
 		collision = true
+		isAnimalHit = true
+
 		for _, animal := range animals {
 			data.Animal.RemoveEntity(w, animal)
 		}
@@ -89,7 +99,7 @@ func updateWorldForCollision(w state.IWorld, position state.Pos, playerID int) (
 		collision = true
 	}
 
-	return collision
+	return collision, isAnimalHit
 }
 
 // would we ever have to handle a case where the bullet flies over more than one tile at once?
