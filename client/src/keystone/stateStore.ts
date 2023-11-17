@@ -6,7 +6,7 @@ import { KeystoneWebsocketUrl } from 'core/keystoneConfig';
 import { KeystoneAPI } from 'index';
 import { toast } from 'pages/Game';
 import { decode } from './message';
-import { CMD, S2CErrorMessage, S2CKillEnemyMessage } from '../clientpb/schemas/main';
+import { CMD, S2CErrorMessage, S2CEnemyKilledMessage } from '../clientpb/schemas/main';
 
 // keystone's table state store
 export class WorldState {
@@ -56,8 +56,8 @@ export class WorldState {
             });
             break;
           }
-          case CMD.S2C_KillEnemy: {
-            const payload = response.data as S2CKillEnemyMessage;
+          case CMD.S2C_EnemyKilled: {
+            const payload = response.data as S2CEnemyKilledMessage;
 
             console.log(payload);
 

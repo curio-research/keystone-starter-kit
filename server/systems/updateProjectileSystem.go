@@ -30,7 +30,7 @@ var UpdateProjectileSystem = server.CreateSystemFromRequestHandler(func(ctx *ser
 		data.Projectile.RemoveEntity(w, req.ProjectileID)
 
 		if isAnimalHit {
-			ctx.EmitEvent(server.CMD(pb_main.CMD_S2C_KillEnemy), &pb_main.S2C_KillEnemyMessage{
+			ctx.EmitEvent(server.CMD(pb_main.CMD_S2C_EnemyKilled), &pb_main.S2C_EnemyKilledMessage{
 				Message: "Enemy killed",
 			}, nil, false)
 		}

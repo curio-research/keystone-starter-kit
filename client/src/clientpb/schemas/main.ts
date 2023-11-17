@@ -5,7 +5,7 @@ export const protobufPackage = "pb_main";
 
 export enum CMD {
   S2C_Error = 0,
-  S2C_KillEnemy = 1,
+  S2C_EnemyKilled = 1,
   UNRECOGNIZED = -1,
 }
 
@@ -15,8 +15,8 @@ export function cMDFromJSON(object: any): CMD {
     case "S2C_Error":
       return CMD.S2C_Error;
     case 1:
-    case "S2C_KillEnemy":
-      return CMD.S2C_KillEnemy;
+    case "S2C_EnemyKilled":
+      return CMD.S2C_EnemyKilled;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -28,15 +28,15 @@ export function cMDToJSON(object: CMD): string {
   switch (object) {
     case CMD.S2C_Error:
       return "S2C_Error";
-    case CMD.S2C_KillEnemy:
-      return "S2C_KillEnemy";
+    case CMD.S2C_EnemyKilled:
+      return "S2C_EnemyKilled";
     case CMD.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
-export interface S2CKillEnemyMessage {
+export interface S2CEnemyKilledMessage {
   Message: string;
 }
 
@@ -44,22 +44,22 @@ export interface S2CErrorMessage {
   Content: string;
 }
 
-function createBaseS2CKillEnemyMessage(): S2CKillEnemyMessage {
+function createBaseS2CEnemyKilledMessage(): S2CEnemyKilledMessage {
   return { Message: "" };
 }
 
-export const S2CKillEnemyMessage = {
-  encode(message: S2CKillEnemyMessage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const S2CEnemyKilledMessage = {
+  encode(message: S2CEnemyKilledMessage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.Message !== "") {
       writer.uint32(10).string(message.Message);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): S2CKillEnemyMessage {
+  decode(input: _m0.Reader | Uint8Array, length?: number): S2CEnemyKilledMessage {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseS2CKillEnemyMessage();
+    const message = createBaseS2CEnemyKilledMessage();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -79,11 +79,11 @@ export const S2CKillEnemyMessage = {
     return message;
   },
 
-  fromJSON(object: any): S2CKillEnemyMessage {
+  fromJSON(object: any): S2CEnemyKilledMessage {
     return { Message: isSet(object.Message) ? globalThis.String(object.Message) : "" };
   },
 
-  toJSON(message: S2CKillEnemyMessage): unknown {
+  toJSON(message: S2CEnemyKilledMessage): unknown {
     const obj: any = {};
     if (message.Message !== "") {
       obj.Message = message.Message;
@@ -91,11 +91,11 @@ export const S2CKillEnemyMessage = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<S2CKillEnemyMessage>, I>>(base?: I): S2CKillEnemyMessage {
-    return S2CKillEnemyMessage.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<S2CEnemyKilledMessage>, I>>(base?: I): S2CEnemyKilledMessage {
+    return S2CEnemyKilledMessage.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<S2CKillEnemyMessage>, I>>(object: I): S2CKillEnemyMessage {
-    const message = createBaseS2CKillEnemyMessage();
+  fromPartial<I extends Exact<DeepPartial<S2CEnemyKilledMessage>, I>>(object: I): S2CEnemyKilledMessage {
+    const message = createBaseS2CEnemyKilledMessage();
     message.Message = object.Message ?? "";
     return message;
   },
