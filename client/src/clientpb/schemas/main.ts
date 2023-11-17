@@ -1,10 +1,11 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "serverpb";
+export const protobufPackage = "pb_main";
 
 export enum CMD {
   S2C_Error = 0,
+  S2C_EnemyKilled = 1,
   UNRECOGNIZED = -1,
 }
 
@@ -13,6 +14,9 @@ export function cMDFromJSON(object: any): CMD {
     case 0:
     case "S2C_Error":
       return CMD.S2C_Error;
+    case 1:
+    case "S2C_EnemyKilled":
+      return CMD.S2C_EnemyKilled;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -24,15 +28,78 @@ export function cMDToJSON(object: CMD): string {
   switch (object) {
     case CMD.S2C_Error:
       return "S2C_Error";
+    case CMD.S2C_EnemyKilled:
+      return "S2C_EnemyKilled";
     case CMD.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+export interface S2CEnemyKilledMessage {
+  Message: string;
+}
+
 export interface S2CErrorMessage {
   Content: string;
 }
+
+function createBaseS2CEnemyKilledMessage(): S2CEnemyKilledMessage {
+  return { Message: "" };
+}
+
+export const S2CEnemyKilledMessage = {
+  encode(message: S2CEnemyKilledMessage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.Message !== "") {
+      writer.uint32(10).string(message.Message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): S2CEnemyKilledMessage {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseS2CEnemyKilledMessage();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.Message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): S2CEnemyKilledMessage {
+    return { Message: isSet(object.Message) ? globalThis.String(object.Message) : "" };
+  },
+
+  toJSON(message: S2CEnemyKilledMessage): unknown {
+    const obj: any = {};
+    if (message.Message !== "") {
+      obj.Message = message.Message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<S2CEnemyKilledMessage>, I>>(base?: I): S2CEnemyKilledMessage {
+    return S2CEnemyKilledMessage.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<S2CEnemyKilledMessage>, I>>(object: I): S2CEnemyKilledMessage {
+    const message = createBaseS2CEnemyKilledMessage();
+    message.Message = object.Message ?? "";
+    return message;
+  },
+};
 
 function createBaseS2CErrorMessage(): S2CErrorMessage {
   return { Content: "" };

@@ -3,10 +3,10 @@ import { AllTableAccessors } from '../core/schemas';
 import { TableOperationType, TableUpdate, IWorld, GetStateResponse } from './types';
 import { TableAccessor } from 'keystone/tableAccessor';
 import { KeystoneWebsocketUrl } from 'core/keystoneConfig';
-import { KeystoneAPI } from 'index'
+import { KeystoneAPI } from 'index';
 import { toast } from 'pages/Game';
-import {decode} from "./message";
-import {CMD, S2CErrorMessage} from "../clientpb/base";
+import { decode } from './message';
+import { CMD, S2CErrorMessage, S2CEnemyKilledMessage } from '../clientpb/schemas/main';
 
 // keystone's table state store
 export class WorldState {
@@ -27,7 +27,6 @@ export class WorldState {
     });
   }
 
-
   public async connectToKeystone() {
     // initialize the websocket connection
     const ws = new WebSocket(`${KeystoneWebsocketUrl}/subscribeAllTableUpdates`);
@@ -39,23 +38,40 @@ export class WorldState {
     ws.onmessage = async (event: MessageEvent) => {
       if (event.data instanceof Blob) {
         const response = await decode(event.data);
+
         if (response === undefined) {
-          return
+          return;
         }
 
         switch (response.command) {
           case CMD.S2C_Error: {
             const payload = response.data as S2CErrorMessage;
+            console.log(payload);
+
             toast.toast({
               description: payload.Content,
               status: 'error',
+              duration: 1_000,
+              isClosable: true,
+            });
+            break;
+          }
+          case CMD.S2C_EnemyKilled: {
+            const payload = response.data as S2CEnemyKilledMessage;
+
+            console.log(payload);
+
+            toast.toast({
+              description: payload.Message,
+              status: 'success',
               duration: 500,
               isClosable: true,
             });
-            break
           }
         }
       } else {
+        // state updates
+
         const jsonObj: any = JSON.parse(event.data);
         const updates = jsonObj as TableUpdate[];
 
