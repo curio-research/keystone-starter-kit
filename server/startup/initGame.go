@@ -10,7 +10,8 @@ import (
 
 // Initialize world map and content
 func InitWorld(ctx *server.EngineCtx) {
-	data.Game.AddSpecific(ctx.World, constants.GameEntity, data.GameSchema{
+	w := ctx.World
+	data.Game.AddSpecific(w, constants.GameEntity, data.GameSchema{
 		Weather: data.Sunny,
 		GameId:  ctx.GameId,
 	})
@@ -24,7 +25,7 @@ func InitWorld(ctx *server.EngineCtx) {
 				Y: i,
 			}
 
-			data.Tile.AddSpecific(ctx.World, largeTileId, data.TileSchema{
+			data.Tile.AddSpecific(w, largeTileId, data.TileSchema{
 				Position: pos,
 				Terrain:  terrain,
 			})
